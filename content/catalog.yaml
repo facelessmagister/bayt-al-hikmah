@@ -84,21 +84,32 @@ books:
     author: fathi-yakan
     shelf: revivalist
     original_language: ar
-    languages: [ar]
-    domains: [dawah, haraki]
-    tags: [dawah, islamic-call, methodology]
+    languages: [ar, en]
+    domains: [dawah, haraki, aqeedah]
+    tags: [dawah, islamic-call, methodology, manhaj, haraki]
     source:
-      archive_id: "20210502_20210502_0448"
-      archive_url: "https://archive.org/details/20210502_20210502_0448"
+      archive_id: "20260509_20260509_0452"
+      archive_url: "https://archive.org/details/20260509_20260509_0452"
     chapters:
-      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "00-introduction" }
-      - { num: 2, title: { en: "The Starting Point of the Call", ar: "مبدأ الدعوة" }, slug: "01-mabda-al-dawah" }
-      - { num: 3, title: { en: "How We Call", ar: "كيف ندعو" }, slug: "02-kayfa-ndau" }
-      - { num: 4, title: { en: "The Subjects of the Call", ar: "موضوعات الدعوة" }, slug: "03-al-mawduat" }
-      - { num: 5, title: { en: "Organization", ar: "التنظيم" }, slug: "04-al-tanzim" }
+      - { num: 1, title: { en: "Introduction", ar: "المقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "Preachers on the Sidelines of Daʿwah", ar: "دعاة على هامش الدعوة" }, slug: "01-preachers-sidelines" }
+      - { num: 3, title: { en: "The Obligation of Daʿwah to Islam", ar: "وجوب الدعوة إلى الإسلام" }, slug: "02-obligation-dawah" }
+      - { num: 4, title: { en: "The Method of Daʿwah and Addressing People", ar: "أسلوب الدعوة ومخاطبة الناس" }, slug: "03-method-dawah" }
+      - { num: 5, title: { en: "Direct Individual Contact", ar: "الاتصال الفردي المباشر" }, slug: "04-individual-contact" }
+      - { num: 6, title: { en: "Critiquing the Current Reality", ar: "نقد الواقع القائم" }, slug: "05-critiquing-reality" }
+      - { num: 7, title: { en: "Critiquing Contemporary Trends", ar: "نقد الاتجاهات المعاصرة" }, slug: "06-critiquing-trends" }
+      - { num: 8, title: { en: "Proving Islam is a Way of Life", ar: "إثبات أن الإسلام منهج حياة" }, slug: "07-islam-way-life" }
+      - { num: 9, title: { en: "Sources of the Islamic Methodology", ar: "مصادر المنهج الإسلامي" }, slug: "08-sources-method" }
+      - { num: 10, title: { en: "Characteristics of the Islamic Methodology", ar: "خصائص المنهج الإسلامي" }, slug: "09-characteristics-method" }
+      - { num: 11, title: { en: "Proving Allah's Existence and the Afterlife", ar: "إثبات وجود الله" }, slug: "10-proving-allah" }
+      - { num: 12, title: { en: "Major Outlines of the Islamic Method", ar: "الخطوط الكبرى للمنهج الإسلامي" }, slug: "11-major-outlines" }
+      - { num: 13, title: { en: "The Necessity of Organizational Movement", ar: "التنظيم الحركي ضرورة" }, slug: "12-organizational-movement" }
     status:
       ar: published
-      en: not-translated
+      en: published
+    translated_by: "Tarbiyyah Translation Team"
+    translated_at: "2026-08-07"
+    notes: "English translation from Tesseract Arabic OCR at 300 DPI. 170 citations verified."
 
   the-promised-generation:
     title:
