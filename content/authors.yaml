@@ -1,0 +1,55 @@
+authors:
+  fathi-yakan:
+    name: Fathi Yakan
+    native_name: فتحي يكن
+    birth_year: 1933
+    death_year: 2009
+    nationality: Lebanese
+    role: Pioneer of the Islamic Action Front; parliamentarian (1992)
+    movement: Muslim Brotherhood (Lebanon)
+    bio: >
+      Among the pioneers of the Islamic movement in the 1950s. Regarded as the grandfather
+      and leading ideologue of the Islamic Group (Al-Jemaah Islamiyah) in Lebanon. Founded
+      Jinan University (Lebanon). Authored more than 35 books, some translated into multiple languages.
+    priority: 1
+
+  said-hawwa:
+    name: Said Hawwa
+    native_name: سعيد حوى
+    birth_year: 1925
+    death_year: 1989
+    nationality: Syrian
+    role: Spiritual educator; author of the Jund Allah series
+    movement: Muslim Brotherhood (Syria)
+    bio: >
+      Syrian Islamic revivalist and Muslim Brotherhood thinker. Best known for the multi-volume
+      Jund Allah (God's Soldiers) series, which forms the organisational and spiritual doctrine
+      of the movement. Also wrote on worship, spiritual education, and the Messenger.
+    priority: 1
+
+  majdi-al-hilali:
+    name: Majdi al-Hilali
+    native_name: مجدي الهلالي
+    birth_year: 1960
+    death_year: null
+    nationality: Egyptian
+    role: Islamic thinker and author
+    movement: Muslim Brotherhood (Egypt)
+    bio: >
+      Egyptian Islamic author known for his work on the qualities and characteristics
+      of the promised generation in Islamic thought.
+    priority: 2
+
+  yusuf-al-qaradawi:
+    name: Yusuf al-Qaradawi
+    native_name: يوسف القرضاوي
+    birth_year: 1926
+    death_year: 2022
+    nationality: Egyptian
+    role: Scholar of fiqh, usul al-fiqh, and Islamic ethics
+    movement: Independent (associated with the Islamic revivalist movement)
+    bio: >
+      One of the most prominent contemporary Islamic scholars. Known for his works on fiqh,
+      zakah, Islamic ethics, halal/haram, and the methodology of approaching the Sunnah.
+      His fiqh and spiritual writings form the core of the Qaradawi Collection.
+    priority: 1

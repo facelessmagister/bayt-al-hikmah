@@ -1,0 +1,346 @@
+books:
+  # ============================================================
+  # SHELF: Contemporary Revivalist Literature
+  # ============================================================
+
+  what-my-belonging-to-islam-means:
+    title:
+      en: "What My Belonging to Islam Means"
+      ar: "ماذا يعني انتمائي للإسلام"
+    author: fathi-yakan
+    shelf: revivalist
+    original_language: ar
+    languages: [en, ar]
+    domains: [aqeedah, islamic-identity, haraki]
+    tags: [belonging, islamic-movement, tarbiyyah]
+    source:
+      archive_id: "1076ZPdf"
+      archive_url: "https://archive.org/details/1076ZPdf"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "المقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "Being a Muslim in My Belief", ar: "المسلم في عقيدتي" }, slug: "01-being-muslim-in-belief" }
+      - { num: 3, title: { en: "Being a Muslim in My Worship", ar: "المسلم في عبادتي" }, slug: "02-being-muslim-in-worship" }
+      - { num: 4, title: { en: "Being a Muslim in My Character", ar: "المسلم في أخلاقي" }, slug: "03-being-muslim-in-character" }
+      - { num: 5, title: { en: "Being a Muslim in My Family and Home", ar: "المسلم في أسرتي وبيتي" }, slug: "04-being-muslim-in-family" }
+      - { num: 6, title: { en: "Overcoming My Ego", ar: "تغلب على نفسي" }, slug: "05-overcoming-the-ego" }
+      - { num: 7, title: { en: "Certainty That the Future Belongs to Islam", ar: "اليقين بأن المستقبل للإسلام" }, slug: "06-certainty-future-islam" }
+      - { num: 8, title: { en: "Part Two: Introduction", ar: "القسم الثاني: المقدمة" }, slug: "06b-part2-intro" }
+      - { num: 9, title: { en: "Living for Islam", ar: "العيش للإسلام" }, slug: "07-living-for-islam" }
+      - { num: 10, title: { en: "Believing in the Obligation to Work for Islam", ar: "الإيمان بفرضية العمل للإسلام" }, slug: "08-obligation-to-work" }
+      - { num: 11, title: { en: "The Islamic Movement — Its Mission and Characteristics", ar: "الحركة الإسلامية — رسالتها وخصائصها" }, slug: "09-islamic-movement" }
+      - { num: 12, title: { en: "Understanding the Methods of Islamic Work", ar: "فهم منهاج العمل الإسلامي" }, slug: "10-methods-islamic-work" }
+      - { num: 13, title: { en: "Understanding the Dimensions of Belonging to the Islamic Movement", ar: "فهم أبعاد الانتماء للحركة الإسلامية" }, slug: "11-dimensions-of-belonging" }
+      - { num: 14, title: { en: "Understanding the Pillars of Islamic Work", ar: "فهم أركان العمل الإسلامي" }, slug: "12-pillars-islamic-work" }
+      - { num: 15, title: { en: "Understanding the Conditions of Brotherhood and Membership", ar: "فهم شروط الأخوة والعضوية" }, slug: "13-conditions-brotherhood" }
+      - { num: 16, title: { en: "The Bond's Litany", ar: "ورد الأخوة" }, slug: "14-the-bonds-litany" }
+    status:
+      en: published
+      ar: published
+    translated_by: "Tarbiyyah Translation Team"
+    translated_at: "2026-08-02"
+
+  our-spiritual-education:
+    title:
+      en: "Our Spiritual Education"
+      ar: "تربيتنا الروحية"
+    author: said-hawwa
+    shelf: revivalist
+    original_language: ar
+    languages: [en, ar]
+    domains: [tazkiyah, sufism, spirituality]
+    tags: [spiritual-education, sufism, tazkiyah, said-hawwa]
+    source:
+      archive_id: "007_20200203"
+      archive_url: "https://archive.org/details/007_20200203"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "General Islamic Introduction", ar: "مقدمة إسلامية عامة" }, slug: "01-general-islamic-introduction" }
+      - { num: 3, title: { en: "Authentic Domains of Sufism", ar: "المجالات الأصيلة للتصوف" }, slug: "02-authentic-domains-of-sufism" }
+      - { num: 4, title: { en: "The Journey to Allah", ar: "السير إلى الله" }, slug: "03-the-journey-to-allah" }
+      - { num: 5, title: { en: "Nature of the Heart's Journey", ar: "طبيعة سير القلب" }, slug: "04-nature-of-hearts-journey" }
+      - { num: 6, title: { en: "Litanies and Mishkat", ar: "الأوراد والمشكاة" }, slug: "05-litanies-and-mishkat" }
+      - { num: 7, title: { en: "The Correct Beginning", ar: "البداية الصحيحة" }, slug: "06-correct-beginning" }
+      - { num: 8, title: { en: "Necessity of Daily Wird", ar: "ضرورة الورد اليومي" }, slug: "07-necessity-of-daily-wird" }
+      - { num: 9, title: { en: "The Soul and Its Demands", ar: "النفس ومطالبها" }, slug: "08-the-soul-and-its-demands" }
+      - { num: 10, title: { en: "Diseases and Health", ar: "الأمراض والصحة" }, slug: "09-diseases-and-health" }
+      - { num: 11, title: { en: "Struggle and Its Pillars", ar: "المجاهدة وأركانها" }, slug: "10-struggle-and-its-pillars" }
+      - { num: 12, title: { en: "Journey: Beginning to End", ar: "السير من البداية إلى النهاية" }, slug: "11-journey-beginning-to-end" }
+      - { num: 13, title: { en: "Aids and Stimulants", ar: "المعينات والمحفزات" }, slug: "12-aids-and-stimulants" }
+      - { num: 14, title: { en: "Cardiac and Psychological Health", ar: "الصحة القلبية والنفسية" }, slug: "13-cardiac-and-psychological-health" }
+      - { num: 15, title: { en: "Visions, Unveiling, and Karamah", ar: "الرؤيا والكشف والكرامة" }, slug: "14-visions-unveiling-karamah" }
+      - { num: 16, title: { en: "The Sheikh and the Pledge", ar: "الشيخ والعهد" }, slug: "15-the-sheikh-and-the-pledge" }
+      - { num: 17, title: { en: "Ethics and Manners", ar: "الآداب والأخلاق" }, slug: "16-ethics-and-manners" }
+      - { num: 18, title: { en: "Various Topics", ar: "مواضيع متنوعة" }, slug: "17-various-topics" }
+    status:
+      en: published
+      ar: published
+    translated_by: "Tarbiyyah Translation Team"
+    translated_at: "2026-08-06"
+
+  how-to-call-to-islam:
+    title:
+      en: "How to Call to Islam"
+      ar: "كيف ندعو إلى الإسلام"
+    author: fathi-yakan
+    shelf: revivalist
+    original_language: ar
+    languages: [ar]
+    domains: [dawah, haraki]
+    tags: [dawah, islamic-call, methodology]
+    source:
+      archive_id: "20210502_20210502_0448"
+      archive_url: "https://archive.org/details/20210502_20210502_0448"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "The Starting Point of the Call", ar: "مبدأ الدعوة" }, slug: "01-mabda-al-dawah" }
+      - { num: 3, title: { en: "How We Call", ar: "كيف ندعو" }, slug: "02-kayfa-ndau" }
+      - { num: 4, title: { en: "The Subjects of the Call", ar: "موضوعات الدعوة" }, slug: "03-al-mawduat" }
+      - { num: 5, title: { en: "Organization", ar: "التنظيم" }, slug: "04-al-tanzim" }
+    status:
+      ar: published
+      en: not-translated
+
+  the-promised-generation:
+    title:
+      en: "The Promised Generation"
+      ar: "الجيل الموعود بالنصر والتمكين"
+    author: majdi-al-hilali
+    shelf: revivalist
+    original_language: ar
+    languages: [ar, en]
+    domains: [tarbiyyah, haraki, quranic-studies]
+    tags: [promised-generation, tarbiyyah, victory, tamkin]
+    source:
+      archive_id: "ozkorallh_20180412"
+      archive_url: "https://archive.org/details/ozkorallh_20180412"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "المقدمة" }, slug: "ch-00-introduction" }
+      - { num: 2, title: { en: "Why the Promised Generation?", ar: "لماذا الجيل الموعود؟" }, slug: "ch-01-limadha" }
+      - { num: 3, title: { en: "With the Attributes of the Promised Generation", ar: "مع صفات الجيل الموعود" }, slug: "ch-02-sifat" }
+      - { num: 4, title: { en: "How the Attributes Are Realized", ar: "كيف تتحقق صفات الجيل الموعود" }, slug: "ch-03-kayfa" }
+      - { num: 5, title: { en: "The First Generation and Tools of Change", ar: "الجيل الأول وأدوات التغيير" }, slug: "ch-04-al-jil-al-awwal" }
+      - { num: 6, title: { en: "Where Are We from the Promised Generation?", ar: "أين نحن من الجيل الموعود؟" }, slug: "ch-05-ayna-nahnu" }
+      - { num: 7, title: { en: "Conclusion", ar: "الخاتمة" }, slug: "ch-06-conclusion" }
+    status:
+      ar: published
+      en: partial
+    translated_by: "Tarbiyyah Translation Team"
+    translated_at: "2026-07-24"
+    notes: "English translation covers chapters 1-3 only."
+
+  # ============================================================
+  # SHELF: Qaradawi Collection
+  # ============================================================
+
+  halal-haram:
+    title:
+      en: "The Lawful and the Prohibited in Islam"
+      ar: "الحلال والحرام في الإسلام"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [fiqh-ibadat, halal-haram, usul-al-fiqh]
+    tags: [halal, haram, fiqh, islamic-ethics]
+    source:
+      archive_id: "lawfulprohibited0000qara_y8p5"
+      archive_url: "https://archive.org/details/lawfulprohibited0000qara_y8p5"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "ch-00" }
+      - { num: 2, title: { en: "Islamic Principles Pertaining to the Lawful and the Prohibited", ar: "المبادئ الإسلامية في الحلال والحرام" }, slug: "ch-01" }
+      - { num: 3, title: { en: "The Lawful and Prohibited in Eating, Drinking, and Economic Life", ar: "الحلال والحرام في الأكل والشرب والمعيشة" }, slug: "ch-02" }
+      - { num: 4, title: { en: "The Lawful and Prohibited in Marriage and Family Life", ar: "الحلال والحرام في الزواج والحياة الأسرية" }, slug: "ch-03" }
+      - { num: 5, title: { en: "The Lawful and Prohibited in Dress, Adornment, and Social Relations", ar: "الحلال والحرام في اللباس والزينة والعلاقات الاجتماعية" }, slug: "ch-04" }
+    status:
+      en: published
+      ar: not-translated
+    notes: "English translation from the original Arabic. OCR via Tesseract."
+
+  fiqh-al-zakah:
+    title:
+      en: "Fiqh al-Zakah (2 Volumes)"
+      ar: "فقه الزكاة"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [fiqh-muamalat, zakat, islamic-economics]
+    tags: [zakah, zakat, islamic-economics, nisab]
+    source:
+      archive_id: "fiqh-al-zakah-volume-2"
+      archive_url: "https://archive.org/details/fiqh-al-zakah-volume-2"
+    chapters:
+      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
+      - { num: 4, title: { en: "Chapter 4", ar: "الفصل الرابع" }, slug: "ch-04" }
+      - { num: 5, title: { en: "Chapter 5", ar: "الفصل الخامس" }, slug: "ch-05" }
+      - { num: 6, title: { en: "Chapter 6", ar: "الفصل السادس" }, slug: "ch-06" }
+      - { num: 7, title: { en: "Chapter 7", ar: "الفصل السابع" }, slug: "ch-07" }
+      - { num: 8, title: { en: "Chapter 8", ar: "الفصل الثامن" }, slug: "ch-08" }
+      - { num: 9, title: { en: "Chapter 9", ar: "الفصل التاسع" }, slug: "ch-09" }
+      - { num: 10, title: { en: "Chapter 10", ar: "الفصل العاشر" }, slug: "ch-10" }
+    status:
+      en: published
+      ar: not-translated
+
+  approaching-the-sunnah:
+    title:
+      en: "Approaching the Sunnah: Comprehension and Controversy"
+      ar: "كيف نتفهم السنة"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [hadith-methodology, sunnah, usul-al-fiqh]
+    tags: [sunnah, hadith-methodology, usul]
+    source:
+      archive_id: "approaching-the-sunnah-comprehension-controversy"
+      archive_url: "https://archive.org/details/approaching-the-sunnah-comprehension-controversy"
+    chapters:
+      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
+    status:
+      en: published
+      ar: not-translated
+
+  economic-security:
+    title:
+      en: "Economic Security in Islam"
+      ar: "الأمن الاقتصادي في الإسلام"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [fiqh-muamalat, islamic-economics]
+    tags: [islamic-economics, zakat, sadaqah, social-security]
+    source:
+      archive_id: "economic-security-in-islam_202503"
+      archive_url: "https://archive.org/details/economic-security-in-islam_202503"
+    chapters:
+      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
+      - { num: 4, title: { en: "Chapter 4", ar: "الفصل الرابع" }, slug: "ch-04" }
+      - { num: 5, title: { en: "Chapter 5", ar: "الفصل الخامس" }, slug: "ch-05" }
+      - { num: 6, title: { en: "Chapter 6", ar: "الفصل السادس" }, slug: "ch-06" }
+      - { num: 7, title: { en: "Chapter 7", ar: "الفصل السابع" }, slug: "ch-07" }
+    status:
+      en: published
+      ar: not-translated
+
+  ethics-in-islam:
+    title:
+      en: "Ethics in Islam"
+      ar: "أخلاق المسلم"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [islamic-ethics, akhlaq, tazkiyah]
+    tags: [akhlaq, ethics, character, morality]
+    source:
+      archive_id: "ethics-in-islam_202503"
+      archive_url: "https://archive.org/details/ethics-in-islam_202503"
+    chapters:
+      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
+      - { num: 4, title: { en: "Chapter 4", ar: "الفصل الرابع" }, slug: "ch-04" }
+    status:
+      en: published
+      ar: not-translated
+
+  education-economy-sunnah:
+    title:
+      en: "Education and Economy in the Sunnah"
+      ar: "التربية والاقتصاد في السنة"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [islamic-education, islamic-economics, sunnah]
+    tags: [education, economy, sunnah]
+    source:
+      archive_id: "education-and-economy-in-the-sunnah"
+      archive_url: "https://archive.org/details/education-and-economy-in-the-sunnah"
+    chapters:
+      - { num: 1, title: { en: "Education in the Sunnah", ar: "التربية في السنة" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Economy in the Sunnah", ar: "الاقتصاد في السنة" }, slug: "ch-02" }
+    status:
+      en: published
+      ar: not-translated
+
+  diversion-arts:
+    title:
+      en: "Diversion and Arts in Islam"
+      ar: "اللهو والفنون في الإسلام"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [fiqh-ibadat, arts, islamic-ethics]
+    tags: [arts, entertainment, music, recreation]
+    source:
+      archive_id: "diversion-and-arts-in-islam"
+      archive_url: "https://archive.org/details/diversion-and-arts-in-islam"
+    chapters:
+      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
+      - { num: 4, title: { en: "Chapter 4", ar: "الفصل الرابع" }, slug: "ch-04" }
+      - { num: 5, title: { en: "Chapter 5", ar: "الفصل الخامس" }, slug: "ch-05" }
+      - { num: 6, title: { en: "Chapter 6", ar: "الفصل السادس" }, slug: "ch-06" }
+      - { num: 7, title: { en: "Chapter 7", ar: "الفصل السابع" }, slug: "ch-07" }
+    status:
+      en: published
+      ar: not-translated
+
+  faith-and-life:
+    title:
+      en: "Faith and Life"
+      ar: "الإيمان والحياة"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [tazkiyah, aqeedah, spirituality]
+    tags: [faith, spirituality, iman]
+    source:
+      archive_id: "faith-and-life"
+      archive_url: "https://archive.org/details/faith-and-life"
+    chapters:
+      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
+      - { num: 4, title: { en: "Chapter 4", ar: "الفصل الرابع" }, slug: "ch-04" }
+    status:
+      en: published
+      ar: not-translated
+
+  auspices-victory:
+    title:
+      en: "Auspices of the Ultimate Victory of Islam"
+      ar: "مقدمات النصر المبين للإسلام"
+    author: yusuf-al-qaradawi
+    shelf: qaradawi
+    original_language: ar
+    languages: [en]
+    domains: [fiqh-dawah, islamic-movement]
+    tags: [victory, islamic-movement, future]
+    source:
+      archive_id: "auspices-of-the-ultimate-victory-of-islam"
+      archive_url: "https://archive.org/details/auspices-of-the-ultimate-victory-of-islam"
+    chapters:
+      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
+      - { num: 4, title: { en: "Chapter 4", ar: "الفصل الرابع" }, slug: "ch-04" }
+      - { num: 5, title: { en: "Chapter 5", ar: "الفصل الخامس" }, slug: "ch-05" }
+      - { num: 6, title: { en: "Chapter 6", ar: "الفصل السادس" }, slug: "ch-06" }
+      - { num: 7, title: { en: "Chapter 7", ar: "الفصل السابع" }, slug: "ch-07" }
+      - { num: 8, title: { en: "Chapter 8", ar: "الفصل الثامن" }, slug: "ch-08" }
+    status:
+      en: published
+      ar: not-translated

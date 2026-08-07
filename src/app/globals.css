@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f8f6f2;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+}
+
+/* Hover effects */
+a[class='book-card']:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+  transform: translateY(-2px);
+  border-color: #c45c3e !important;
+}
+
+a[class='chapter-row']:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1) !important;
+  border-color: #c45c3e !important;
+}
+
+a[class='scholar-card']:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+  transform: translateY(-2px);
+  border-color: #c45c3e !important;
+}
+
+.nav-link:hover {
+  color: #f8f6f2 !important;
+}
