@@ -16,7 +16,7 @@ A unified, multi-language digital Islamic library. One beautiful website where r
 | **Type** | Next.js static site, Vercel-deployed |
 | **Location** | `/root/projects/bayt-al-hikmah/` |
 | **Git** | New GitHub repo (`bayt-al-hikmah`) |
-| **Deploy** | Vercel (auto-deploy on push) |
+| **Deploy** | Vercel — see AGENTS.md for credentials and workflow |
 | **Access** | Public (free reading). Architecture supports future member tier |
 | **Design** | Solaris aesthetic: #f8f6f2 warm paper, #0a2540 deep navy, #c45c3e terracotta. DM Serif Display + Source Sans 3 + Amiri (Arabic) |
 | **Status** | Planning phase — August 2026 |
@@ -263,7 +263,7 @@ Typography:
 - **Content:** YAML registry + Markdown chapters (gray-matter frontmatter)
 - **Styling:** Tailwind CSS + custom CSS variables for design system
 - **Fonts:** Google Fonts (DM Serif Display, Source Sans 3, Amiri)
-- **Deploy:** Vercel (GitHub-connected, auto-deploy on push)
+- **Deploy:** Vercel — see `AGENTS.md` for the correct token, project ID, and publishing workflow
 - **Languages:** TypeScript
 
 ## Governance
