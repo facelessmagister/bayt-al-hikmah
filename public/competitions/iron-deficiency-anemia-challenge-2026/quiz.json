@@ -1,0 +1,129 @@
+{
+  "competition_slug": "iron-deficiency-anemia-challenge-2026",
+  "title": "Iron Deficiency Anemia Knowledge Challenge",
+  "total_questions": 10,
+  "time_limit_minutes": 20,
+  "passing_score": 70,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the primary function of hemoglobin in the body?",
+      "options": [
+        "To fight infections",
+        "To transport oxygen from lungs to cells",
+        "To digest food",
+        "To regulate body temperature"
+      ],
+      "correct_answer": 1,
+      "explanation": "Hemoglobin is the protein in red blood cells that carries oxygen from the lungs to every cell in the body."
+    },
+    {
+      "id": 2,
+      "question": "Which of the following is a rich source of heme iron (most easily absorbed)?",
+      "options": [
+        "Spinach",
+        "Lentils",
+        "Beef liver",
+        "Fortified cereals"
+      ],
+      "correct_answer": 2,
+      "explanation": "Heme iron is found in animal foods like beef liver, chicken, and fish. It is more easily absorbed (15–35%) than non-heme iron from plant sources."
+    },
+    {
+      "id": 3,
+      "question": "Why do women of reproductive age need more iron than men?",
+      "options": [
+        "They exercise more",
+        "They lose iron through menstruation",
+        "They eat less food",
+        "Their bodies produce more blood"
+      ],
+      "correct_answer": 1,
+      "explanation": "Women lose iron through monthly menstruation. The average woman loses 30–40 mL of blood per period, resulting in approximately 200–250 mg of iron lost per year."
+    },
+    {
+      "id": 4,
+      "question": "What does a low MCV (Mean Corpuscular Volume) indicate in iron deficiency anemia?",
+      "options": [
+        "Red blood cells are too large",
+        "Red blood cells are small and pale",
+        "There are too many white blood cells",
+        "Platelet count is high"
+      ],
+      "correct_answer": 1,
+      "explanation": "In iron deficiency anemia, MCV is low (<80 fL), meaning red blood cells are microcytic (small) and hypochromic (pale) due to insufficient hemoglobin."
+    },
+    {
+      "id": 5,
+      "question": "Which drink can BLOCK iron absorption when consumed with meals?",
+      "options": [
+        "Orange juice",
+        "Coffee",
+        "Water",
+        "Apple juice"
+      ],
+      "correct_answer": 1,
+      "explanation": "Coffee and tea contain tannins and polyphenols that bind to iron and reduce absorption. Orange juice, rich in vitamin C, actually enhances absorption."
+    },
+    {
+      "id": 6,
+      "question": "How long does it typically take for hemoglobin to return to normal after starting iron treatment?",
+      "options": [
+        "1–2 days",
+        "2–4 weeks",
+        "2–3 months",
+        "1 year"
+      ],
+      "correct_answer": 2,
+      "explanation": "While energy may improve in 1–2 weeks, hemoglobin takes 2–3 months to return to normal. Iron stores (ferritin) take 6 months to fully replenish."
+    },
+    {
+      "id": 7,
+      "question": "Which vitamin enhances the absorption of non-heme iron from plant foods?",
+      "options": [
+        "Vitamin D",
+        "Vitamin B12",
+        "Vitamin C",
+        "Vitamin E"
+      ],
+      "correct_answer": 2,
+      "explanation": "Vitamin C converts non-heme iron into a more absorbable form. Good combinations include lentils with tomatoes, or fortified cereal with orange juice."
+    },
+    {
+      "id": 8,
+      "question": "What is the name of the condition where a person craves non-food items like ice or dirt?",
+      "options": [
+        "Anorexia",
+        "Pica",
+        "Bulimia",
+        "Rickets"
+      ],
+      "correct_answer": 1,
+      "explanation": "Pica is the craving and eating of non-food items such as ice, dirt, or starch. It is strongly associated with iron deficiency."
+    },
+    {
+      "id": 9,
+      "question": "During pregnancy, a woman's daily iron need increases to approximately:",
+      "options": [
+        "8 mg",
+        "18 mg",
+        "27 mg",
+        "50 mg"
+      ],
+      "correct_answer": 2,
+      "explanation": "Pregnant women need 27 mg/day of iron — the highest recommendation of any adult group — due to increased blood volume and fetal development."
+    },
+    {
+      "id": 10,
+      "question": "Which group is at the HIGHEST risk for iron deficiency anemia?",
+      "options": [
+        "Adult men",
+        "Post-menopausal women",
+        "Women with heavy menstrual periods",
+        "Teenage boys"
+      ],
+      "correct_answer": 2,
+      "explanation": "Women with heavy menstrual periods (menorrhagia) lose significantly more blood — sometimes 2–3 times the average amount — dramatically increasing their risk of iron deficiency anemia."
+    }
+  ]
+}

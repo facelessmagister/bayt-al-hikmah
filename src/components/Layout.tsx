@@ -47,11 +47,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             Library
           </Link>
           <Link
+            href="/courses/"
+            style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
+            className="nav-link"
+          >
+            Courses
+          </Link>
+          <Link
             href="/scholars/"
             style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
             className="nav-link"
           >
             Scholars
+          </Link>
+          <Link
+            href="/competitions/iron-deficiency-anemia-challenge-2026/"
+            style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
+            className="nav-link"
+          >
+            Competitions
           </Link>
           <Link
             href="/about/"
