@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import UserNav from './UserNav';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -59,6 +60,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           >
             About
           </Link>
+          <UserNav />
         </nav>
       </header>
       <main>{children}</main>
