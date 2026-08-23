@@ -187,20 +187,6 @@ export default function UserNav() {
             <div style={{ padding: '0.5rem 0.75rem', borderBottom: '1px solid #eee', marginBottom: '0.25rem' }}>
               <div style={{ fontWeight: 600, color: '#0a2540', fontSize: '0.85rem' }}>{user.name}</div>
               <div style={{ fontSize: '0.75rem', color: '#888' }}>{user.email}</div>
-              {user.role === 'admin' && (
-                <div
-                  style={{
-                    fontSize: '0.65rem',
-                    color: '#c45c3e',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    marginTop: '0.25rem',
-                    fontWeight: 600,
-                  }}
-                >
-                  Admin
-                </div>
-              )}
             </div>
             <Link
               href="/profile/"
@@ -219,25 +205,6 @@ export default function UserNav() {
             >
               Profile
             </Link>
-            {user.role === 'admin' && (
-              <Link
-                href="/admin/"
-                onClick={() => setDropdownOpen(false)}
-                style={{
-                  display: 'block',
-                  padding: '0.5rem 0.75rem',
-                  color: '#333',
-                  textDecoration: 'none',
-                  fontSize: '0.85rem',
-                  borderRadius: '4px',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#f8f6f2')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-              >
-                Admin Dashboard
-              </Link>
-            )}
             <button
               onClick={handleSignOut}
               style={{
