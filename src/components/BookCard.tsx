@@ -4,11 +4,13 @@ import type { Book, Author } from '@/lib/catalog';
 interface BookCardProps {
   book: Book;
   author?: Author;
+  progress?: number; // completion_percent (0-100)
 }
 
-export default function BookCard({ book, author }: BookCardProps) {
+export default function BookCard({ book, author, progress }: BookCardProps) {
   const langCount = book.languages.length;
   const chapterCount = book.chapters?.length || 0;
+  const showProgress = progress !== undefined && progress > 0;
 
   return (
     <Link
@@ -92,6 +94,41 @@ export default function BookCard({ book, author }: BookCardProps) {
         <span>📖 {chapterCount} chapters</span>
         {book.translated_by && <span>✍️ Translated</span>}
       </div>
+
+      {/* Progress bar */}
+      {showProgress && (
+        <div style={{ marginTop: '0.75rem' }}>
+          <div
+            style={{
+              width: '100%',
+              height: '4px',
+              background: '#e3eaf2',
+              borderRadius: '2px',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                width: `${progress}%`,
+                height: '100%',
+                background: '#c45c3e',
+                borderRadius: '2px',
+                transition: 'width 0.3s',
+              }}
+            />
+          </div>
+          <div
+            style={{
+              fontSize: '0.7rem',
+              color: '#888',
+              marginTop: '0.25rem',
+              textAlign: 'right',
+            }}
+          >
+            {progress}%
+          </div>
+        </div>
+      )}
 
       </Link>
     );

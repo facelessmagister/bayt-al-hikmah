@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { remark } from 'remark';
 import remarkHtml from 'remark-html';
+import { createClient } from '@/utils/supabase/client';
 
 interface ChapterReaderProps {
   book: any;
@@ -35,11 +36,40 @@ export default function ChapterReader({
 }: ChapterReaderProps) {
   const [fontSize, setFontSize] = useState(18);
   const [html, setHtml] = useState('');
+  const [saveStatus, setSaveStatus] = useState('');
   const isRTL = currentLang === 'ar';
 
   useEffect(() => {
     markdownToHtml(chapter.content).then(setHtml);
   }, [chapter.content]);
+
+  // Auto-save reading progress when chapter loads
+  const saveProgress = useCallback(async () => {
+    const completionPercent = Math.round((chapterNum / totalChapters) * 100)
+    try {
+      const response = await fetch('/api/progress/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content_type: 'book',
+          content_slug: book.slug,
+          chapter_num: chapterNum,
+          completion_percent: completionPercent,
+          language: currentLang,
+        }),
+      })
+      if (response.ok) {
+        setSaveStatus('Progress saved')
+        setTimeout(() => setSaveStatus(''), 2000)
+      }
+    } catch (err) {
+      console.error('Failed to save progress:', err)
+    }
+  }, [book.slug, chapterNum, totalChapters, currentLang])
+
+  useEffect(() => {
+    saveProgress()
+  }, [saveProgress])
 
   return (
     <div
@@ -103,6 +133,20 @@ export default function ChapterReader({
           <span style={{ fontSize: '0.8rem', color: '#b0c4de' }}>
             Ch {chapterNum} / {totalChapters}
           </span>
+          {saveStatus && (
+            <span
+              style={{
+                fontSize: '0.75rem',
+                color: '#4ade80',
+                background: 'rgba(74, 222, 128, 0.15)',
+                padding: '0.15rem 0.5rem',
+                borderRadius: '4px',
+                fontWeight: 500,
+              }}
+            >
+              {saveStatus}
+            </span>
+          )}
           <div style={{ display: 'flex', gap: '0.25rem' }}>
             <button
               onClick={() => setFontSize((f) => Math.max(14, f - 1))}

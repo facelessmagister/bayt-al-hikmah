@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import BookCard from '@/components/BookCard';
+import ContinueReadingWrapper from '@/components/ContinueReadingWrapper';
 import { getAllBooks, getAllAuthors, getBooksByShelf, SHELVES } from '@/lib/catalog';
 
 export default function HomePage() {
@@ -74,6 +75,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Continue Reading */}
+      <ContinueReadingWrapper books={books} authors={authors} />
 
       {/* Shelves */}
       <section style={{ padding: '3rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
