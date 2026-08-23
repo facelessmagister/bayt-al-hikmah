@@ -1,9 +1,10 @@
 # Bayt al-Hikmah — Development Plan: Authentication, Database & User Accounts
 
-> **Status:** PENDING APPROVAL  
+> **Status:** IN PROGRESS — Phase 1  
 > **Created:** 2026-08-23 (UTC+8)  
+> **Updated:** 2026-08-23 (stack revised to Supabase-only)  
 > **Scope:** Convert static content library into full-featured educational platform  
-> **Approach:** Auth.js + Drizzle ORM + local libSQL (sqld) / Turso (production)
+> **Approach:** Supabase Auth + Supabase PostgreSQL database + Next.js SSR
 
 ---
 
@@ -13,11 +14,10 @@
 2. [Technology Stack](#2-technology-stack)
 3. [Database Schema](#3-database-schema)
 4. [Phase-by-Phase Implementation Plan](#4-phase-by-phase-implementation-plan)
-5. [OAuth Provider Configuration](#5-oauth-provider-configuration)
-6. [Deployment Architecture](#6-deployment-architecture)
-7. [Content Expansion Roadmap](#7-content-expansion-roadmap)
-8. [Current Project State](#8-current-project-state)
-9. [Next Steps](#9-next-steps)
+5. [Deployment Architecture](#5-deployment-architecture)
+6. [Content Expansion Roadmap](#6-content-expansion-roadmap)
+7. [Current Project State](#7-current-project-state)
+8. [Environment Variables](#8-environment-variables)
 
 ---
 
@@ -45,184 +45,215 @@
 
 | Layer | Choice | Reason |
 |-------|--------|--------|
-| **Auth** | Auth.js (NextAuth v5) | Config in code (auth.ts), readable cookies, multiple OAuth providers, email/password built-in |
-| **Database** | libSQL / Turso | SQLite-compatible, schema in TypeScript via Drizzle, file-based local dev, edge-replicated in production |
-| **ORM** | Drizzle ORM | Schema is TypeScript; migrations are SQL files; fully inspectable by agent |
+| **Auth** | Supabase Auth | Built-in OAuth (Google, GitHub), email/password, no OAuth app creation needed |
+| **Database** | Supabase PostgreSQL | Managed PostgreSQL with real-time subscriptions, row-level security |
+| **Database Client** | `@supabase/supabase-js` | Official client, handles auth sessions + database queries |
+| **SSR/Server Components** | `@supabase/ssr` | Cookie-based session management for Next.js App Router |
 | **Framework** | Next.js 14 App Router | Already in use; upgrade from static export to SSR + API routes |
-| **Deployment** | Vercel | Current platform; handles SSR, API routes, and edge functions natively |
-| **Local DB Server** | sqld (bundled with Turso CLI) | Runs libSQL HTTP API locally; same protocol as Turso cloud |
+| **Deployment** | Vercel | Current platform; handles SSR, API routes natively |
 
-### Why Not Clerk + Supabase
-- Clerk uses opaque JWT tokens that are masked by security filters — I cannot debug auth issues programmatically
-- Supabase RLS policies are invisible SQL in a dashboard — not version-controlled
-- This stack is 100% code-driven and debuggable by an AI agent
+### Why Supabase (revised decision)
+- **Zero OAuth setup** — Google/GitHub auth works out of the box via Supabase proxy
+- **Single service** — auth and database in one place, one set of credentials
+- **No email confirmation required** — configured in dashboard, users sign up instantly
+- **RLS policies** — handled in Supabase dashboard; acceptable trade-off for zero setup friction
+- **Production ready** — auto-scaling, backups, real-time subscriptions available
 
 ---
 
 ## 3. Database Schema
 
-```typescript
-// db/schema.ts — Drizzle ORM schema
+All tables created in Supabase PostgreSQL. Managed via Supabase SQL Editor or migrations.
 
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
-import { relations } from "drizzle-orm";
+```sql
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-// ===== AUTH (Auth.js managed) =====
-export const users = sqliteTable("users", {
-  id: text("id").primaryKey(),
-  name: text("name"),
-  email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "timestamp" }),
-  image: text("image"),
-  role: text("role", { enum: ["student", "instructor", "admin"] }).notNull().default("student"),
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-});
+-- ===== PROFILES (extends Supabase auth.users) =====
+-- This table is automatically linked to auth.users via a trigger
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT,
+  avatar_url TEXT,
+  role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'instructor', 'admin')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-export const accounts = sqliteTable("accounts", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  type: text("type").notNull(),
-  provider: text("provider").notNull(),
-  providerAccountId: text("provider_account_id").notNull(),
-  refresh_token: text("refresh_token"),
-  access_token: text("access_token"),
-  expires_at: integer("expires_at"),
-  token_type: text("token_type"),
-  scope: text("scope"),
-  id_token: text("id_token"),
-  session_state: text("session_state"),
-});
+-- Trigger: auto-create profile on new user signup
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, name, avatar_url, role)
+  VALUES (NEW.id, NEW.raw_user_meta_data->>'name', NEW.raw_user_meta_data->>'avatar_url', 'student');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-export const sessions = sqliteTable("sessions", {
-  id: text("id").primaryKey(),
-  sessionToken: text("session_token").notNull().unique(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  expires: integer("expires", { mode: "timestamp" }).notNull(),
-});
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
-export const verificationTokens = sqliteTable("verification_tokens", {
-  identifier: text("identifier").notNull(),
-  token: text("token").notNull().unique(),
-  expires: integer("expires", { mode: "timestamp" }).notNull(),
-});
+-- ===== READING PROGRESS =====
+CREATE TABLE reading_progress (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  content_type TEXT NOT NULL CHECK (content_type IN ('book', 'quran', 'hadith', 'tafsir')),
+  content_slug TEXT NOT NULL,
+  chapter_num INTEGER,
+  last_read_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  completion_percent INTEGER NOT NULL DEFAULT 0 CHECK (completion_percent BETWEEN 0 AND 100),
+  language TEXT NOT NULL DEFAULT 'en',
+  UNIQUE(user_id, content_slug, language)
+);
 
-// ===== READING PROGRESS =====
-export const readingProgress = sqliteTable("reading_progress", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  contentType: text("content_type", { enum: ["book", "quran", "hadith", "tafsir"] }).notNull(),
-  contentSlug: text("content_slug").notNull(),
-  chapterNum: integer("chapter_num"),
-  lastReadAt: integer("last_read_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  completionPercent: integer("completion_percent").notNull().default(0),
-  language: text("language").notNull().default("en"),
-});
+-- ===== COURSES =====
+CREATE TABLE courses (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  slug TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  description TEXT,
+  instructor_id UUID REFERENCES auth.users(id),
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'open', 'closed', 'archived')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-// ===== COURSES =====
-export const courses = sqliteTable("courses", {
-  id: text("id").primaryKey(),
-  slug: text("slug").notNull().unique(),
-  title: text("title").notNull(),
-  description: text("description"),
-  instructorId: text("instructor_id").references(() => users.id),
-  status: text("status", { enum: ["draft", "open", "closed", "archived"] }).notNull().default("draft"),
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-});
+CREATE TABLE course_lessons (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  course_id UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  description TEXT,
+  "order" INTEGER NOT NULL,
+  content_slug TEXT,
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-export const courseLessons = sqliteTable("course_lessons", {
-  id: text("id").primaryKey(),
-  courseId: text("course_id").notNull().references(() => courses.id, { onDelete: "cascade" }),
-  title: text("title").notNull(),
-  description: text("description"),
-  order: integer("order").notNull(),
-  contentSlug: text("content_slug"), // links to static content (book chapter, etc.)
-  status: text("status", { enum: ["draft", "published"] }).notNull().default("draft"),
-});
+CREATE TABLE course_enrollments (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  course_id UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+  enrolled_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'dropped')),
+  UNIQUE(user_id, course_id)
+);
 
-export const courseEnrollments = sqliteTable("course_enrollments", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  courseId: text("course_id").notNull().references(() => courses.id, { onDelete: "cascade" }),
-  enrolledAt: integer("enrolled_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  status: text("status", { enum: ["active", "completed", "dropped"] }).notNull().default("active"),
-});
+CREATE TABLE course_progress (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  lesson_id UUID NOT NULL REFERENCES course_lessons(id) ON DELETE CASCADE,
+  completed_at TIMESTAMP WITH TIME ZONE,
+  UNIQUE(user_id, lesson_id)
+);
 
-export const courseProgress = sqliteTable("course_progress", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  lessonId: text("lesson_id").notNull().references(() => courseLessons.id, { onDelete: "cascade" }),
-  completedAt: integer("completed_at", { mode: "timestamp" }),
-});
+-- ===== COMPETITIONS =====
+CREATE TABLE competitions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  slug TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  description TEXT,
+  registration_open TIMESTAMP WITH TIME ZONE,
+  registration_close TIMESTAMP WITH TIME ZONE,
+  competition_date TIMESTAMP WITH TIME ZONE,
+  entry_fee TEXT,
+  prize_description TEXT,
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'open', 'closed', 'completed')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-// ===== COMPETITIONS =====
-export const competitions = sqliteTable("competitions", {
-  id: text("id").primaryKey(),
-  slug: text("slug").notNull().unique(),
-  title: text("title").notNull(),
-  description: text("description"),
-  registrationOpen: integer("registration_open", { mode: "timestamp" }),
-  registrationClose: integer("registration_close", { mode: "timestamp" }),
-  competitionDate: integer("competition_date", { mode: "timestamp" }),
-  entryFee: text("entry_fee"), // free-form text (e.g., "RM 50", "Free")
-  prizeDescription: text("prize_description"),
-  status: text("status", { enum: ["draft", "open", "closed", "completed"] }).notNull().default("draft"),
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-});
+CREATE TABLE competition_registrations (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  competition_id UUID NOT NULL REFERENCES competitions(id) ON DELETE CASCADE,
+  registered_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'verified', 'waived')),
+  payment_verified_by UUID REFERENCES auth.users(id),
+  payment_verified_at TIMESTAMP WITH TIME ZONE,
+  notes TEXT,
+  UNIQUE(user_id, competition_id)
+);
 
-export const competitionRegistrations = sqliteTable("competition_registrations", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  competitionId: text("competition_id").notNull().references(() => competitions.id, { onDelete: "cascade" }),
-  registeredAt: integer("registered_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  paymentStatus: text("payment_status", { enum: ["pending", "verified", "waived"] }).notNull().default("pending"),
-  paymentVerifiedBy: text("payment_verified_by").references(() => users.id),
-  paymentVerifiedAt: integer("payment_verified_at", { mode: "timestamp" }),
-  notes: text("notes"),
-});
+CREATE TABLE competition_submissions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  competition_id UUID NOT NULL REFERENCES competitions(id) ON DELETE CASCADE,
+  submission_data JSONB NOT NULL DEFAULT '{}',
+  submitted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  score INTEGER CHECK (score BETWEEN 0 AND 100),
+  scored_by UUID REFERENCES auth.users(id),
+  scored_at TIMESTAMP WITH TIME ZONE,
+  feedback TEXT
+);
 
-export const competitionSubmissions = sqliteTable("competition_submissions", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  competitionId: text("competition_id").notNull().references(() => competitions.id, { onDelete: "cascade" }),
-  submissionData: text("submission_data").notNull(), // JSON string: {answers, essay, etc.}
-  submittedAt: integer("submitted_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
-  score: integer("score"),
-  scoredBy: text("scored_by").references(() => users.id),
-  scoredAt: integer("scored_at", { mode: "timestamp" }),
-  feedback: text("feedback"),
-});
+-- ===== ROW LEVEL SECURITY (RLS) POLICIES =====
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE reading_progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE course_lessons ENABLE ROW LEVEL SECURITY;
+ALTER TABLE course_enrollments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE course_progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE competitions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE competition_registrations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE competition_submissions ENABLE ROW LEVEL SECURITY;
+
+-- Profiles: users can read all profiles, update only their own
+CREATE POLICY "Profiles are viewable by everyone" ON profiles FOR SELECT USING (true);
+CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+
+-- Reading progress: users can CRUD only their own
+CREATE POLICY "Users can CRUD own reading progress" ON reading_progress FOR ALL USING (auth.uid() = user_id);
+
+-- Courses: public read when open, admin full access
+CREATE POLICY "Courses are viewable by everyone" ON courses FOR SELECT USING (true);
+
+-- Course lessons: public read when parent course is open
+CREATE POLICY "Course lessons are viewable by everyone" ON course_lessons FOR SELECT USING (true);
+
+-- Enrollments: users can CRUD only their own
+CREATE POLICY "Users can CRUD own enrollments" ON course_enrollments FOR ALL USING (auth.uid() = user_id);
+
+-- Course progress: users can CRUD only their own
+CREATE POLICY "Users can CRUD own course progress" ON course_progress FOR ALL USING (auth.uid() = user_id);
+
+-- Competitions: public read when open
+CREATE POLICY "Competitions are viewable by everyone" ON competitions FOR SELECT USING (true);
+
+-- Competition registrations: users can CRUD only their own
+CREATE POLICY "Users can CRUD own registrations" ON competition_registrations FOR ALL USING (auth.uid() = user_id);
+
+-- Competition submissions: users can CRUD only their own
+CREATE POLICY "Users can CRUD own submissions" ON competition_submissions FOR ALL USING (auth.uid() = user_id);
 ```
 
 ---
 
 ## 4. Phase-by-Phase Implementation Plan
 
-### Phase 1: Foundation — Auth + Database + Schema (Week 1)
+### Phase 1: Foundation — Supabase Auth + Database + SSR Migration (Week 1)
 
-**Objective:** Migrate from static export to SSR, set up auth and database.
+**Objective:** Migrate from static export to SSR, integrate Supabase auth and database.
 
 | Step | Task | Files |
 |------|------|-------|
 | 1.1 | Backup current static site | Git tag `pre-auth-migration` (DONE) |
 | 1.2 | Switch `next.config.js` from `output: 'export'` to SSR | `next.config.js` |
-| 1.3 | Install dependencies: `next-auth`, `@auth/core`, `drizzle-orm`, `@libsql/client`, `better-sqlite3` (dev) | `package.json` |
-| 1.4 | Configure Drizzle with libSQL adapter | `drizzle.config.ts`, `db/client.ts` |
-| 1.5 | Define database schema (`db/schema.ts`) | `db/schema.ts` |
-| 1.6 | Run initial migration to create tables | `drizzle/migrate.ts` |
-| 1.7 | Configure Auth.js with credentials + OAuth providers | `auth.ts`, `middleware.ts` |
-| 1.8 | Create sign-in / sign-up UI pages | `app/(auth)/signin/page.tsx`, `app/(auth)/signup/page.tsx` |
-| 1.9 | Add session provider to layout | `app/layout.tsx` |
-| 1.10 | Add user nav dropdown to header | `components/UserNav.tsx` |
-| 1.11 | Test locally: sign up, sign in, sign out | — |
-| 1.12 | Deploy to Vercel with environment variables | `.env.local` → Vercel |
+| 1.3 | Install dependencies: `@supabase/supabase-js`, `@supabase/ssr` | `package.json` |
+| 1.4 | Create Supabase client utilities (browser + server) | `utils/supabase/client.ts`, `utils/supabase/server.ts`, `utils/supabase/middleware.ts` |
+| 1.5 | Apply database schema to Supabase | Supabase SQL Editor |
+| 1.6 | Create auth callback handler for OAuth | `app/auth/callback/route.ts` |
+| 1.7 | Create sign-in / sign-up pages | `app/login/page.tsx`, `app/signup/page.tsx` |
+| 1.8 | Add middleware for session refresh | `middleware.ts` |
+| 1.9 | Add user nav dropdown to header | `components/UserNav.tsx` |
+| 1.10 | Test locally: sign up, sign in, sign out | — |
+| 1.11 | Deploy to Vercel with environment variables | `.env.local` → Vercel dashboard |
 
 **Acceptance Criteria:**
 - [ ] `npm run dev` serves SSR pages
-- [ ] `/signin` and `/signup` pages work
+- [ ] `/login` and `/signup` pages work
 - [ ] Google OAuth login works in production
-- [ ] Email/password registration works
+- [ ] Email/password registration works (no confirmation required)
 - [ ] Session persists across page reloads
+- [ ] New users auto-create profile row
 
 ---
 
@@ -233,16 +264,16 @@ export const competitionSubmissions = sqliteTable("competition_submissions", {
 | Step | Task | Files |
 |------|------|-------|
 | 2.1 | Create user profile page | `app/profile/page.tsx` |
-| 2.2 | Add `role` field to user (default: student) | `db/schema.ts` |
-| 2.3 | Add progress tracking API: POST `/api/progress` | `app/api/progress/route.ts` |
-| 4.4 | Add progress fetch API: GET `/api/progress/[contentSlug]` | `app/api/progress/[slug]/route.ts` |
-| 2.5 | Integrate progress save into chapter reader (auto-save on scroll) | `components/ChapterReader.tsx` |
-| 2.6 | Show "Continue Reading" section on homepage for logged-in users | `app/page.tsx` |
+| 2.2 | Add role-based route protection (admin only) | `middleware.ts` |
+| 2.3 | Add progress tracking API: save progress | `app/api/progress/route.ts` |
+| 2.4 | Add progress fetch API: get progress | `app/api/progress/route.ts` (GET) |
+| 2.5 | Integrate progress save into chapter reader | `components/ChapterReader.tsx` |
+| 2.6 | Show "Continue Reading" section on homepage | `app/page.tsx` |
 | 2.7 | Show reading progress bar on book cards | `components/BookCard.tsx` |
 
 **Acceptance Criteria:**
 - [ ] Logged-in user sees their profile with joined date
-- [ ] Reading a chapter auto-saves progress every 30 seconds
+- [ ] Reading a chapter auto-saves progress
 - [ ] Homepage shows "Continue Reading" with last-read books
 - [ ] Book cards show a progress bar (% complete)
 
@@ -254,13 +285,12 @@ export const competitionSubmissions = sqliteTable("competition_submissions", {
 
 | Step | Task | Files |
 |------|------|-------|
-| 3.1 | Create course admin pages (list, create, edit, delete) | `app/admin/courses/**` |
-| 3.2 | Create course public listing page | `app/courses/page.tsx` |
-| 3.3 | Create course detail page with enrollment button | `app/course/[slug]/page.tsx` |
+| 3.1 | Create course admin pages | `app/admin/courses/**` |
+| 3.2 | Create course public listing | `app/courses/page.tsx` |
+| 3.3 | Create course detail + enrollment | `app/course/[slug]/page.tsx` |
 | 3.4 | Add enrollment API | `app/api/courses/[slug]/enroll/route.ts` |
 | 3.5 | Add lesson completion API | `app/api/courses/[slug]/progress/route.ts` |
-| 3.6 | Create course player (sequential lesson navigation) | `app/course/[slug]/lesson/[lessonId]/page.tsx` |
-| 3.7 | Add admin route protection (role = admin or instructor) | `middleware.ts` |
+| 3.6 | Create course player | `app/course/[slug]/lesson/[lessonId]/page.tsx` |
 
 **Acceptance Criteria:**
 - [ ] Admin can create a course with lessons
@@ -279,13 +309,13 @@ export const competitionSubmissions = sqliteTable("competition_submissions", {
 |------|------|-------|
 | 4.1 | Create competition admin pages | `app/admin/competitions/**` |
 | 4.2 | Create competition public listing | `app/competitions/page.tsx` |
-| 4.3 | Create competition detail + registration page | `app/competition/[slug]/page.tsx` |
-| 4.4 | Add registration API (creates pending record) | `app/api/competitions/[slug]/register/route.ts` |
-| 4.5 | Add submission API (for competition entries) | `app/api/competitions/[slug]/submit/route.ts` |
-| 4.6 | Create admin payment verification page | `app/admin/competitions/[slug]/payments/page.tsx` |
+| 4.3 | Create competition detail + registration | `app/competition/[slug]/page.tsx` |
+| 4.4 | Add registration API | `app/api/competitions/[slug]/register/route.ts` |
+| 4.5 | Add submission API | `app/api/competitions/[slug]/submit/route.ts` |
+| 4.6 | Create admin payment verification | `app/admin/competitions/[slug]/payments/page.tsx` |
 | 4.7 | Add payment verification API | `app/api/competitions/[slug]/verify-payment/route.ts` |
-| 4.8 | Add scoring API (admin assigns scores) | `app/api/competitions/[slug]/score/route.ts` |
-| 4.9 | Add public leaderboard page | `app/competition/[slug]/leaderboard/page.tsx` |
+| 4.8 | Add scoring API | `app/api/competitions/[slug]/score/route.ts` |
+| 4.9 | Create public leaderboard | `app/competition/[slug]/leaderboard/page.tsx` |
 
 **Acceptance Criteria:**
 - [ ] Admin can create competition with entry fee
@@ -303,19 +333,13 @@ export const competitionSubmissions = sqliteTable("competition_submissions", {
 
 | Step | Task | Files |
 |------|------|-------|
-| 5.1 | Create admin dashboard homepage (stats overview) | `app/admin/page.tsx` |
-| 5.2 | Add user management table (list all users, promote/demote roles) | `app/admin/users/page.tsx` |
-| 5.3 | Add admin sidebar navigation | `components/AdminSidebar.tsx` |
-| 5.4 | Ensure mobile responsiveness for auth pages | CSS review |
-| 5.5 | Add loading states and error boundaries | `components/Loading.tsx`, `components/ErrorBoundary.tsx` |
-| 5.6 | Performance audit (Lighthouse score > 90) | — |
-| 5.7 | Final end-to-end test of all flows | — |
-
-**Acceptance Criteria:**
-- [ ] Admin dashboard loads in < 2s
-- [ ] Admin can view all users, change roles
-- [ ] All pages are mobile-friendly
-- [ ] Lighthouse performance score ≥ 90
+| 5.1 | Create admin dashboard | `app/admin/page.tsx` |
+| 5.2 | Add user management | `app/admin/users/page.tsx` |
+| 5.3 | Add admin sidebar | `components/AdminSidebar.tsx` |
+| 5.4 | Mobile responsiveness | CSS review |
+| 5.5 | Loading states + error boundaries | `components/Loading.tsx` |
+| 5.6 | Performance audit | Lighthouse |
+| 5.7 | End-to-end testing | — |
 
 ---
 
@@ -323,39 +347,19 @@ export const competitionSubmissions = sqliteTable("competition_submissions", {
 
 **Objective:** Integrate existing wiki content into the platform.
 
-| Step | Task | Source |
-|------|------|--------|
-| 6.1 | Ingest Quran Wiki surah pages as static content | `/root/tarbiyyah/quran-wiki/` |
-| 6.2 | Ingest Qaradawi Library entities as static content | `/root/qaradawi-library/` |
-| 6.3 | Ingest Fi Zilal Wiki as static content | `/root/tarbiyyah/fi-zilal-wiki/` |
-| 6.4 | Add Hadith collections (Bukhari, Muslim, Sunan) | External sources / API |
-| 6.5 | Add Malay/Indonesian translations support | `catalog.yaml` extension |
-| 6.6 | Add full-text search across all content | `flexsearch` or `fuse.js` |
-| 6.7 | Add concept wiki cross-references | `content/concepts/` |
+| Step | Content | Source |
+|------|---------|--------|
+| 6.1 | Quran Wiki (114 surahs + tafsir + themes) | `/root/tarbiyyah/quran-wiki/` |
+| 6.2 | Qaradawi Library (9 books, entities, concepts) | `/root/qaradawi-library/` |
+| 6.3 | Fi Zilal Wiki (23+ surahs, thematic) | `/root/tarbiyyah/fi-zilal-wiki/` |
+| 6.4 | Hadith collections (Bukhari, Muslim, Sunan) | External sources |
+| 6.5 | Malay/Indonesian translations | Translation pipeline |
+| 6.6 | Full-text search | `flexsearch` or `fuse.js` |
+| 6.7 | Concept wiki cross-references | AI-generated |
 
 ---
 
-## 5. OAuth Provider Configuration
-
-### Configured Providers (no additional API keys needed beyond what we set up):
-
-| Provider | Status | Config Key | Notes |
-|----------|--------|-----------|-------|
-| **Google** | INCLUDED | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Most common; users already have accounts |
-| **GitHub** | INCLUDED | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | Easy setup; good for developers |
-| **Email/Password** | INCLUDED | `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD` | Auth.js built-in credentials provider |
-
-### Why Not More Providers
-- Facebook: requires business verification, complex app review
-- Apple: requires Apple Developer account ($99/year)
-- Twitter/X: API approval is slow and unreliable
-- Discord: niche audience for this platform
-
-**Decision:** Google + GitHub + Email/Password covers 95%+ of users with minimal friction.
-
----
-
-## 6. Deployment Architecture
+## 5. Deployment Architecture
 
 ### Development Environment
 
@@ -366,19 +370,16 @@ Local Machine (WSL)
 │   ├── API routes (/api/*)
 │   └── Static content (unchanged)
 │
-└── sqld (localhost:8080)
-    └── /root/projects/bayt-al-hikmah/db/bayt-al-hikmah.db
-        └── libSQL database file
+└── Supabase (cloud)
+    ├── Auth (OAuth, email/password)
+    └── PostgreSQL database
 ```
 
 **Start local dev:**
 ```bash
-# Terminal 1: Database
 cd /root/projects/bayt-al-hikmah
-/root/.turso/sqld -d db/bayt-al-hikmah.db --http-listen-addr 0.0.0.0:8080
-
-# Terminal 2: Next.js
 npm run dev
+# Supabase is cloud — no local server needed
 ```
 
 ### Production Environment (Vercel)
@@ -389,45 +390,21 @@ Vercel Edge Network
 │   → Pre-rendered at build, cached at edge
 │
 ├── Server routes:
-│   /api/auth/*      → Auth.js (OAuth callbacks, sessions)
-│   /api/progress/*  → Reading progress API
-│   /api/courses/*   → Course enrollment/progress
-│   /api/compete/*   → Competition registration/submission
-│   /dashboard/*     → User dashboard (SSR with auth check)
+│   /api/**          → API routes (Next.js serverless functions)
+│   /login           → Login page
+│   /signup          → Signup page
+│   /profile         → User profile (SSR with auth check)
+│   /dashboard/*     → User dashboard
 │   /admin/*         → Admin panel (protected by role)
 │
-└── Database: Turso (libSQL)
-    → Edge-replicated SQLite
-    → Connection via @libsql/client
-```
-
-### Environment Variables
-
-```bash
-# .env.local (development)
-TURSO_DATABASE_URL=http://localhost:8080
-TURSO_AUTH_TOKEN=local  # not used for local sqld
-AUTH_SECRET=<random-32-char-string>
-AUTH_TRUST_HOST=http://localhost:3000
-GOOGLE_CLIENT_ID=<from-google-cloud-console>
-GOOGLE_CLIENT_SECRET=<from-google-cloud-console>
-GITHUB_CLIENT_ID=<from-github-settings>
-GITHUB_CLIENT_SECRET=<from-github-settings>
-SMTP_HOST=<your-email-provider>
-SMTP_USER=<email-address>
-SMTP_PASSWORD=<app-password>
-
-# Vercel production:
-TURSO_DATABASE_URL=libsql://<db-name>-<user>.turso.io
-TURSO_AUTH_TOKEN=<turso-api-token>
-AUTH_SECRET=<same-as-dev>
-AUTH_TRUST_HOST=https://bayt-al-hikmah-nine.vercel.app
-# (same OAuth and SMTP vars)
+└── Supabase (cloud)
+    ├── Auth (OAuth, sessions)
+    └── PostgreSQL (user data, progress, courses, competitions)
 ```
 
 ---
 
-## 7. Content Expansion Roadmap
+## 6. Content Expansion Roadmap
 
 After the auth platform is complete, the following content will be integrated gradually:
 
@@ -443,7 +420,7 @@ After the auth platform is complete, the following content will be integrated gr
 
 ---
 
-## 8. Current Project State
+## 7. Current Project State
 
 | Metric | Value |
 |--------|-------|
@@ -456,42 +433,32 @@ After the auth platform is complete, the following content will be integrated gr
 | Deployment | Vercel (bayt-al-hikmah-nine.vercel.app) |
 | Git remote | https://github.com/facelessmagister/bayt-al-hikmah.git |
 | Backup tag | `pre-auth-migration` |
-| Turso CLI | Installed at `/root/.turso/turso` |
-| Local libSQL | Tested and working (`sqld` on port 8080) |
+| Supabase project | `sblzlpjxwlthilppmyyd` |
+| Email confirmation | Disabled (configured in Supabase dashboard) |
+| Environment | `.env.local` configured (gitignored) |
 
 ---
 
-## 9. Next Steps
+## 8. Environment Variables
 
-To proceed with implementation:
+### `.env.local` (development — already configured)
 
-1. **Approve this plan** — reply "proceed with Phase 1"
-2. **Provide OAuth credentials** — Google Cloud Console + GitHub OAuth App
-   - Or: I can guide you through creating them
-3. **Provide email SMTP credentials** — for password reset emails
-   - Or: we can skip email verification in Phase 1 and add it later
-4. **Turso production account** — Visit https://api.turso.tech/signup to create account
-   - Or: we can use local libSQL indefinitely (no cloud needed)
+```bash
+SUPABASE_URL=https://sblzlpjxwlthilppmyyd.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNibHpscGp4d2x0aGlscHBteXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MzYyMTYsImV4cCI6MjEwMzAxMjIxNn0.g5FIoS4n-LMMpH32foozh4SaNYCFLhZKRojCFPtCl8U
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNibHpscGp4d2x0aGlscHBteXlkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzQzNjIxNiwiZXhwIjoyMTAzMDEyMjE2fQ.92ru0PnJIAXIR_8IZSQYZHMMXm5M7LnfZfYlcO2CP20
+AUTH_SECRET=09b9d23609936dbf9a4c52b5a0a6f630a465cadb2d4deea276ee432e6152169a
+AUTH_TRUST_HOST=http://localhost:3000
+```
 
-### Immediate Action Required (User)
+### Vercel Production Environment Variables
 
-| Item | How to Complete | Priority |
-|------|-----------------|----------|
-| Google OAuth credentials | https://console.cloud.google.com → APIs & Services → Credentials → Create OAuth 2.0 Client ID | HIGH |
-| GitHub OAuth credentials | https://github.com/settings/developers → New OAuth App | HIGH |
-| SMTP credentials (email) | Any provider (Gmail, Resend, Mailgun) | MEDIUM |
-| Turso cloud account | https://api.turso.tech/signup → GitHub login | MEDIUM |
-
-### Agent Readiness Checklist
-
-| Item | Status |
-|------|--------|
-| Next.js SSR capability | ✅ Verified (framework supports it) |
-| libSQL local server | ✅ Tested (sqld responds on port 8080) |
-| Turso CLI installed | ✅ At `/root/.turso/turso` |
-| Drizzle ORM knowledge | ✅ Available |
-| Auth.js v5 knowledge | ✅ Available |
-| Current site backed up | ✅ Git tag `pre-auth-migration` |
+Set in Vercel dashboard (Settings → Environment Variables):
+- `SUPABASE_URL` — same as above
+- `SUPABASE_ANON_KEY` — same as above
+- `SUPABASE_SERVICE_ROLE_KEY` — same as above
+- `AUTH_SECRET` — generate new random string
+- `AUTH_TRUST_HOST` — `https://bayt-al-hikmah-nine.vercel.app`
 
 ---
 
@@ -500,18 +467,25 @@ To proceed with implementation:
 | File | Purpose |
 |------|---------|
 | `DEVELOPMENT_PLAN.md` | This document — the master plan |
-| `AGENTS.md` | Project operations guide (deployment, content workflow) |
+| `AGENTS.md` | Project operations guide (deployment, content workflow, current status) |
 | `PROJECT.md` | Original project overview |
 | `next.config.js` | Next.js config (to be changed from static export) |
 | `content/catalog.yaml` | Book registry |
 | `content/authors.yaml` | Scholar registry |
 | `content/books/` | Markdown chapter files |
-| `db/` | **NEW** — Database schema, client, migrations |
-| `auth.ts` | **NEW** — Auth.js configuration |
-| `middleware.ts` | **NEW** — Route protection |
-| `app/api/` | **NEW** — API routes |
+| `.env.local` | Environment variables (gitignored, Bayt al-Hikmah ONLY) |
+| `.env.local.example` | Template for environment variables |
+| `utils/supabase/` | **NEW** — Supabase client utilities |
+| `middleware.ts` | **NEW** — Session refresh + route protection |
+| `app/login/page.tsx` | **NEW** — Login page |
+| `app/signup/page.tsx` | **NEW** — Signup page |
+| `app/auth/callback/route.ts` | **NEW** — OAuth callback handler |
+| `app/api/**` | **NEW** — API routes |
 | `app/admin/` | **NEW** — Admin dashboard pages |
+| `app/profile/` | **NEW** — User profile pages |
+| `app/courses/` | **NEW** — Course pages |
+| `app/competitions/` | **NEW** — Competition pages |
 
 ---
 
-*Plan created by Hermes (Nous Research). Review, approve, and store in project memory.*
+*Plan created by Hermes (Nous Research). Stack revised to Supabase-only on 2026-08-23.*
