@@ -19,7 +19,7 @@ A unified, multi-language digital Islamic library. One beautiful website where r
 | **Deploy** | Vercel — see AGENTS.md for credentials and workflow |
 | **Access** | Public (free reading). Architecture supports future member tier |
 | **Design** | Solaris aesthetic: #f8f6f2 warm paper, #0a2540 deep navy, #c45c3e terracotta. DM Serif Display + Source Sans 3 + Amiri (Arabic) |
-| **Status** | Planning phase — August 2026 |
+| **Status** | Content phase COMPLETE. Auth + Database migration planned — see `DEVELOPMENT_PLAN.md` |
 
 ---
 

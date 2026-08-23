@@ -13,6 +13,20 @@ Unified Islamic digital library. Next.js 14 static export, Vercel-deployed.
 | **Content** | `content/catalog.yaml` (book registry) + `content/authors.yaml` (scholars) + `content/books/[slug]/{en,ar}/*.md` |
 | **Design** | Solaris: #f8f6f2 paper, #0a2540 navy, #c45c3e terracotta. DM Serif Display + Source Sans 3 + Amiri |
 
+## Current Status
+
+- **Phase 0 (CONTENT):** COMPLETE — 13 books, 104 chapters, bilingual AR+EN reader, Solaris design.
+- **Phase 1 (AUTH + DATABASE):** PENDING — See `DEVELOPMENT_PLAN.md` for full migration plan.
+- **Framework change:** Next.js static export → SSR + API routes (pending Phase 1).
+
+## Development Plan
+
+**Current active plan:** `DEVELOPMENT_PLAN.md` — Authentication, Database, User Accounts, Courses, Competitions, Content Expansion.
+
+This is the canonical plan. All agent work on this project should reference it.
+
+---
+
 ## Deployment Credentials (CRITICAL)
 
 This project is deployed under the **facelessmagister-9996s-projects** Vercel team.
