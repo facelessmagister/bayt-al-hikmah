@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { getAllBooks, getAllAuthors } from '@/lib/catalog'
 
 export default async function ProfilePage() {
   const supabase = createClient()
@@ -16,6 +17,25 @@ export default async function ProfilePage() {
     .select('*')
     .eq('id', session.user.id)
     .single()
+
+  // Fetch reading progress
+  const { data: readingProgress } = await supabase
+    .from('reading_progress')
+    .select('*')
+    .eq('user_id', session.user.id)
+    .order('last_read_at', { ascending: false })
+    .limit(5)
+
+  // Get book data for progress
+  const books = getAllBooks()
+  const authors = getAllAuthors()
+
+  const progressItems = (readingProgress || [])
+    .map((p) => {
+      const book = books.find((b) => b.slug === p.content_slug)
+      return { progress: p, book }
+    })
+    .filter((item): item is { progress: typeof item.progress; book: NonNullable<typeof item.book> } => item.book !== undefined)
 
   return (
     <Layout>
@@ -118,25 +138,77 @@ export default async function ProfilePage() {
           >
             Continue Reading
           </h3>
-          <p style={{ color: '#666', fontSize: '0.9rem' }}>
-            Your reading progress will appear here. Start reading a book to see your progress.
-          </p>
-          <Link
-            href="/library/"
-            style={{
-              display: 'inline-block',
-              marginTop: '1rem',
-              padding: '0.6rem 1.2rem',
-              background: '#0a2540',
-              color: '#f8f6f2',
-              borderRadius: '6px',
-              textDecoration: 'none',
-              fontWeight: 600,
-              fontSize: '0.85rem',
-            }}
-          >
-            Browse Library
-          </Link>
+          {progressItems.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {progressItems.map(({ progress, book }) => (
+                <Link
+                  key={progress.id}
+                  href={`/chapter/${book.slug}/${progress.chapter_num}/${progress.language}/`}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '1rem',
+                    background: '#f8f6f2',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    color: '#0a2540',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{book.title.en}</div>
+                    <div style={{ fontSize: '0.8rem', color: '#888' }}>
+                      Chapter {progress.chapter_num}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div
+                      style={{
+                        width: '120px',
+                        height: '4px',
+                        background: '#e3eaf2',
+                        borderRadius: '2px',
+                        overflow: 'hidden',
+                        marginBottom: '0.25rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${progress.completion_percent}%`,
+                          height: '100%',
+                          background: '#c45c3e',
+                          borderRadius: '2px',
+                        }}
+                      />
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{progress.completion_percent}%</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <>
+              <p style={{ color: '#666', fontSize: '0.9rem' }}>
+                Your reading progress will appear here. Start reading a book to see your progress.
+              </p>
+              <Link
+                href="/library/"
+                style={{
+                  display: 'inline-block',
+                  marginTop: '1rem',
+                  padding: '0.6rem 1.2rem',
+                  background: '#0a2540',
+                  color: '#f8f6f2',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  fontSize: '0.85rem',
+                }}
+              >
+                Browse Library
+              </Link>
+            </>
+          )}
         </div>
       </section>
     </Layout>
