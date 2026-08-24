@@ -1,0 +1,160 @@
+{
+  "title": "Children's Reading Library",
+  "description": "Graded reading materials for children aged 5 to 13",
+  "version": "1.1.0",
+  "updated": "2026-08-24",
+  "ageGroups": [
+    {
+      "id": "age-05",
+      "label": "Age 5",
+      "subtitle": "Emergent Readers",
+      "cefr": "Pre-A1 → A1",
+      "wordRange": "50-150",
+      "fleschEase": "95-100",
+      "color": "#FFE082"
+    },
+    {
+      "id": "age-09",
+      "label": "Age 9",
+      "subtitle": "Developing Readers",
+      "cefr": "A2 → B1",
+      "wordRange": "300-600",
+      "fleschEase": "80-95",
+      "color": "#81D4FA"
+    },
+    {
+      "id": "age-12",
+      "label": "Age 12",
+      "subtitle": "Fluent Readers",
+      "cefr": "B1 → B2",
+      "wordRange": "600-1,200",
+      "fleschEase": "65-80",
+      "color": "#A5D6A7"
+    }
+  ],
+  "articles": {
+    "age-05": [
+      {
+        "slug": "my-cat-bella",
+        "title": "My Cat Bella",
+        "topic": "Animals / Pets",
+        "wordCount": 112,
+        "fleschEase": 97,
+        "newWords": 4,
+        "date": "2026-08-10"
+      }
+    ],
+    "age-09": [
+      {
+        "slug": "baby-elephant",
+        "title": "A Baby Elephant's First Day",
+        "topic": "Animals / Nature",
+        "wordCount": 412,
+        "fleschEase": 87,
+        "newWords": 6,
+        "date": "2026-08-10"
+      },
+      {
+        "slug": "how-rainbows-form",
+        "title": "How Rainbows Are Made",
+        "topic": "Science / Nature",
+        "wordCount": 445,
+        "fleschEase": 84,
+        "newWords": 6,
+        "date": "2026-08-10"
+      },
+      {
+        "slug": "the-lost-puppy",
+        "title": "The Lost Puppy",
+        "topic": "Animals / Adventure",
+        "wordCount": 398,
+        "fleschEase": 86,
+        "newWords": 6,
+        "date": "2026-08-10"
+      },
+      {
+        "slug": "how-to-draw-manga",
+        "title": "How to Draw Manga",
+        "topic": "Art / How-To",
+        "wordCount": 430,
+        "fleschEase": 85,
+        "newWords": 6,
+        "date": "2026-08-24"
+      },
+      {
+        "slug": "what-makes-a-good-friend",
+        "title": "What Makes a Good Friend",
+        "topic": "Friendship / Values",
+        "wordCount": 480,
+        "fleschEase": 87,
+        "newWords": 6,
+        "date": "2026-08-24"
+      },
+      {
+        "slug": "when-anger-comes",
+        "title": "When Anger Comes",
+        "topic": "Feelings / Anger Management",
+        "wordCount": 510,
+        "fleschEase": 86,
+        "newWords": 6,
+        "date": "2026-08-24"
+      }
+    ],
+    "age-12": [
+      {
+        "slug": "football-world-cup",
+        "title": "The Football World Cup",
+        "topic": "Sports / Culture",
+        "wordCount": 398,
+        "fleschEase": 82,
+        "newWords": 8,
+        "date": "2026-08-10"
+      },
+      {
+        "slug": "black-holes",
+        "title": "Black Holes in Space",
+        "topic": "Science / Space",
+        "wordCount": 780,
+        "fleschEase": 72,
+        "newWords": 10,
+        "date": "2026-08-10"
+      },
+      {
+        "slug": "what-is-coding",
+        "title": "What Is Coding?",
+        "topic": "Technology / Coding",
+        "wordCount": 820,
+        "fleschEase": 74,
+        "newWords": 8,
+        "date": "2026-08-24"
+      },
+      {
+        "slug": "python-first-language",
+        "title": "Python: Your First Programming Language",
+        "topic": "Technology / Programming",
+        "wordCount": 850,
+        "fleschEase": 73,
+        "newWords": 8,
+        "date": "2026-08-24"
+      },
+      {
+        "slug": "robots-among-us",
+        "title": "Robots Among Us",
+        "topic": "Technology / Robotics",
+        "wordCount": 890,
+        "fleschEase": 74,
+        "newWords": 8,
+        "date": "2026-08-24"
+      },
+      {
+        "slug": "drones-in-the-sky",
+        "title": "Drones in the Sky",
+        "topic": "Technology / Drones",
+        "wordCount": 920,
+        "fleschEase": 72,
+        "newWords": 8,
+        "date": "2026-08-24"
+      }
+    ]
+  }
+}
