@@ -25,6 +25,16 @@ export default async function CoursesPage() {
           textAlign: 'center',
         }}
       >
+        <p
+          style={{
+            fontFamily: '"Amiri", serif',
+            fontSize: '1.6rem',
+            color: '#c4a35a',
+            marginBottom: '0.25rem',
+          }}
+        >
+          الأكاديمية
+        </p>
         <h1
           style={{
             fontFamily: '"DM Serif Display", serif',
@@ -32,10 +42,11 @@ export default async function CoursesPage() {
             marginBottom: '0.5rem',
           }}
         >
-          Courses
+          Academy
         </h1>
         <p style={{ fontSize: '1rem', color: '#b0c4de', maxWidth: '600px', margin: '0 auto' }}>
-          Structured learning paths to deepen your understanding of Islamic knowledge and beyond.
+          Structured courses, quizzes, and competitions to deepen your understanding of
+          Islamic knowledge and the sciences.
         </p>
       </section>
 

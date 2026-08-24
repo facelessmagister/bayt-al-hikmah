@@ -51,12 +51,12 @@ export default function HomePage() {
               fontSize: '1.15rem',
               lineHeight: 1.7,
               color: '#b0c4de',
-              maxWidth: '600px',
+              maxWidth: '620px',
               margin: '0 auto 2.5rem',
             }}
           >
-            A digital library of Islamic literature — books, tafsir, and hadith
-            in Arabic, English, and more. Read freely, study deeply.
+            House of Wisdom — a center for Islamic education, translation, and the sciences.
+            Read books, take courses, learn, and build new knowledge.
           </p>
 
           {/* Stats */}
@@ -73,6 +73,72 @@ export default function HomePage() {
             <StatBox value={authors.length} label="Scholars" />
             <StatBox value={bilingualBooks} label="Bilingual" accent />
           </div>
+        </div>
+      </section>
+
+      {/* Five Pillars */}
+      <section style={{ padding: '3rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
+        <h2
+          style={{
+            fontFamily: '"DM Serif Display", serif',
+            fontSize: '1.75rem',
+            color: '#0a2540',
+            textAlign: 'center',
+            marginBottom: '0.5rem',
+          }}
+        >
+          Five Pillars of Knowledge
+        </h2>
+        <p
+          style={{
+            fontSize: '0.95rem',
+            color: '#666',
+            textAlign: 'center',
+            marginBottom: '2.5rem',
+            maxWidth: '600px',
+            margin: '0 auto 2.5rem',
+            lineHeight: 1.6,
+          }}
+        >
+          Named after the legendary House of Wisdom of Baghdad, this project revives its mission
+          for the digital age — combining a library, academy, translation center, writing center,
+          and a community of learners.
+        </p>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gap: '1.25rem',
+          }}
+        >
+          <PillarCard
+            icon="📚"
+            title="Library"
+            description="Books, tafsir, and hadith in Arabic and English — read freely, study deeply."
+            href="/library/"
+          />
+          <PillarCard
+            icon="🎓"
+            title="Academy"
+            description="Structured courses, quizzes, and competitions to deepen your understanding."
+            href="/courses/"
+          />
+          <PillarCard
+            icon="🔤"
+            title="Translation"
+            description="Making Islamic scholarship accessible across languages — Arabic, English, Malay, and more."
+          />
+          <PillarCard
+            icon="✍️"
+            title="Writing Center"
+            description="Original research, essays, and knowledge production by our community."
+          />
+          <PillarCard
+            icon="🌱"
+            title="Young Learners"
+            description="Graded reading materials for children ages 5 to 13 — building the next generation."
+            href="/young-learners/"
+          />
         </div>
       </section>
 
@@ -210,4 +276,58 @@ function StatBox({ value, label, accent }: { value: number; label: string; accen
       </div>
     </div>
   );
+}
+
+function PillarCard({
+  icon,
+  title,
+  description,
+  href,
+}: {
+  icon: string;
+  title: string;
+  description: string;
+  href?: string;
+}) {
+  const content = (
+    <div
+      style={{
+        background: '#fff',
+        borderRadius: '12px',
+        padding: '1.5rem',
+        border: '1px solid #eee',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+        height: '100%',
+      }}
+    >
+      <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{icon}</div>
+      <h3
+        style={{
+          fontFamily: '"DM Serif Display", serif',
+          fontSize: '1.2rem',
+          color: '#0a2540',
+          marginBottom: '0.5rem',
+        }}
+      >
+        {title}
+      </h3>
+      <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.6, margin: 0 }}>
+        {description}
+      </p>
+      {href && (
+        <p style={{ fontSize: '0.8rem', color: '#c45c3e', fontWeight: 600, marginTop: '0.75rem' }}>
+          Explore →
+        </p>
+      )}
+    </div>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+        {content}
+      </Link>
+    );
+  }
+  return content;
 }

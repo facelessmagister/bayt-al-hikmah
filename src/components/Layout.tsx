@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             Bayt al-Hikmah
           </span>
         </Link>
-        <nav style={{ display: 'flex', gap: '1.75rem', alignItems: 'center' }}>
+        <nav style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
           <Link
             href="/library/"
             style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
@@ -51,7 +51,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
             className="nav-link"
           >
-            Courses
+            Academy
+          </Link>
+          <Link
+            href="/young-learners/"
+            style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
+            className="nav-link"
+          >
+            Young Learners
           </Link>
           <Link
             href="/scholars/"
@@ -59,13 +66,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             className="nav-link"
           >
             Scholars
-          </Link>
-          <Link
-            href="/competitions/iron-deficiency-anemia-challenge-2026/"
-            style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
-            className="nav-link"
-          >
-            Competitions
           </Link>
           <Link
             href="/about/"
@@ -96,7 +96,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           — Bayt al-Hikmah
         </p>
         <p style={{ color: '#b0c4de', fontSize: '0.8rem' }}>
-          A digital library of Islamic literature — books, tafsir, and hadith in multiple languages.
+          House of Wisdom — a center for Islamic education, translation, and the sciences.
         </p>
         <p style={{ color: '#6b8ca0', fontSize: '0.75rem', marginTop: '0.75rem' }}>
           All content is freely available for reading and study.
