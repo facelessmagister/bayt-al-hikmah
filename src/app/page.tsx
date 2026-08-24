@@ -127,6 +127,7 @@ export default function HomePage() {
             icon="🔤"
             title="Translation"
             description="Making Islamic scholarship accessible across languages — Arabic, English, Malay, and more."
+            href="/translation/"
           />
           <PillarCard
             icon="✍️"
