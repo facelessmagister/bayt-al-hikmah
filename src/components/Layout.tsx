@@ -61,6 +61,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             Young Learners
           </Link>
           <Link
+            href="/competitions/"
+            style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
+            className="nav-link"
+          >
+            Competitions
+          </Link>
+          <Link
             href="/scholars/"
             style={{ color: '#b0c4de', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
             className="nav-link"

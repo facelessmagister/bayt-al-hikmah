@@ -33,6 +33,12 @@ a[class='scholar-card']:hover {
   border-color: #c45c3e !important;
 }
 
+a[class='competition-card']:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+  transform: translateY(-2px);
+  border-color: #c4a35a !important;
+}
+
 .nav-link:hover {
   color: #f8f6f2 !important;
 }

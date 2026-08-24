@@ -24,7 +24,7 @@ export default async function CompetitionPage({
       <Layout>
         <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
           <h1 style={{ color: '#0a2540', fontFamily: '"DM Serif Display", serif' }}>Competition Not Found</h1>
-          <Link href="/" style={{ color: '#c45c3e' }}>← Back to Home</Link>
+          <Link href="/competitions/" style={{ color: '#c45c3e' }}>← Back to Competitions</Link>
         </div>
       </Layout>
     )
@@ -49,6 +49,12 @@ export default async function CompetitionPage({
     }
   }
 
+  // Parse prize structure from DB (JSONB array of {rank, prize})
+  const prizes: Array<{ rank: string; prize: string }> = competition.prize_structure || []
+  const rules: Array<string> = competition.rules || []
+  const paymentInstructions = competition.payment_instructions ||
+    'Join our Telegram channel and message the admin to arrange payment.'
+
   return (
     <Layout>
       {/* Success banner after registration */}
@@ -65,7 +71,9 @@ export default async function CompetitionPage({
           }}
         >
           <p style={{ margin: 0, fontWeight: 600, color: '#0a2540' }}>✓ Successfully registered!</p>
-          <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#666' }}>Your payment status is pending. Please complete your RM25 payment to unlock the quiz.</p>
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#666' }}>
+            Your payment status is pending. Please complete your payment to unlock the quiz.
+          </p>
         </div>
       )}
 
@@ -148,17 +156,7 @@ export default async function CompetitionPage({
           )}
 
           {session && isRegistered && registrationStatus === 'pending' && (
-            <div
-              style={{
-                background: 'rgba(196, 163, 90, 0.15)',
-                border: '1px solid #c4a35a',
-                borderRadius: '8px',
-                padding: '1rem 1.5rem',
-              }}
-            >
-              <p style={{ margin: 0, fontWeight: 600 }}>✓ Registered — Payment Pending</p>
-              <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#b0c4de' }}>Please complete your payment of {competition.entry_fee}. Instructions will be sent via email.</p>
-            </div>
+            <PaymentPendingCard entryFee={competition.entry_fee} instructions={paymentInstructions} />
           )}
 
           {session && isRegistered && registrationStatus === 'verified' && (
@@ -168,6 +166,7 @@ export default async function CompetitionPage({
                 border: '1px solid #4ade80',
                 borderRadius: '8px',
                 padding: '1rem 1.5rem',
+                display: 'inline-block',
               }}
             >
               <p style={{ margin: 0, fontWeight: 600 }}>✓ Payment Verified — You're In!</p>
@@ -195,6 +194,7 @@ export default async function CompetitionPage({
 
       {/* Details */}
       <section style={{ padding: '3rem 2rem', maxWidth: '800px', margin: '0 auto' }}>
+        {/* Detail Cards */}
         <div
           style={{
             display: 'grid',
@@ -203,182 +203,213 @@ export default async function CompetitionPage({
             marginBottom: '3rem',
           }}
         >
-          <DetailCard
-            icon="🎯"
-            title="Entry Fee"
-            value={competition.entry_fee}
-          />
-          <DetailCard
-            icon="🎁"
-            title="Prizes"
-            value="RM150 / RM100 / RM50"
-          />
-          <DetailCard
-            icon="📅"
-            title="Registration Closes"
-            value={new Date(competition.registration_close).toLocaleDateString('en-MY', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          />
+          <DetailCard icon="🎯" title="Entry Fee" value={competition.entry_fee} />
+          {competition.registration_close && (
+            <DetailCard
+              icon="📅"
+              title="Registration Closes"
+              value={new Date(competition.registration_close).toLocaleDateString('en-MY', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            />
+          )}
+          {competition.competition_date && (
+            <DetailCard
+              icon="🗓️"
+              title="Competition Date"
+              value={new Date(competition.competition_date).toLocaleDateString('en-MY', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            />
+          )}
         </div>
 
         {/* Prizes */}
-        <h2
-          style={{
-            fontFamily: '"DM Serif Display", serif',
-            fontSize: '1.5rem',
-            color: '#0a2540',
-            marginBottom: '1.5rem',
-          }}
-        >
-          Prize Structure
-        </h2>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '3rem' }}>
-          <PrizeRow rank="🥇 1st Place" prize="RM 150" highlight />
-          <PrizeRow rank="🥈 2nd Place" prize="RM 100" />
-          <PrizeRow rank="🥉 3rd Place" prize="RM 50" />
-        </div>
+        {prizes.length > 0 && (
+          <>
+            <h2
+              style={{
+                fontFamily: '"DM Serif Display", serif',
+                fontSize: '1.5rem',
+                color: '#0a2540',
+                marginBottom: '1.5rem',
+              }}
+            >
+              Prize Structure
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '3rem' }}>
+              {prizes.map((prize, i) => (
+                <PrizeRow
+                  key={i}
+                  rank={prize.rank}
+                  prize={prize.prize}
+                  highlight={i === 0}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Rules */}
-        <h2
-          style={{
-            fontFamily: '"DM Serif Display", serif',
-            fontSize: '1.5rem',
-            color: '#0a2540',
-            marginBottom: '1.5rem',
-          }}
-        >
-          How It Works
-        </h2>
-
-        <ol
-          style={{
-            color: '#333',
-            lineHeight: 1.8,
-            paddingLeft: '1.5rem',
-            marginBottom: '3rem',
-          }}
-        >
-          <li>Register and pay the {competition.entry_fee} entry fee.</li>
-          <li>Study the <Link href="/course/iron-deficiency-anemia-in-women/" style={{ color: '#c45c3e' }}>Iron Deficiency Anemia course</Link> (5 lessons, free).</li>
-          <li>Take the 10-question multiple-choice quiz.</li>
-          <li>Your score and completion time are recorded privately.</li>
-          <li>Winners are determined by highest score. In case of ties, the earliest completion wins.</li>
-          <li>All participants receive a FREE spot at the live course in Kota Bharu, Kelantan.</li>
-        </ol>
-
-        {/* Live Course */}
-        <div
-          style={{
-            background: '#e3eaf2',
-            borderRadius: '12px',
-            padding: '1.75rem',
-            marginBottom: '3rem',
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: '"DM Serif Display", serif',
-              fontSize: '1.25rem',
-              color: '#0a2540',
-              marginBottom: '0.75rem',
-            }}
-          >
-            📍 Live Course Session
-          </h3>
-          <p style={{ color: '#333', lineHeight: 1.6, margin: 0 }}>
-            All participants — regardless of score — are invited to attend a live course session in
-            <strong>Kota Bharu, Kelantan</strong>. Date and venue will be announced after registration closes.
-          </p>
-        </div>
-
-        {/* Eligibility */}
-        <div
-          style={{
-            borderLeft: '4px solid #c45c3e',
-            paddingLeft: '1.25rem',
-            marginBottom: '3rem',
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: '"DM Serif Display", serif',
-              fontSize: '1.1rem',
-              color: '#0a2540',
-              marginBottom: '0.5rem',
-            }}
-          >
-            Eligibility
-          </h3>
-          <p style={{ color: '#666', lineHeight: 1.6, margin: 0 }}>
-            Open to all Malaysians. You must be registered on Bayt al-Hikmah and have completed payment
-            to be eligible for prizes and the live course session.
-          </p>
-        </div>
-
-        {/* CTA */}
-        <div style={{ textAlign: 'center' }}>
-          {!session && (
-            <Link
-              href={`/login/?next=/competitions/${slug}/`}
+        {rules.length > 0 && (
+          <>
+            <h2
               style={{
-                display: 'inline-block',
-                padding: '0.85rem 1.75rem',
-                background: '#0a2540',
-                color: '#f8f6f2',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '1rem',
+                fontFamily: '"DM Serif Display", serif',
+                fontSize: '1.5rem',
+                color: '#0a2540',
+                marginBottom: '1.5rem',
               }}
             >
-              Log In to Register →
-            </Link>
-          )}
+              How It Works
+            </h2>
+            <ol
+              style={{
+                color: '#333',
+                lineHeight: 1.8,
+                paddingLeft: '1.5rem',
+                marginBottom: '3rem',
+              }}
+            >
+              {rules.map((rule, i) => (
+                <li key={i}>{rule}</li>
+              ))}
+            </ol>
+          </>
+        )}
 
-          {session && !isRegistered && (
-            <form action={`/api/competitions/${slug}/register/`} method="POST">
-              <button
-                type="submit"
-                style={{
-                  padding: '0.85rem 1.75rem',
-                  background: '#0a2540',
-                  color: '#f8f6f2',
-                  borderRadius: '8px',
-                  border: 'none',
-                  fontWeight: 700,
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                }}
+        {/* Related Course */}
+        {competition.related_course_slug && (
+          <div
+            style={{
+              background: '#e3eaf2',
+              borderRadius: '12px',
+              padding: '1.75rem',
+              marginBottom: '3rem',
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: '"DM Serif Display", serif',
+                fontSize: '1.25rem',
+                color: '#0a2540',
+                marginBottom: '0.75rem',
+              }}
+            >
+              📚 Study Material
+            </h3>
+            <p style={{ color: '#333', lineHeight: 1.6, margin: 0 }}>
+              Prepare by studying the{' '}
+              <Link
+                href={`/course/${competition.related_course_slug}/`}
+                style={{ color: '#c45c3e', fontWeight: 600 }}
               >
-                Register Now — {competition.entry_fee}
-              </button>
-            </form>
-          )}
+                {competition.related_course_slug.replace(/-/g, ' ')} course
+              </Link>
+              {' '}— free for all registered participants.
+            </p>
+          </div>
+        )}
 
-          {session && isRegistered && registrationStatus === 'verified' && (
-            <Link
-              href={`/competitions/${slug}/quiz/`}
+        {/* Payment Instructions (shown when pending) */}
+        {session && isRegistered && registrationStatus === 'pending' && (
+          <div
+            style={{
+              background: '#fff8e7',
+              border: '2px solid #c4a35a',
+              borderRadius: '12px',
+              padding: '1.75rem',
+              marginBottom: '3rem',
+            }}
+          >
+            <h3
               style={{
-                display: 'inline-block',
-                padding: '0.85rem 1.75rem',
-                background: '#c45c3e',
-                color: '#fff',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '1rem',
+                fontFamily: '"DM Serif Display", serif',
+                fontSize: '1.25rem',
+                color: '#0a2540',
+                marginBottom: '0.75rem',
               }}
             >
-              Start the Quiz →
-            </Link>
-          )}
+              💬 Complete Your Payment
+            </h3>
+            <p style={{ color: '#333', lineHeight: 1.7, marginBottom: '1rem' }}>
+              To activate your participation, please pay the entry fee of{' '}
+              <strong>{competition.entry_fee}</strong> and notify the admin:
+            </p>
+            <ol style={{ paddingLeft: '1.5rem', color: '#333', lineHeight: 1.8, marginBottom: '1rem' }}>
+              <li>Join our official Telegram channel:{' '}
+                <a
+                  href="https://t.me/bayt_al_hikmah_xyz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#c45c3e', fontWeight: 600 }}
+                >
+                  @bayt_al_hikmah_xyz
+                </a>
+              </li>
+              <li>Send a message to the admin with your registered email and payment proof.</li>
+              <li>The admin will verify your payment and unlock the quiz for you.</li>
+              <li>You will be notified once your payment is verified.</li>
+            </ol>
+            <div
+              style={{
+                background: 'rgba(196, 163, 90, 0.1)',
+                borderRadius: '8px',
+                padding: '0.75rem 1rem',
+                fontSize: '0.85rem',
+                color: '#666',
+              }}
+            >
+              <strong style={{ color: '#0a2540' }}>Note:</strong> Your quiz will remain locked until
+              the admin verifies your payment. This usually takes a few hours.
+            </div>
+          </div>
+        )}
+
+        {/* Leaderboard link */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <Link
+            href={`/competitions/${slug}/leaderboard/`}
+            style={{
+              display: 'inline-block',
+              padding: '0.6rem 1.2rem',
+              background: 'transparent',
+              color: '#0a2540',
+              borderRadius: '6px',
+              border: '1px solid #0a2540',
+              textDecoration: 'none',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+            }}
+          >
+            🏆 View Leaderboard
+          </Link>
         </div>
       </section>
     </Layout>
+  )
+}
+
+function PaymentPendingCard({ entryFee, instructions }: { entryFee: string; instructions: string }) {
+  return (
+    <div
+      style={{
+        background: 'rgba(196, 163, 90, 0.15)',
+        border: '1px solid #c4a35a',
+        borderRadius: '8px',
+        padding: '1rem 1.5rem',
+        display: 'inline-block',
+      }}
+    >
+      <p style={{ margin: 0, fontWeight: 600 }}>✓ Registered — Payment Pending</p>
+      <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#b0c4de' }}>
+        Please complete your payment of {entryFee}. See instructions below.
+      </p>
+    </div>
   )
 }
 
