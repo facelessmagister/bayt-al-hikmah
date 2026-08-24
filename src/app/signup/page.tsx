@@ -52,7 +52,7 @@ export default function SignupPage() {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback/`,
+        redirectTo: 'https://bayt-al-hikmah-nine.vercel.app/auth/callback/',
       },
     })
   }
