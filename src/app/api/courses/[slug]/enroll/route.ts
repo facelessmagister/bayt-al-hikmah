@@ -51,5 +51,6 @@ export async function POST(
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  return NextResponse.json(data)
+  // Redirect back to course page with success
+  return NextResponse.redirect(`https://bayt-al-hikmah-nine.vercel.app/course/${slug}/?enrolled=1`)
 }

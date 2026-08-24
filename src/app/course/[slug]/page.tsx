@@ -3,9 +3,16 @@ import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-export default async function CourseDetailPage({ params }: { params: { slug: string } }) {
+export default async function CourseDetailPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}) {
   const supabase = createClient()
   const slug = params.slug
+  const justEnrolled = searchParams?.enrolled === '1'
 
   // Fetch course with lessons
   const { data: course } = await supabase
@@ -42,6 +49,24 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
 
   return (
     <Layout>
+      {/* Success banner after enrollment */}
+      {justEnrolled && (
+        <div
+          style={{
+            background: 'rgba(74, 222, 128, 0.15)',
+            border: '1px solid #4ade80',
+            borderRadius: '8px',
+            padding: '1rem 1.5rem',
+            margin: '1.5rem auto',
+            maxWidth: '800px',
+            textAlign: 'center',
+          }}
+        >
+          <p style={{ margin: 0, fontWeight: 600, color: '#0a2540' }}>✓ Successfully enrolled!</p>
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#666' }}>You can now access all lessons.</p>
+        </div>
+      )}
+
       <section
         style={{
           background: 'linear-gradient(135deg, #0a2540 0%, #0d2d4f 100%)',

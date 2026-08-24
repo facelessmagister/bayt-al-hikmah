@@ -2,9 +2,16 @@ import { createClient } from '@/utils/supabase/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 
-export default async function CompetitionPage({ params }: { params: { slug: string } }) {
+export default async function CompetitionPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}) {
   const supabase = createClient()
   const slug = params.slug
+  const justRegistered = searchParams?.registered === '1'
 
   const { data: competition } = await supabase
     .from('competitions')
@@ -44,6 +51,24 @@ export default async function CompetitionPage({ params }: { params: { slug: stri
 
   return (
     <Layout>
+      {/* Success banner after registration */}
+      {justRegistered && (
+        <div
+          style={{
+            background: 'rgba(74, 222, 128, 0.15)',
+            border: '1px solid #4ade80',
+            borderRadius: '8px',
+            padding: '1rem 1.5rem',
+            margin: '1.5rem auto',
+            maxWidth: '800px',
+            textAlign: 'center',
+          }}
+        >
+          <p style={{ margin: 0, fontWeight: 600, color: '#0a2540' }}>✓ Successfully registered!</p>
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#666' }}>Your payment status is pending. Please complete your RM25 payment to unlock the quiz.</p>
+        </div>
+      )}
+
       {/* Hero */}
       <section
         style={{

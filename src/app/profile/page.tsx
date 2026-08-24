@@ -1,44 +1,155 @@
-import { createClient } from '@/utils/supabase/server'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { createClient } from '@/utils/supabase/client'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { getAllBooks, getAllAuthors } from '@/lib/catalog'
 
-export default async function ProfilePage() {
+interface Profile {
+  id: string
+  name: string
+  first_name: string | null
+  second_name: string | null
+  age: number | null
+  phone_number: string | null
+  bank_name: string | null
+  bank_account_number: string | null
+  role: string
+  created_at: string
+}
+
+interface Enrollment {
+  id: string
+  course_id: string
+  enrolled_at: string
+  status: string
+  courses: {
+    title: string
+    slug: string
+  }
+}
+
+interface Registration {
+  id: string
+  competition_id: string
+  registered_at: string
+  payment_status: string
+  competitions: {
+    title: string
+    slug: string
+  }
+}
+
+export default function ProfilePage() {
   const supabase = createClient()
-  const { data: { session } } = await supabase.auth.getSession()
+  const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([])
+  const [registrations, setRegistrations] = useState<Registration[]>([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState('')
 
-  if (!session) {
-    redirect('/login/')
+  // Form state
+  const [form, setForm] = useState({
+    first_name: '',
+    second_name: '',
+    age: '',
+    phone_number: '',
+    bank_name: '',
+    bank_account_number: '',
+  })
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  async function fetchData() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      window.location.href = '/login/'
+      return
+    }
+    setUser(session.user)
+
+    // Profile
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', session.user.id)
+      .single()
+    setProfile(profileData || null)
+    if (profileData) {
+      setForm({
+        first_name: profileData.first_name || '',
+        second_name: profileData.second_name || '',
+        age: profileData.age ? String(profileData.age) : '',
+        phone_number: profileData.phone_number || '',
+        bank_name: profileData.bank_name || '',
+        bank_account_number: profileData.bank_account_number || '',
+      })
+    }
+
+    // Course enrollments
+    const { data: enrollData } = await supabase
+      .from('course_enrollments')
+      .select('*, courses(title, slug)')
+      .eq('user_id', session.user.id)
+      .order('enrolled_at', { ascending: false })
+    setEnrollments((enrollData as any) || [])
+
+    // Competition registrations
+    const { data: regData } = await supabase
+      .from('competition_registrations')
+      .select('*, competitions(title, slug)')
+      .eq('user_id', session.user.id)
+      .order('registered_at', { ascending: false })
+    setRegistrations((regData as any) || [])
+
+    setLoading(false)
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single()
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault()
+    if (!user) return
 
-  // Fetch reading progress
-  const { data: readingProgress } = await supabase
-    .from('reading_progress')
-    .select('*')
-    .eq('user_id', session.user.id)
-    .order('last_read_at', { ascending: false })
-    .limit(5)
+    setSaving(true)
+    setMessage('')
 
-  // Get book data for progress
-  const books = getAllBooks()
-  const authors = getAllAuthors()
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        first_name: form.first_name || null,
+        second_name: form.second_name || null,
+        age: form.age ? parseInt(form.age) : null,
+        phone_number: form.phone_number || null,
+        bank_name: form.bank_name || null,
+        bank_account_number: form.bank_account_number || null,
+      })
+      .eq('id', user.id)
 
-  const progressItems = (readingProgress || [])
-    .map((p) => {
-      const book = books.find((b) => b.slug === p.content_slug)
-      return { progress: p, book }
-    })
-    .filter((item): item is { progress: typeof item.progress; book: NonNullable<typeof item.book> } => item.book !== undefined)
+    setSaving(false)
+    if (error) {
+      setMessage('Error saving: ' + error.message)
+    } else {
+      setMessage('✓ Profile updated successfully')
+      // Refresh profile
+      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+      setProfile(data)
+    }
+  }
+
+  if (loading) {
+    return (
+      <Layout>
+        <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>
+      </Layout>
+    )
+  }
 
   return (
     <Layout>
+      {/* Hero */}
       <section
         style={{
           background: '#0a2540',
@@ -47,21 +158,16 @@ export default async function ProfilePage() {
           textAlign: 'center',
         }}
       >
-        <h1
-          style={{
-            fontFamily: '"DM Serif Display", serif',
-            fontSize: '2.5rem',
-            marginBottom: '0.5rem',
-          }}
-        >
+        <h1 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '2.5rem', marginBottom: '0.5rem' }}>
           Your Profile
         </h1>
         <p style={{ fontSize: '1rem', color: '#b0c4de' }}>
-          Manage your account and view your progress
+          Manage your account, certificates & prize details
         </p>
       </section>
 
-      <section style={{ padding: '3rem 2rem', maxWidth: '800px', margin: '0 auto' }}>
+      <section style={{ padding: '3rem 2rem', maxWidth: '900px', margin: '0 auto' }}>
+        {/* Personal Info Card */}
         <div
           style={{
             background: '#fff',
@@ -71,28 +177,30 @@ export default async function ProfilePage() {
             marginBottom: '2rem',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
             <div
               style={{
-                width: '64px',
-                height: '64px',
+                width: '72px',
+                height: '72px',
                 borderRadius: '50%',
                 background: '#c4a35a',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '1.5rem',
-                fontWeight: 600,
+                fontSize: '1.75rem',
+                fontWeight: 700,
                 color: '#0a2540',
               }}
             >
-              {(profile?.name || session.user.email?.split('@')[0] || 'U').charAt(0).toUpperCase()}
+              {(profile?.name || user?.email?.split('@')[0] || 'U').charAt(0).toUpperCase()}
             </div>
             <div>
               <h2 style={{ fontFamily: '"DM Serif Display", serif', color: '#0a2540', marginBottom: '0.25rem' }}>
-                {profile?.name || session.user.email?.split('@')[0] || 'User'}
+                {profile?.first_name && profile?.second_name
+                  ? `${profile.first_name} ${profile.second_name}`
+                  : profile?.name || user?.email?.split('@')[0] || 'User'}
               </h2>
-              <p style={{ color: '#666', fontSize: '0.9rem' }}>{session.user.email}</p>
+              <p style={{ color: '#666', fontSize: '0.9rem' }}>{user?.email}</p>
               <span
                 style={{
                   display: 'inline-block',
@@ -103,8 +211,8 @@ export default async function ProfilePage() {
                   fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  background: profile?.role === 'admin' ? '#c45c3e' : '#e3eaf2',
-                  color: profile?.role === 'admin' ? '#fff' : '#0a2540',
+                  background: '#e3eaf2',
+                  color: '#0a2540',
                 }}
               >
                 {profile?.role || 'student'}
@@ -112,20 +220,157 @@ export default async function ProfilePage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-            <StatCard label="Books Read" value="0" />
-            <StatCard label="Courses Enrolled" value="0" />
-            <StatCard label="Competitions" value="0" />
-            <StatCard label="Joined" value={new Date(profile?.created_at || session.user.created_at).toLocaleDateString()} />
-          </div>
+          {/* Edit Form */}
+          <form onSubmit={handleSave}>
+            <h3
+              style={{
+                fontFamily: '"DM Serif Display", serif',
+                color: '#0a2540',
+                marginBottom: '1.25rem',
+                fontSize: '1.15rem',
+              }}
+            >
+              Personal Details
+            </h3>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '1rem',
+                marginBottom: '1.5rem',
+              }}
+            >
+              <div>
+                <label style={labelStyle}>First Name</label>
+                <input
+                  type="text"
+                  value={form.first_name}
+                  onChange={(e) => setForm({ ...form, first_name: e.target.value })}
+                  placeholder="e.g. Ahmad"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Second / Family Name</label>
+                <input
+                  type="text"
+                  value={form.second_name}
+                  onChange={(e) => setForm({ ...form, second_name: e.target.value })}
+                  placeholder="e.g. bin Ismail"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Age</label>
+                <input
+                  type="number"
+                  value={form.age}
+                  onChange={(e) => setForm({ ...form, age: e.target.value })}
+                  placeholder="e.g. 22"
+                  min={0}
+                  max={120}
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Phone Number (Touch & Go)</label>
+                <input
+                  type="tel"
+                  value={form.phone_number}
+                  onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
+                  placeholder="e.g. +60 12-345 6789"
+                  style={inputStyle}
+                />
+              </div>
+            </div>
+
+            <h3
+              style={{
+                fontFamily: '"DM Serif Display", serif',
+                color: '#0a2540',
+                marginBottom: '1.25rem',
+                fontSize: '1.15rem',
+              }}
+            >
+              Prize Transfer Details
+            </h3>
+            <p style={{ color: '#666', fontSize: '0.85rem', marginBottom: '1rem' }}>
+              Required if you win a competition prize. Used for certificate printing and bank transfers.
+            </p>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '1rem',
+                marginBottom: '1.5rem',
+              }}
+            >
+              <div>
+                <label style={labelStyle}>Bank Name</label>
+                <input
+                  type="text"
+                  value={form.bank_name}
+                  onChange={(e) => setForm({ ...form, bank_name: e.target.value })}
+                  placeholder="e.g. Maybank, CIMB, Bank Islam"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Bank Account Number</label>
+                <input
+                  type="text"
+                  value={form.bank_account_number}
+                  onChange={(e) => setForm({ ...form, bank_account_number: e.target.value })}
+                  placeholder="e.g. 1234567890123"
+                  style={inputStyle}
+                />
+              </div>
+            </div>
+
+            {message && (
+              <div
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '6px',
+                  marginBottom: '1rem',
+                  background: message.startsWith('✓') ? 'rgba(74,222,128,0.15)' : 'rgba(196,92,62,0.1)',
+                  color: message.startsWith('✓') ? '#16a34a' : '#c45c3e',
+                  fontSize: '0.9rem',
+                }}
+              >
+                {message}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={saving}
+              style={{
+                padding: '0.75rem 1.5rem',
+                borderRadius: '8px',
+                border: 'none',
+                background: '#0a2540',
+                color: '#f8f6f2',
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontSize: '0.95rem',
+              }}
+            >
+              {saving ? 'Saving...' : 'Save Profile'}
+            </button>
+          </form>
         </div>
 
+        {/* My Courses */}
         <div
           style={{
             background: '#fff',
             borderRadius: '12px',
             padding: '2rem',
             boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+            marginBottom: '2rem',
           }}
         >
           <h3
@@ -136,14 +381,14 @@ export default async function ProfilePage() {
               fontSize: '1.25rem',
             }}
           >
-            Continue Reading
+            My Courses
           </h3>
-          {progressItems.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {progressItems.map(({ progress, book }) => (
+          {enrollments.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {enrollments.map((e) => (
                 <Link
-                  key={progress.id}
-                  href={`/chapter/${book.slug}/${progress.chapter_num}/${progress.language}/`}
+                  key={e.id}
+                  href={`/course/${e.courses?.slug}/`}
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -155,59 +400,87 @@ export default async function ProfilePage() {
                     color: '#0a2540',
                   }}
                 >
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{book.title.en}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#888' }}>
-                      Chapter {progress.chapter_num}
-                    </div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div
-                      style={{
-                        width: '120px',
-                        height: '4px',
-                        background: '#e3eaf2',
-                        borderRadius: '2px',
-                        overflow: 'hidden',
-                        marginBottom: '0.25rem',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: `${progress.completion_percent}%`,
-                          height: '100%',
-                          background: '#c45c3e',
-                          borderRadius: '2px',
-                        }}
-                      />
-                    </div>
-                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{progress.completion_percent}%</div>
-                  </div>
+                  <span style={{ fontWeight: 600 }}>{e.courses?.title}</span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: '4px',
+                      background: e.status === 'completed' ? '#4ade80' : '#c4a35a',
+                      color: e.status === 'completed' ? '#fff' : '#0a2540',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {e.status === 'completed' ? 'Completed' : 'Active'}
+                  </span>
                 </Link>
               ))}
             </div>
           ) : (
-            <>
-              <p style={{ color: '#666', fontSize: '0.9rem' }}>
-                Your reading progress will appear here. Start reading a book to see your progress.
-              </p>
-              <Link
-                href="/library/"
-                style={{
-                  display: 'inline-block',
-                  marginTop: '1rem',
-                  padding: '0.6rem 1.2rem',
-                  background: '#0a2540',
-                  color: '#f8f6f2',
-                  borderRadius: '6px',
-                  textDecoration: 'none',
-                  fontWeight: 600,
-                  fontSize: '0.85rem',
-                }}
-              >
-                Browse Library
-              </Link>
-            </>
+            <p style={{ color: '#666' }}>You haven't enrolled in any courses yet.</p>
+          )}
+        </div>
+
+        {/* My Competitions */}
+        <div
+          style={{
+            background: '#fff',
+            borderRadius: '12px',
+            padding: '2rem',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+            marginBottom: '2rem',
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: '"DM Serif Display", serif',
+              color: '#0a2540',
+              marginBottom: '1rem',
+              fontSize: '1.25rem',
+            }}
+          >
+            My Competitions
+          </h3>
+          {registrations.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {registrations.map((r) => (
+                <Link
+                  key={r.id}
+                  href={`/competitions/${r.competitions?.slug}/`}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '1rem',
+                    background: '#f8f6f2',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    color: '#0a2540',
+                  }}
+                >
+                  <span style={{ fontWeight: 600 }}>{r.competitions?.title}</span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: '4px',
+                      background:
+                        r.payment_status === 'verified'
+                          ? '#4ade80'
+                          : r.payment_status === 'pending'
+                            ? '#fbbf24'
+                            : '#eee',
+                      color: r.payment_status === 'verified' ? '#fff' : '#0a2540',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {r.payment_status === 'verified' ? 'Paid' : r.payment_status === 'pending' ? 'Payment Pending' : r.payment_status}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p style={{ color: '#666' }}>You haven't registered for any competitions yet.</p>
           )}
         </div>
       </section>
@@ -215,11 +488,19 @@ export default async function ProfilePage() {
   )
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div style={{ textAlign: 'center', padding: '1rem', background: '#f8f6f2', borderRadius: '8px' }}>
-      <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0a2540', marginBottom: '0.25rem' }}>{value}</div>
-      <div style={{ fontSize: '0.75rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</div>
-    </div>
-  )
-}
+const labelStyle = {
+  display: 'block',
+  fontSize: '0.8rem',
+  color: '#555',
+  marginBottom: '0.35rem',
+  fontWeight: 600,
+} as const
+
+const inputStyle = {
+  width: '100%',
+  padding: '0.65rem 0.85rem',
+  borderRadius: '6px',
+  border: '1px solid #ddd',
+  fontSize: '0.9rem',
+  fontFamily: 'inherit',
+} as const
