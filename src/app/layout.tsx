@@ -3,6 +3,7 @@ import './globals.css';
 export const metadata = {
   title: 'Bayt al-Hikmah — House of Wisdom',
   description: 'A digital library of Islamic literature — books, tafsir, and hadith in multiple languages.',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

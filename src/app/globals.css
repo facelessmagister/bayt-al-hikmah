@@ -15,7 +15,30 @@ a {
   color: inherit;
 }
 
-/* Hover effects */
+/* ===== Responsive header ===== */
+.nav-mobile-toggle {
+  display: none !important;
+}
+
+@media (max-width: 880px) {
+  .nav-desktop {
+    display: none !important;
+  }
+  .nav-mobile-toggle {
+    display: flex !important;
+  }
+  .header-title {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .header-title {
+    display: none;
+  }
+}
+
+/* ===== Hover effects ===== */
 a[class='book-card']:hover {
   box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
   transform: translateY(-2px);
@@ -47,6 +70,224 @@ a[class='translation-card']:hover {
 
 .nav-link:hover {
   color: #f8f6f2 !important;
+}
+
+/* ===== Responsive grids ===== */
+/* Override minmax(300px,...) and minmax(340px,...) and minmax(400px,...) on mobile */
+@media (max-width: 768px) {
+  /* Any grid with minmax >= 280px: reduce to 1fr for single column */
+  [style*="minmax(400px"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="minmax(340px"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="minmax(300px"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="minmax(280px"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="minmax(220px"] {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  }
+  [style*="minmax(180px"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Hero sections: reduce padding and font sizes */
+  section[style*="padding: 5rem"] {
+    padding: 3rem 1rem 2.5rem !important;
+  }
+  section[style*="padding: 4rem 2rem"] {
+    padding: 2.5rem 1rem !important;
+  }
+  section[style*="padding: 3.5rem 2rem"] {
+    padding: 2.5rem 1rem !important;
+  }
+  section[style*="padding: 3rem 2rem"] {
+    padding: 2rem 1rem !important;
+  }
+  section[style*="padding: 2.5rem 2rem"] {
+    padding: 2rem 1rem !important;
+  }
+
+  /* Hero h1 sizes */
+  h1[style*="font-size: 3rem"] {
+    font-size: 2rem !important;
+  }
+  h1[style*="font-size: 2.5rem"] {
+    font-size: 1.85rem !important;
+  }
+  h1[style*="font-size: 2.25rem"] {
+    font-size: 1.7rem !important;
+  }
+
+  /* Hero h2 sizes */
+  h2[style*="font-size: 1.75rem"] {
+    font-size: 1.4rem !important;
+  }
+  h2[style*="font-size: 1.5rem"] {
+    font-size: 1.25rem !important;
+  }
+
+  /* Content sections: reduce padding */
+  section[style*="padding: 3rem 2rem"],
+  section[style*="padding: 2.5rem 2rem"],
+  section[style*="padding: 2rem 2rem"] {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Content max-width sections: reduce padding */
+  [style*="maxWidth: 800px"],
+  [style*="maxWidth: 900px"],
+  [style*="maxWidth: 1000px"],
+  [style*="maxWidth: 1200px"] {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Stat boxes in hero: reduce gap */
+  [style*="gap: 2.5rem"] {
+    gap: 1.5rem !important;
+  }
+
+  /* Article content: reduce padding */
+  article[style*="padding: 2rem"] {
+    padding: 1.5rem 1rem !important;
+  }
+
+  [style*="padding: 3rem 2rem 1rem"] {
+    padding: 2rem 1rem 0.5rem !important;
+  }
+
+  [style*="padding: 0 2rem 3rem"] {
+    padding: 0 1rem 2rem !important;
+  }
+
+  /* Detail card grids in competition page */
+  [style*="gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))'"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even smaller: force single column for most grids */
+  [style*="minmax(220px"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="minmax(180px"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  [style*="repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Hero fonts even smaller */
+  h1[style*="font-size: 2rem"] {
+    font-size: 1.6rem !important;
+  }
+  h1[style*="font-size: 1.85rem"] {
+    font-size: 1.5rem !important;
+  }
+  h1[style*="font-size: 1.7rem"] {
+    font-size: 1.4rem !important;
+  }
+
+  /* Stat box values */
+  [style*="fontSize: '2.5rem'"] {
+    font-size: 1.75rem !important;
+  }
+  [style*="fontSize: '2rem'"] {
+    font-size: 1.5rem !important;
+  }
+
+  /* Hero Arabic text */
+  [style*="fontSize: '2.5rem'"] {
+    font-size: 1.75rem !important;
+  }
+  [style*="fontSize: '1.8rem'"] {
+    font-size: 1.4rem !important;
+  }
+
+  /* Section descriptions */
+  [style*="fontSize: '1.15rem'"] {
+    font-size: 0.95rem !important;
+  }
+  [style*="fontSize: '1.05rem'"] {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ===== ChapterReader responsive ===== */
+@media (max-width: 768px) {
+  /* Reader top bar: stack controls */
+  .reader-topbar {
+    flex-wrap: wrap !important;
+    padding: 0.5rem 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Reader content */
+  .reader-content {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .reader-header {
+    padding: 2rem 1rem 0.5rem !important;
+  }
+
+  /* Chapter nav */
+  .chapter-nav {
+    padding: 0 1rem 2rem !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+  }
+}
+
+/* ===== Course lesson page responsive ===== */
+@media (max-width: 768px) {
+  .course-sidebar {
+    display: none !important;
+  }
+  .course-main {
+    padding: 1.5rem 1rem !important;
+  }
+}
+
+/* ===== Quiz page responsive ===== */
+@media (max-width: 768px) {
+  .quiz-container {
+    padding: 1rem !important;
+  }
+  .quiz-card {
+    padding: 1.25rem !important;
+  }
+  .quiz-question {
+    font-size: 1.05rem !important;
+  }
+  .quiz-option {
+    padding: 0.75rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ===== Competition detail page responsive ===== */
+@media (max-width: 768px) {
+  /* Prize rows: stack */
+  [style*="justifyContent: 'space-between'"][style*="borderRadius: '8px'"] {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    text-align: center !important;
+  }
+
+  /* Profile page avatar + name: stack */
+  [style*="gap: '1.5rem'"][style*="marginBottom: '2rem'"] {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 1rem !important;
+  }
 }
 
 /* ===== Young Learners ===== */
@@ -194,4 +435,50 @@ a[class='translation-card']:hover {
   height: auto;
   border-radius: 6px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Young Learners responsive ===== */
+@media (max-width: 768px) {
+  .yl-article-body h1 {
+    font-size: 1.4rem !important;
+  }
+  .yl-article-body h2 {
+    font-size: 1.1rem !important;
+  }
+  .yl-article-body table {
+    font-size: 0.8rem !important;
+  }
+  .yl-article-body th,
+  .yl-article-body td {
+    padding: 0.4rem 0.5rem !important;
+  }
+
+  /* Article card meta: wrap */
+  .yl-article-card [style*="display: flex"][style*="gap: 1rem"] {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+}
+
+/* ===== Profile form responsive ===== */
+@media (max-width: 768px) {
+  [style*="gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))'"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ===== Reduce tap target spacing on mobile ===== */
+@media (max-width: 768px) {
+  /* Card paddings */
+  [style*="padding: 1.75rem"] {
+    padding: 1.25rem !important;
+  }
+  [style*="padding: 2rem"][style*="borderRadius: 12px"] {
+    padding: 1.25rem !important;
+  }
+}
+
+/* ===== Viewport meta is in Next.js head by default, but ensure no horizontal scroll ===== */
+html, body {
+  overflow-x: hidden;
 }

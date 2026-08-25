@@ -109,6 +109,7 @@ export default async function CoursePlayerPage({
         <div style={{ display: 'flex', maxWidth: '1200px', margin: '0 auto' }}>
           {/* Sidebar: Lesson list */}
           <aside
+            className="course-sidebar"
             style={{
               width: '280px',
               background: '#fff',
@@ -116,7 +117,6 @@ export default async function CoursePlayerPage({
               padding: '1.5rem',
               display: 'none',
             }}
-            className="course-sidebar"
           >
             <h3
               style={{
@@ -149,7 +149,7 @@ export default async function CoursePlayerPage({
           </aside>
 
           {/* Main content */}
-          <main style={{ flex: 1, padding: '2rem', maxWidth: '760px', margin: '0 auto' }}>
+          <main className="course-main" style={{ flex: 1, padding: '2rem', maxWidth: '760px', margin: '0 auto' }}>
             <h1
               style={{
                 fontFamily: '"DM Serif Display", serif',

@@ -81,6 +81,7 @@ export default function ChapterReader({
     >
       {/* Top bar */}
       <div
+        className="reader-topbar"
         style={{
           position: 'sticky',
           top: 0,
@@ -182,6 +183,7 @@ export default function ChapterReader({
 
       {/* Chapter header */}
       <div
+        className="reader-header"
         style={{
           padding: '3rem 2rem 1rem',
           maxWidth: '760px',
@@ -218,6 +220,7 @@ export default function ChapterReader({
 
       {/* Chapter content */}
       <article
+        className="reader-content"
         style={{
           maxWidth: '760px',
           margin: '0 auto',
@@ -259,6 +262,7 @@ export default function ChapterReader({
 
       {/* Chapter navigation */}
       <div
+        className="chapter-nav"
         style={{
           maxWidth: '760px',
           margin: '0 auto',

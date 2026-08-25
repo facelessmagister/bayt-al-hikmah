@@ -170,7 +170,7 @@ export default function QuizPage({
           </span>
         </div>
 
-        <div style={{ maxWidth: '720px', margin: '0 auto', padding: '2rem' }}>
+        <div className="quiz-container" style={{ maxWidth: '720px', margin: '0 auto', padding: '2rem' }}>
           {/* Progress */}
           <div style={{ marginBottom: '1.5rem' }}>
             <div
@@ -210,6 +210,7 @@ export default function QuizPage({
 
           {/* Question */}
           <div
+            className="quiz-card"
             style={{
               background: '#fff',
               borderRadius: '12px',
@@ -219,6 +220,7 @@ export default function QuizPage({
             }}
           >
             <h2
+              className="quiz-question"
               style={{
                 fontFamily: '"DM Serif Display", serif',
                 fontSize: '1.25rem',
@@ -234,6 +236,7 @@ export default function QuizPage({
               {question.options.map((option: string, index: number) => (
                 <button
                   key={index}
+                  className="quiz-option"
                   onClick={() => handleAnswer(index)}
                   style={{
                     width: '100%',
