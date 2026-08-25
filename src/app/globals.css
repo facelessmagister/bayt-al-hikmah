@@ -77,12 +77,12 @@ a[class='translation-card']:hover {
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: '#0a2540';
+  color: #0a2540;
 }
 
 /* Young Learners article body (markdown) */
 .yl-article-body h1 {
-  font-family: '"DM Serif Display", serif';
+  font-family: "DM Serif Display", serif;
   font-size: 1.8rem;
   color: #0a2540;
   margin-bottom: 0.5rem;

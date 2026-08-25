@@ -50,11 +50,10 @@ export default async function ArticlePage({ params }: { params: { ageId: string;
     .use(remarkHtml)
     .process(content);
 
-  // Add lazy loading + no-referrer to images
-  const html = String(processed).replace(
-    /<img /g,
-    '<img loading="lazy" referrerpolicy="no-referrer" '
-  );
+  // Add lazy loading + no-referrer to images, fix &#x26; encoding in URLs
+  const html = String(processed)
+    .replace(/<img /g, '<img loading="lazy" referrerpolicy="no-referrer" ')
+    .replace(/&#x26;/g, '&amp;');
 
   return (
     <Layout>
