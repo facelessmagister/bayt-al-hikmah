@@ -26,12 +26,15 @@ export default async function CourseDetailPage({
   }
 
   const lessons = course.course_lessons || []
-  const sortedLessons = lessons.sort((a: any, b: any) => a.order - b.order)
+  const sortedLessons = lessons.sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
 
   // Check enrollment status
   const { data: { session } } = await supabase.auth.getSession()
   let isEnrolled = false
   let enrollmentStatus = null
+  let completedLessonIds = new Set<string>()
+  let completedCount = 0
+  let progressPercent = 0
 
   if (session) {
     const { data: enrollment } = await supabase
@@ -44,6 +47,22 @@ export default async function CourseDetailPage({
     if (enrollment) {
       isEnrolled = true
       enrollmentStatus = enrollment.status
+
+      // Fetch completed lessons
+      const lessonIds = sortedLessons.map((l: any) => l.id)
+      if (lessonIds.length > 0) {
+        const { data: progress } = await supabase
+          .from('course_progress')
+          .select('lesson_id')
+          .eq('user_id', session.user.id)
+          .in('lesson_id', lessonIds)
+
+        completedLessonIds = new Set((progress || []).map((p: any) => p.lesson_id))
+        completedCount = completedLessonIds.size
+        progressPercent = sortedLessons.length > 0
+          ? Math.round((completedCount / sortedLessons.length) * 100)
+          : 0
+      }
     }
   }
 
@@ -84,7 +103,7 @@ export default async function CourseDetailPage({
           <h1
             style={{
               fontFamily: '"DM Serif Display", serif',
-              fontSize: '2.25rem',
+              fontSize: '2.5rem',
               marginBottom: '0.75rem',
               lineHeight: 1.2,
             }}
@@ -96,30 +115,56 @@ export default async function CourseDetailPage({
           </p>
 
           <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
-            <Stat label="Lessons" value={lessons.length} />
+            <Stat label="Lessons" value={sortedLessons.length} />
             <Stat label="Status" value={course.status === 'open' ? 'Open for enrollment' : course.status} />
             <Stat label="Price" value="Free" />
           </div>
+
+          {/* Progress bar for enrolled users */}
+          {isEnrolled && (
+            <div style={{ marginTop: '2rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.85rem', color: '#b0c4de' }}>Your Progress</span>
+                <span style={{ fontSize: '0.85rem', color: '#c4a35a', fontWeight: 700 }}>
+                  {completedCount} / {sortedLessons.length} lessons · {progressPercent}%
+                </span>
+              </div>
+              <div style={{ width: '100%', height: '10px', background: 'rgba(255,255,255,0.15)', borderRadius: '5px', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%',
+                  width: `${progressPercent}%`,
+                  background: progressPercent === 100 ? '#4ade80' : '#c4a35a',
+                  borderRadius: '5px',
+                  transition: 'width 0.3s',
+                }} />
+              </div>
+            </div>
+          )}
 
           {/* Enrollment CTA */}
           <div style={{ marginTop: '2rem' }}>
             {isEnrolled ? (
               <div>
-                <Link
-                  href={`/course/${course.slug}/lesson/${sortedLessons[0]?.id}/`}
-                  style={{
-                    display: 'inline-block',
-                    padding: '0.85rem 1.75rem',
-                    background: '#c4a35a',
-                    color: '#0a2540',
-                    borderRadius: '8px',
-                    textDecoration: 'none',
-                    fontWeight: 700,
-                    fontSize: '1rem',
-                  }}
-                >
-                  {enrollmentStatus === 'completed' ? 'Review Course' : 'Continue Learning →'}
-                </Link>
+                {sortedLessons.length > 0 && (
+                  <Link
+                    href={`/course/${course.slug}/lesson/${completedCount < sortedLessons.length
+                      ? (sortedLessons.find((l: any) => !completedLessonIds.has(l.id)) || sortedLessons[0])?.id
+                      : sortedLessons[0]?.id}/`}
+                    style={{
+                      display: 'inline-block',
+                      padding: '0.85rem 1.75rem',
+                      background: '#c4a35a',
+                      color: '#0a2540',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      fontWeight: 700,
+                      fontSize: '1rem',
+                    }}
+                  >
+                    {enrollmentStatus === 'completed' ? 'Review Course' :
+                     completedCount > 0 ? 'Continue Learning →' : 'Start Course →'}
+                  </Link>
+                )}
                 {enrollmentStatus === 'completed' && (
                   <span style={{ marginLeft: '1rem', color: '#4ade80', fontSize: '0.85rem' }}>✓ Completed</span>
                 )}
@@ -163,62 +208,64 @@ export default async function CourseDetailPage({
         {sortedLessons.length === 0 ? (
           <p style={{ color: '#666' }}>No lessons published yet.</p>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {sortedLessons.map((lesson: any, index: number) => (
-              <div
-                key={lesson.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '1rem 1.25rem',
-                  background: '#fff',
-                  borderRadius: '8px',
-                  border: '1px solid #eee',
-                  opacity: isEnrolled ? 1 : 0.6,
-                }}
-              >
-                <div
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            {sortedLessons.map((lesson: any, index: number) => {
+              const isCompleted = completedLessonIds.has(lesson.id)
+              return (
+                <Link
+                  key={lesson.id}
+                  href={`/course/${course.slug}/lesson/${lesson.id}/`}
                   style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: isEnrolled ? '#c4a35a' : '#e3eaf2',
-                    color: isEnrolled ? '#0a2540' : '#888',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    flexShrink: 0,
+                    gap: '1rem',
+                    padding: '1rem 1.25rem',
+                    background: '#fff',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    color: '#0a2540',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                    transition: 'all 0.2s',
+                    border: '1px solid #eee',
+                    opacity: isEnrolled ? 1 : 0.6,
                   }}
+                  className="chapter-row"
                 >
-                  {index + 1}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, color: '#0a2540', fontSize: '0.95rem' }}>
-                    {lesson.title}
-                  </div>
-                  {lesson.description && (
-                    <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.25rem' }}>{lesson.description}</div>
-                  )}
-                </div>
-                {isEnrolled && (
-                  <Link
-                    href={`/course/${course.slug}/lesson/${lesson.id}/`}
+                  <div
                     style={{
-                      color: '#c45c3e',
-                      textDecoration: 'none',
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      background: isCompleted ? '#16a34a' : isEnrolled ? '#c4a35a' : '#e3eaf2',
+                      color: isCompleted ? '#fff' : isEnrolled ? '#0a2540' : '#888',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 700,
                       fontSize: '0.85rem',
-                      fontWeight: 600,
-                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
                     }}
                   >
-                    Start →
-                  </Link>
-                )}
-              </div>
-            ))}
+                    {isCompleted ? '✓' : index + 1}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, color: '#0a2540', fontSize: '0.95rem' }}>
+                      {lesson.title}
+                    </div>
+                    {lesson.description && (
+                      <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.25rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '500px' }}>
+                        {lesson.description.slice(0, 100)}...
+                      </div>
+                    )}
+                  </div>
+                  {isEnrolled && (
+                    <span style={{ color: '#c45c3e', fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                      {isCompleted ? 'Review' : 'Start'} →
+                    </span>
+                  )}
+                </Link>
+              )
+            })}
           </div>
         )}
       </section>

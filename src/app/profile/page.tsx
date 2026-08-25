@@ -29,6 +29,10 @@ interface Enrollment {
   }
 }
 
+interface CourseProgress {
+  lesson_id: string
+}
+
 interface Registration {
   id: string
   competition_id: string
@@ -45,6 +49,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
+  const [courseProgress, setCourseProgress] = useState<Record<string, { completed: number; total: number; percent: number }>>({})
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -96,7 +101,39 @@ export default function ProfilePage() {
       .select('*, courses(title, slug)')
       .eq('user_id', session.user.id)
       .order('enrolled_at', { ascending: false })
-    setEnrollments((enrollData as any) || [])
+    const enrollArray = (enrollData as any) || []
+    setEnrollments(enrollArray)
+
+    // Fetch lesson counts and progress for each enrolled course
+    const progressMap: Record<string, { completed: number; total: number; percent: number }> = {}
+    for (const e of enrollArray) {
+      // Get total lessons for this course
+      const { data: lessons } = await supabase
+        .from('course_lessons')
+        .select('id')
+        .eq('course_id', e.course_id)
+
+      const totalLessons = lessons?.length || 0
+      if (totalLessons === 0) {
+        progressMap[e.course_id] = { completed: 0, total: 0, percent: 0 }
+        continue
+      }
+
+      const lessonIds = lessons!.map(l => (l as any).id)
+      const { data: completed } = await supabase
+        .from('course_progress')
+        .select('lesson_id')
+        .eq('user_id', session.user.id)
+        .in('lesson_id', lessonIds)
+
+      const completedCount = completed?.length || 0
+      progressMap[e.course_id] = {
+        completed: completedCount,
+        total: totalLessons,
+        percent: Math.round((completedCount / totalLessons) * 100),
+      }
+    }
+    setCourseProgress(progressMap)
 
     // Competition registrations
     const { data: regData } = await supabase
@@ -385,36 +422,58 @@ export default function ProfilePage() {
           </h3>
           {enrollments.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {enrollments.map((e) => (
-                <Link
-                  key={e.id}
-                  href={`/course/${e.courses?.slug}/`}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '1rem',
-                    background: '#f8f6f2',
-                    borderRadius: '8px',
-                    textDecoration: 'none',
-                    color: '#0a2540',
-                  }}
-                >
-                  <span style={{ fontWeight: 600 }}>{e.courses?.title}</span>
-                  <span
+              {enrollments.map((e) => {
+                const prog = courseProgress[e.course_id]
+                return (
+                  <Link
+                    key={e.id}
+                    href={`/course/${e.courses?.slug}/`}
                     style={{
-                      fontSize: '0.75rem',
-                      padding: '0.25rem 0.5rem',
-                      borderRadius: '4px',
-                      background: e.status === 'completed' ? '#4ade80' : '#c4a35a',
-                      color: e.status === 'completed' ? '#fff' : '#0a2540',
-                      fontWeight: 600,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      padding: '1rem',
+                      background: '#f8f6f2',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      color: '#0a2540',
+                      gap: '0.5rem',
                     }}
                   >
-                    {e.status === 'completed' ? 'Completed' : 'Active'}
-                  </span>
-                </Link>
-              ))}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: 600 }}>{e.courses?.title}</span>
+                      <span
+                        style={{
+                          fontSize: '0.75rem',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          background: e.status === 'completed' ? '#4ade80' : '#c4a35a',
+                          color: e.status === 'completed' ? '#fff' : '#0a2540',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {e.status === 'completed' ? 'Completed' : 'Active'}
+                      </span>
+                    </div>
+                    {prog && prog.total > 0 && (
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#888', marginBottom: '0.25rem' }}>
+                          <span>{prog.completed} / {prog.total} lessons</span>
+                          <span style={{ fontWeight: 600, color: prog.percent === 100 ? '#16a34a' : '#c45c3e' }}>{prog.percent}%</span>
+                        </div>
+                        <div style={{ width: '100%', height: '6px', background: '#e3eaf2', borderRadius: '3px', overflow: 'hidden' }}>
+                          <div style={{
+                            height: '100%',
+                            width: `${prog.percent}%`,
+                            background: prog.percent === 100 ? '#16a34a' : '#c45c3e',
+                            borderRadius: '3px',
+                            transition: 'width 0.3s',
+                          }} />
+                        </div>
+                      </div>
+                    )}
+                  </Link>
+                )
+              })}
             </div>
           ) : (
             <p style={{ color: '#666' }}>You haven't enrolled in any courses yet.</p>

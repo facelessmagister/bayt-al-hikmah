@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import LessonCompleteButton from '@/components/LessonCompleteButton'
 
 export default async function CoursePlayerPage({
   params,
@@ -57,6 +58,20 @@ export default async function CoursePlayerPage({
     redirect(`/course/${slug}/`)
   }
 
+  // Fetch user's progress for this course (which lessons are completed)
+  const allLessonIds = sortedLessons.map((l: any) => l.id)
+  const { data: progressRecords } = await supabase
+    .from('course_progress')
+    .select('lesson_id')
+    .eq('user_id', session.user.id)
+    .in('lesson_id', allLessonIds)
+
+  const completedLessonIds = new Set((progressRecords || []).map((p: any) => p.lesson_id))
+  const completedCount = completedLessonIds.size
+  const totalLessons = sortedLessons.length
+  const progressPercent = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0
+  const isCurrentCompleted = completedLessonIds.has(lessonId)
+
   // Fetch lesson content using content_slug from database
   let lessonContent = ''
   let lessonHtml = ''
@@ -64,7 +79,6 @@ export default async function CoursePlayerPage({
     try {
       const fs = await import('fs')
       const path = await import('path')
-      // content_slug is like "iron-deficiency-anemia-in-women/lesson-1"
       const contentPath = path.join(process.cwd(), 'content', 'courses', `${currentLesson.content_slug}.md`)
       if (fs.existsSync(contentPath)) {
         lessonContent = fs.readFileSync(contentPath, 'utf-8')
@@ -93,6 +107,8 @@ export default async function CoursePlayerPage({
             position: 'sticky',
             top: 0,
             zIndex: 99,
+            flexWrap: 'wrap',
+            gap: '0.5rem',
           }}
         >
           <Link
@@ -101,9 +117,16 @@ export default async function CoursePlayerPage({
           >
             ← {course.title}
           </Link>
-          <span style={{ fontSize: '0.8rem', color: '#b0c4de' }}>
-            Lesson {currentIndex + 1} / {sortedLessons.length}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ fontSize: '0.8rem', color: '#b0c4de' }}>
+              Lesson {currentIndex + 1} / {sortedLessons.length}
+            </span>
+            {/* Progress bar in top bar */}
+            <div style={{ width: '80px', height: '6px', background: 'rgba(255,255,255,0.2)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${progressPercent}%`, background: '#c4a35a', borderRadius: '3px', transition: 'width 0.3s' }} />
+            </div>
+            <span style={{ fontSize: '0.75rem', color: '#c4a35a', fontWeight: 600 }}>{progressPercent}%</span>
+          </div>
         </div>
 
         <div style={{ display: 'flex', maxWidth: '1200px', margin: '0 auto' }}>
@@ -129,40 +152,69 @@ export default async function CoursePlayerPage({
               Course Content
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {sortedLessons.map((lesson: any, index: number) => (
-                <Link
-                  key={lesson.id}
-                  href={`/course/${slug}/lesson/${lesson.id}/`}
-                  style={{
-                    padding: '0.5rem 0.75rem',
-                    borderRadius: '6px',
-                    textDecoration: 'none',
-                    fontSize: '0.85rem',
-                    color: lesson.id === lessonId ? '#fff' : '#333',
-                    background: lesson.id === lessonId ? '#0a2540' : 'transparent',
-                  }}
-                >
-                  {index + 1}. {lesson.title}
-                </Link>
-              ))}
+              {sortedLessons.map((lesson: any, index: number) => {
+                const isCompleted = completedLessonIds.has(lesson.id)
+                const isCurrent = lesson.id === lessonId
+                return (
+                  <Link
+                    key={lesson.id}
+                    href={`/course/${slug}/lesson/${lesson.id}/`}
+                    style={{
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '6px',
+                      textDecoration: 'none',
+                      fontSize: '0.85rem',
+                      color: isCurrent ? '#fff' : '#333',
+                      background: isCurrent ? '#0a2540' : 'transparent',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    <span style={{ fontSize: '0.8rem' }}>
+                      {isCompleted ? '✓' : `${index + 1}.`}
+                    </span>
+                    <span>{lesson.title}</span>
+                  </Link>
+                )
+              })}
             </div>
           </aside>
 
           {/* Main content */}
           <main className="course-main" style={{ flex: 1, padding: '2rem', maxWidth: '760px', margin: '0 auto' }}>
+            {/* Phase/Week indicator */}
+            <div
+              style={{
+                display: 'inline-block',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                background: '#e3eaf2',
+                color: '#0a2540',
+                marginBottom: '1rem',
+              }}
+            >
+              Week {currentIndex + 1} of {totalLessons}
+            </div>
+
             <h1
               style={{
                 fontFamily: '"DM Serif Display", serif',
                 fontSize: '1.75rem',
                 color: '#0a2540',
                 marginBottom: '1rem',
+                lineHeight: 1.3,
               }}
             >
               {currentLesson.title}
             </h1>
 
             {currentLesson.description && (
-              <p style={{ color: '#666', marginBottom: '1.5rem', fontSize: '0.95rem' }}>{currentLesson.description}</p>
+              <p style={{ color: '#666', marginBottom: '1.5rem', fontSize: '0.95rem', lineHeight: 1.6 }}>{currentLesson.description}</p>
             )}
 
             {/* Lesson content */}
@@ -193,7 +245,7 @@ export default async function CoursePlayerPage({
               </div>
             )}
 
-            {/* Navigation */}
+            {/* Completion + Navigation */}
             <div
               style={{
                 marginTop: '3rem',
@@ -202,6 +254,8 @@ export default async function CoursePlayerPage({
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '1rem',
               }}
             >
               <div>
@@ -221,44 +275,35 @@ export default async function CoursePlayerPage({
                 )}
               </div>
 
-              {nextLesson ? (
-                <Link
-                  href={`/course/${slug}/lesson/${nextLesson.id}/`}
-                  style={{ color: '#0a2540', textDecoration: 'none' }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      textAlign: 'right',
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontSize: '0.7rem', color: '#888' }}>Next</div>
-                      <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{nextLesson.title}</div>
-                    </div>
-                    <span>→</span>
-                  </div>
-                </Link>
-              ) : (
-                <form action={`/api/courses/${slug}/complete/`} method="POST">
-                  <button
-                    type="submit"
-                    style={{
-                      padding: '0.6rem 1.2rem',
-                      background: '#c45c3e',
-                      color: '#fff',
-                      borderRadius: '6px',
-                      border: 'none',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Mark Course Complete
-                  </button>
-                </form>
-              )}
+              <LessonCompleteButton
+                courseSlug={slug}
+                lessonId={lessonId}
+                alreadyCompleted={isCurrentCompleted}
+                isLastLesson={!nextLesson}
+                nextLessonId={nextLesson?.id}
+              />
+            </div>
+
+            {/* Course progress summary */}
+            <div
+              style={{
+                marginTop: '2rem',
+                padding: '1rem 1.25rem',
+                background: '#fff',
+                borderRadius: '8px',
+                border: '1px solid #eee',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '0.5rem' }}>
+                Course Progress: {completedCount} of {totalLessons} lessons complete
+              </div>
+              <div style={{ width: '100%', height: '8px', background: '#e3eaf2', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${progressPercent}%`, background: progressPercent === 100 ? '#16a34a' : '#c45c3e', borderRadius: '4px', transition: 'width 0.3s' }} />
+              </div>
+              <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.35rem' }}>
+                {progressPercent === 100 ? '✓ Course Complete!' : `${progressPercent}% complete`}
+              </div>
             </div>
           </main>
         </div>
