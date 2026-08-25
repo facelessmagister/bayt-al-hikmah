@@ -1,6 +1,8 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
 
+const PROD_ORIGIN = 'https://bayt-al-hikmah-nine.vercel.app'
+
 // POST: Enroll in a course
 export async function POST(
   request: Request,
@@ -11,7 +13,8 @@ export async function POST(
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Redirect to login with next param so user returns to the course page
+    return NextResponse.redirect(`${PROD_ORIGIN}/login/?next=/course/${slug}/`)
   }
 
   // Find course
@@ -22,7 +25,7 @@ export async function POST(
     .single()
 
   if (!course) {
-    return NextResponse.json({ error: 'Course not found' }, { status: 404 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/courses/?error=not-found`)
   }
 
   // Check if already enrolled
@@ -34,23 +37,22 @@ export async function POST(
     .single()
 
   if (existing) {
-    return NextResponse.json({ error: 'Already enrolled' }, { status: 400 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/course/${slug}/?enrolled=1`)
   }
 
   // Create enrollment
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('course_enrollments')
     .insert({
       user_id: session.user.id,
       course_id: course.id,
       status: 'active',
     })
-    .select()
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/course/${slug}/?error=enrollment-failed`)
   }
 
   // Redirect back to course page with success
-  return NextResponse.redirect(`https://bayt-al-hikmah-nine.vercel.app/course/${slug}/?enrolled=1`)
+  return NextResponse.redirect(`${PROD_ORIGIN}/course/${slug}/?enrolled=1`)
 }

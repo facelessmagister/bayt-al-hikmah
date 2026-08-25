@@ -1,6 +1,8 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
 
+const PROD_ORIGIN = 'https://bayt-al-hikmah-nine.vercel.app'
+
 // POST: Register for a competition
 export async function POST(
   request: Request,
@@ -11,7 +13,7 @@ export async function POST(
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/login/?next=/competitions/${slug}/`)
   }
 
   // Find competition
@@ -22,7 +24,7 @@ export async function POST(
     .single()
 
   if (!competition) {
-    return NextResponse.json({ error: 'Competition not found' }, { status: 404 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/competitions/?error=not-found`)
   }
 
   // Check if already registered
@@ -34,23 +36,22 @@ export async function POST(
     .single()
 
   if (existing) {
-    return NextResponse.json({ error: 'Already registered' }, { status: 400 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/competitions/${slug}/?registered=1`)
   }
 
   // Create registration (payment pending)
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('competition_registrations')
     .insert({
       user_id: session.user.id,
       competition_id: competition.id,
       payment_status: 'pending',
     })
-    .select()
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/competitions/${slug}/?error=registration-failed`)
   }
 
   // Redirect back to competition page with success
-  return NextResponse.redirect(`https://bayt-al-hikmah-nine.vercel.app/competitions/${slug}/?registered=1`)
+  return NextResponse.redirect(`${PROD_ORIGIN}/competitions/${slug}/?registered=1`)
 }

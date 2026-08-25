@@ -72,7 +72,7 @@ export default async function CompetitionPage({
         >
           <p style={{ margin: 0, fontWeight: 600, color: '#0a2540' }}>✓ Successfully registered!</p>
           <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#666' }}>
-            Your payment status is pending. Please complete your payment to unlock the quiz.
+            Your payment status is pending. You can take the quiz now and complete payment later.
           </p>
         </div>
       )}
@@ -156,10 +156,39 @@ export default async function CompetitionPage({
           )}
 
           {session && isRegistered && registrationStatus === 'pending' && (
-            <PaymentPendingCard entryFee={competition.entry_fee} instructions={paymentInstructions} />
+            <div
+              style={{
+                background: 'rgba(196, 163, 90, 0.15)',
+                border: '1px solid #c4a35a',
+                borderRadius: '8px',
+                padding: '1rem 1.5rem',
+                display: 'inline-block',
+              }}
+            >
+              <p style={{ margin: 0, fontWeight: 600 }}>✓ Registered — Payment Pending</p>
+              <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#b0c4de' }}>
+                You can take the quiz now! Payment can be completed later.
+              </p>
+              <div style={{ marginTop: '0.75rem' }}>
+                <Link
+                  href={`/competitions/${slug}/quiz/`}
+                  style={{
+                    display: 'inline-block',
+                    padding: '0.6rem 1.2rem',
+                    background: '#c45c3e',
+                    color: '#fff',
+                    borderRadius: '6px',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                  }}
+                >
+                  Start Quiz →
+                </Link>
+              </div>
+            </div>
           )}
 
-          {session && isRegistered && registrationStatus === 'verified' && (
+          {session && isRegistered && (registrationStatus === 'verified' || registrationStatus === 'waived') && (
             <div
               style={{
                 background: 'rgba(74, 222, 128, 0.15)',
@@ -169,7 +198,7 @@ export default async function CompetitionPage({
                 display: 'inline-block',
               }}
             >
-              <p style={{ margin: 0, fontWeight: 600 }}>✓ Payment Verified — You're In!</p>
+              <p style={{ margin: 0, fontWeight: 600 }}>✓ {registrationStatus === 'waived' ? 'Entry Fee Waived' : "Payment Verified — You're In!"}</p>
               <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#b0c4de' }}>Good luck! Click below to start the quiz.</p>
               <div style={{ marginTop: '0.75rem' }}>
                 <Link
@@ -364,8 +393,9 @@ export default async function CompetitionPage({
                 color: '#666',
               }}
             >
-              <strong style={{ color: '#0a2540' }}>Note:</strong> Your quiz will remain locked until
-              the admin verifies your payment. This usually takes a few hours.
+              <strong style={{ color: '#0a2540' }}>Note:</strong> Your quiz is unlocked — you can
+              take it now. Payment verification is only required for leaderboard ranking and prizes.
+              This usually takes a few hours after you send your proof.
             </div>
           </div>
         )}
@@ -391,25 +421,6 @@ export default async function CompetitionPage({
         </div>
       </section>
     </Layout>
-  )
-}
-
-function PaymentPendingCard({ entryFee, instructions }: { entryFee: string; instructions: string }) {
-  return (
-    <div
-      style={{
-        background: 'rgba(196, 163, 90, 0.15)',
-        border: '1px solid #c4a35a',
-        borderRadius: '8px',
-        padding: '1rem 1.5rem',
-        display: 'inline-block',
-      }}
-    >
-      <p style={{ margin: 0, fontWeight: 600 }}>✓ Registered — Payment Pending</p>
-      <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', color: '#b0c4de' }}>
-        Please complete your payment of {entryFee}. See instructions below.
-      </p>
-    </div>
   )
 }
 

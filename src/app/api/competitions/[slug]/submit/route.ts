@@ -11,7 +11,7 @@ export async function POST(
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Please log in to submit your quiz.' }, { status: 401 })
   }
 
   // Find competition
@@ -22,10 +22,10 @@ export async function POST(
     .single()
 
   if (!competition) {
-    return NextResponse.json({ error: 'Competition not found' }, { status: 404 })
+    return NextResponse.json({ error: 'Competition not found.' }, { status: 404 })
   }
 
-  // Verify registration and payment
+  // Verify registration (any status — payment NOT required to submit)
   const { data: registration } = await supabase
     .from('competition_registrations')
     .select('*')
@@ -34,11 +34,7 @@ export async function POST(
     .single()
 
   if (!registration) {
-    return NextResponse.json({ error: 'Not registered' }, { status: 403 })
-  }
-
-  if (registration.payment_status !== 'verified' && registration.payment_status !== 'waived') {
-    return NextResponse.json({ error: 'Payment not verified' }, { status: 403 })
+    return NextResponse.json({ error: 'Please register for this competition first.' }, { status: 403 })
   }
 
   // Parse answers from request body
@@ -46,7 +42,7 @@ export async function POST(
   const { answers, started_at, completed_at } = body
 
   if (!answers || !Array.isArray(answers)) {
-    return NextResponse.json({ error: 'Invalid answers' }, { status: 400 })
+    return NextResponse.json({ error: 'Invalid answers.' }, { status: 400 })
   }
 
   // Load quiz to calculate score
@@ -59,7 +55,7 @@ export async function POST(
       quizData = JSON.parse(fs.readFileSync(quizPath, 'utf-8'))
     }
   } catch {
-    return NextResponse.json({ error: 'Quiz not found' }, { status: 404 })
+    return NextResponse.json({ error: 'Quiz not found.' }, { status: 404 })
   }
 
   // Calculate score
@@ -81,7 +77,7 @@ export async function POST(
     .single()
 
   if (existingSubmission) {
-    return NextResponse.json({ error: 'Already submitted' }, { status: 400 })
+    return NextResponse.json({ error: 'You have already submitted your answers.' }, { status: 400 })
   }
 
   // Save submission

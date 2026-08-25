@@ -1,11 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#f8f6f2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><p style={{ color: '#666' }}>Loading...</p></div>}>
+      <LoginForm />
+    </Suspense>
+  )
+}
+
+function LoginForm() {
   const supabase = createClient()
+  const searchParams = useSearchParams()
+  const nextUrl = searchParams.get('next') || '/'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -25,7 +36,7 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      window.location.href = '/'
+      window.location.href = nextUrl
     }
   }
 
@@ -34,7 +45,7 @@ export default function LoginPage() {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: 'https://bayt-al-hikmah-nine.vercel.app/auth/callback/',
+        redirectTo: `https://bayt-al-hikmah-nine.vercel.app/auth/callback/?next=${encodeURIComponent(nextUrl)}`,
       },
     })
   }

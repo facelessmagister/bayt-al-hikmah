@@ -1,6 +1,8 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
 
+const PROD_ORIGIN = 'https://bayt-al-hikmah-nine.vercel.app'
+
 // POST: Mark course as complete
 export async function POST(
   request: Request,
@@ -11,7 +13,7 @@ export async function POST(
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/login/?next=/course/${slug}/`)
   }
 
   // Find course
@@ -22,7 +24,7 @@ export async function POST(
     .single()
 
   if (!course) {
-    return NextResponse.json({ error: 'Course not found' }, { status: 404 })
+    return NextResponse.redirect(`${PROD_ORIGIN}/courses/?error=not-found`)
   }
 
   // Update enrollment status
