@@ -12,7 +12,7 @@ export default async function AdminTranslationsPage() {
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    redirect('/login/?next=/admin/translations/')
+    redirect('/auth/?next=/admin/translations/')
   }
 
   const { data: profile } = await supabase

@@ -259,7 +259,7 @@ export default async function TranslationPage() {
             contact the admin via our Telegram channel.
           </p>
           <Link
-            href="/signup/"
+            href="/auth/"
             style={{
               display: 'inline-block',
               padding: '0.5rem 1rem',

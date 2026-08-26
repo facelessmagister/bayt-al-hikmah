@@ -13,7 +13,7 @@ export async function POST(
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    return NextResponse.redirect(`${PROD_ORIGIN}/login/?next=/competitions/${slug}/`)
+    return NextResponse.redirect(`${PROD_ORIGIN}/auth/?next=/competitions/${slug}/`)
   }
 
   // Find competition

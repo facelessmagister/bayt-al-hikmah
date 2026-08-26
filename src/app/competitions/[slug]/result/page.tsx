@@ -9,7 +9,7 @@ export default async function CompetitionResultPage({ params }: { params: { slug
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    redirect(`/login/?next=/competitions/${slug}/result/`)
+    redirect(`/auth/?next=/competitions/${slug}/result/`)
   }
 
   // Fetch competition

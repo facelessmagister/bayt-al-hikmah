@@ -8,7 +8,7 @@ export default async function AdminCompetitionsPage() {
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    redirect('/login/?next=/admin/competitions/')
+    redirect('/auth/?next=/admin/competitions/')
   }
 
   // Check admin role

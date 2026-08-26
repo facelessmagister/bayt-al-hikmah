@@ -119,7 +119,7 @@ export default async function CompetitionPage({
 
           {!session && (
             <Link
-              href={`/login/?next=/competitions/${slug}/`}
+              href={`/auth/?next=/competitions/${slug}/`}
               style={{
                 display: 'inline-block',
                 padding: '0.85rem 1.75rem',

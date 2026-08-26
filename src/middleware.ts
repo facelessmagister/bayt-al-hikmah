@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
   // Protect admin routes — require authentication + admin role
   if (request.nextUrl.pathname.startsWith('/admin/')) {
     if (!user) {
-      return NextResponse.redirect(new URL('/login/', request.url))
+      return NextResponse.redirect(new URL('/auth/', request.url))
     }
     // Role check: fetch profile role from Supabase
     // For now, allow all authenticated users (role check in page component)
@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/profile/') || 
       request.nextUrl.pathname.startsWith('/dashboard/')) {
     if (!user) {
-      return NextResponse.redirect(new URL('/login/', request.url))
+      return NextResponse.redirect(new URL('/auth/', request.url))
     }
   }
 

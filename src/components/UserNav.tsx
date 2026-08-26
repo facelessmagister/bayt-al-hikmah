@@ -80,18 +80,7 @@ export default function UserNav() {
     return (
       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
         <Link
-          href="/login/"
-          style={{
-            color: '#b0c4de',
-            textDecoration: 'none',
-            fontSize: '0.9rem',
-            transition: 'color 0.2s',
-          }}
-        >
-          Sign In
-        </Link>
-        <Link
-          href="/signup/"
+          href="/auth/"
           style={{
             color: '#0a2540',
             background: '#c4a35a',
@@ -103,7 +92,7 @@ export default function UserNav() {
             transition: 'background 0.2s',
           }}
         >
-          Sign Up
+          Sign In
         </Link>
       </div>
     )

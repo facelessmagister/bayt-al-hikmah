@@ -72,7 +72,7 @@ export default function ProfilePage() {
   async function fetchData() {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
-      window.location.href = '/login/'
+      window.location.href = '/auth/'
       return
     }
     setUser(session.user)

@@ -9,7 +9,7 @@ export default async function AdminCompetitionDetailPage({ params }: { params: {
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    redirect(`/login/?next=/admin/competitions/${slug}/`)
+    redirect(`/auth/?next=/admin/competitions/${slug}/`)
   }
 
   const { data: profile } = await supabase

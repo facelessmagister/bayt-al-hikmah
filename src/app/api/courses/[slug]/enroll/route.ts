@@ -14,7 +14,7 @@ export async function POST(
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
     // Redirect to login with next param so user returns to the course page
-    return NextResponse.redirect(`${PROD_ORIGIN}/login/?next=/course/${slug}/`)
+    return NextResponse.redirect(`${PROD_ORIGIN}/auth/?next=/course/${slug}/`)
   }
 
   // Find course

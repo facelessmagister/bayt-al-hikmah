@@ -44,7 +44,7 @@ export default async function CoursePlayerPage({
   // Check enrollment
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    redirect(`/login/?next=/course/${slug}/lesson/${lessonId}/`)
+    redirect(`/auth/?next=/course/${slug}/lesson/${lessonId}/`)
   }
 
   const { data: enrollment } = await supabase

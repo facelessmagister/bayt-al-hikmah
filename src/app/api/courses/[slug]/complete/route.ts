@@ -13,7 +13,7 @@ export async function POST(
 
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) {
-    return NextResponse.redirect(`${PROD_ORIGIN}/login/?next=/course/${slug}/`)
+    return NextResponse.redirect(`${PROD_ORIGIN}/auth/?next=/course/${slug}/`)
   }
 
   // Find course
