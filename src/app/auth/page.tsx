@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useSearchParams } from 'next/navigation'
 
@@ -25,6 +25,21 @@ function AuthForm() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [checkingSession, setCheckingSession] = useState(true)
+
+  // Check if already logged in — redirect away
+  useEffect(() => {
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        // Already logged in, redirect
+        window.location.href = nextUrl
+      } else {
+        setCheckingSession(false)
+      }
+    }
+    checkSession()
+  }, [supabase, nextUrl])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -65,7 +80,6 @@ function AuthForm() {
       })
 
       if (error) {
-        // Provide helpful message for Google OAuth users who try email/password
         if (error.message === 'Invalid login credentials') {
           setError('Invalid email or password. If you signed up with Google, please use the "Continue with Google" button above.')
         } else {
@@ -80,12 +94,32 @@ function AuthForm() {
 
   async function handleGoogleAuth() {
     setLoading(true)
-    await supabase.auth.signInWithOAuth({
+    setError(null)
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `https://bayt-al-hikmah-nine.vercel.app/auth/callback/?next=${encodeURIComponent(nextUrl)}`,
       },
     })
+
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+    }
+    // If no error, the browser will redirect to Google.
+    // data.url contains the OAuth URL — we can also force-redirect:
+    if (data?.url && !error) {
+      window.location.href = data.url
+    }
+  }
+
+  if (checkingSession) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#f8f6f2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ color: '#666' }}>Loading...</p>
+      </div>
+    )
   }
 
   if (success) {
@@ -255,7 +289,7 @@ function AuthForm() {
               borderRadius: '8px',
               border: '1px solid #ddd',
               background: '#fff',
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               fontSize: '0.9rem',
               color: '#333',
             }}
@@ -266,7 +300,7 @@ function AuthForm() {
               <path fill="#FBBC05" d="M3.947 10.7c-.18-.54-.282-1.116-.282-1.71s.102-1.17.282-1.71V5.948H.96C.348 7.173 0 8.548 0 9.99s.348 2.817.96 4.042l2.987-2.332z"/>
               <path fill="#EA4335" d="M9 3.58c1.32 0 2.508.454 3.44 1.345l2.58-2.58C13.463.891 11.426 0 9 0 5.48 0 2.44 2.017.96 4.958L3.947 7.29c.71-2.14 2.703-3.71 5.053-3.71z"/>
             </svg>
-            Continue with Google
+            {loading ? 'Redirecting...' : 'Continue with Google'}
           </button>
         </div>
 
@@ -378,7 +412,7 @@ function AuthForm() {
               color: '#f8f6f2',
               fontSize: '0.9rem',
               fontWeight: 600,
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               marginTop: '0.5rem',
             }}
           >
