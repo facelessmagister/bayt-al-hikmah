@@ -65,7 +65,12 @@ function AuthForm() {
       })
 
       if (error) {
-        setError(error.message)
+        // Provide helpful message for Google OAuth users who try email/password
+        if (error.message === 'Invalid login credentials') {
+          setError('Invalid email or password. If you signed up with Google, please use the "Continue with Google" button above.')
+        } else {
+          setError(error.message)
+        }
         setLoading(false)
       } else {
         window.location.href = nextUrl
