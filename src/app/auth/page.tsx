@@ -106,12 +106,19 @@ function AuthForm() {
     if (error) {
       setError(error.message)
       setLoading(false)
+      return
     }
-    // If no error, the browser will redirect to Google.
-    // data.url contains the OAuth URL — we can also force-redirect:
-    if (data?.url && !error) {
+
+    // signInWithOAuth already redirects the browser to Google.
+    // If it somehow didn't redirect, use data.url as fallback.
+    if (data?.url) {
       window.location.href = data.url
     }
+    // If we get here without a redirect, reset loading after a timeout
+    setTimeout(() => {
+      setLoading(false)
+      setError('Sign-in redirect failed. Please try again.')
+    }, 5000)
   }
 
   if (checkingSession) {
