@@ -7,6 +7,9 @@ export const metadata = {
   viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
 };
 
+// Force dynamic rendering — Clerk auth requires server-side rendering
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
