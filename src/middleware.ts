@@ -1,26 +1,12 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { clerkMiddleware } from '@clerk/nextjs/server'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const isProtectedRoute = createRouteMatcher([
-  '/admin/(.*)',
-  '/profile/(.*)',
-  '/dashboard/(.*)',
-])
-
-const isApiProtectedRoute = createRouteMatcher([
-  '/api/progress(.*)',
-  '/api/courses/(.*)/enroll(.*)',
-  '/api/courses/(.*)/complete(.*)',
-  '/api/courses/(.*)/lesson/(.*)/complete(.*)',
-  '/api/competitions/(.*)/register(.*)',
-  '/api/competitions/(.*)/submit(.*)',
-  '/api/admin/(.*)',
-])
-
 export default clerkMiddleware(async (auth, request: NextRequest) => {
-  // Protect admin pages
-  if (isProtectedRoute(request)) {
-    const { userId } = await auth()
+  const { userId } = await auth()
+  const path = request.nextUrl.pathname
+
+  // Protect admin pages — require authentication
+  if (path.startsWith('/admin/') || path.startsWith('/profile/') || path.startsWith('/dashboard/')) {
     if (!userId) {
       const signInUrl = new URL('/sign-in', request.url)
       signInUrl.searchParams.set('redirect_url', request.url)
@@ -28,9 +14,11 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
     }
   }
 
-  // Protect API routes
-  if (isApiProtectedRoute(request)) {
-    const { userId } = await auth()
+  // Protect API routes — require authentication
+  if (path.startsWith('/api/progress') ||
+      path.startsWith('/api/courses/') && (path.includes('/enroll') || path.includes('/complete')) ||
+      path.startsWith('/api/competitions/') && (path.includes('/register') || path.includes('/submit')) ||
+      path.startsWith('/api/admin/')) {
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -43,7 +31,5 @@ export const config = {
   matcher: [
     // Skip static files and images, run on all other routes
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-    // Always run for Clerk frontend API proxy routes
-    '/__clerk/(.*)',
   ],
 }
