@@ -96,6 +96,10 @@ function AuthForm() {
     setLoading(true)
     setError(null)
 
+    // Clear any existing session first — prevents stale cookie interference
+    // for returning users (fixes the "existing user hangs" issue)
+    await supabase.auth.signOut()
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -110,11 +114,12 @@ function AuthForm() {
     }
 
     // signInWithOAuth already redirects the browser to Google.
-    // If it somehow didn't redirect, use data.url as fallback.
+    // Fallback: if it didn't redirect, use data.url manually
     if (data?.url) {
       window.location.href = data.url
     }
-    // If we get here without a redirect, reset loading after a timeout
+
+    // If we somehow get here without a redirect, reset after timeout
     setTimeout(() => {
       setLoading(false)
       setError('Sign-in redirect failed. Please try again.')
