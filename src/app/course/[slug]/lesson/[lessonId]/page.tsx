@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { auth } from '@clerk/nextjs/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -41,16 +42,16 @@ export default async function CoursePlayerPage({
   const prevLesson = currentIndex > 0 ? sortedLessons[currentIndex - 1] : null
   const nextLesson = currentIndex < sortedLessons.length - 1 ? sortedLessons[currentIndex + 1] : null
 
-  // Check enrollment
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
-    redirect(`/auth/?next=/course/${slug}/lesson/${lessonId}/`)
+  // Check enrollment (Clerk auth)
+  const { userId } = await auth()
+  if (!userId) {
+    redirect(`/sign-in?redirect_url=/course/${slug}/lesson/${lessonId}/`)
   }
 
   const { data: enrollment } = await supabase
     .from('course_enrollments')
     .select('*')
-    .eq('user_id', session.user.id)
+    .eq('user_id', userId)
     .eq('course_id', course.id)
     .single()
 
@@ -63,7 +64,7 @@ export default async function CoursePlayerPage({
   const { data: progressRecords } = await supabase
     .from('course_progress')
     .select('lesson_id')
-    .eq('user_id', session.user.id)
+    .eq('user_id', userId)
     .in('lesson_id', allLessonIds)
 
   const completedLessonIds = new Set((progressRecords || []).map((p: any) => p.lesson_id))

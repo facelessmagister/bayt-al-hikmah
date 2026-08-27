@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useUser } from '@clerk/nextjs'
 import { createClient } from '@/utils/supabase/client'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
@@ -45,8 +46,8 @@ interface Registration {
 }
 
 export default function ProfilePage() {
+  const { user, isLoaded, isSignedIn } = useUser()
   const supabase = createClient()
-  const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
   const [courseProgress, setCourseProgress] = useState<Record<string, { completed: number; total: number; percent: number }>>({})
@@ -66,22 +67,23 @@ export default function ProfilePage() {
   })
 
   useEffect(() => {
-    fetchData()
-  }, [])
-
-  async function fetchData() {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      window.location.href = '/auth/'
+    if (!isLoaded) return
+    if (!isSignedIn || !user) {
+      window.location.href = '/sign-in'
       return
     }
-    setUser(session.user)
+    fetchData()
+  }, [isLoaded, isSignedIn, user])
+
+  async function fetchData() {
+    if (!user) return
+    const userId = user.id
 
     // Profile
     const { data: profileData } = await supabase
       .from('profiles')
       .select('*')
-      .eq('id', session.user.id)
+      .eq('id', userId)
       .single()
     setProfile(profileData || null)
     if (profileData) {
@@ -99,7 +101,7 @@ export default function ProfilePage() {
     const { data: enrollData } = await supabase
       .from('course_enrollments')
       .select('*, courses(title, slug)')
-      .eq('user_id', session.user.id)
+      .eq('user_id', userId)
       .order('enrolled_at', { ascending: false })
     const enrollArray = (enrollData as any) || []
     setEnrollments(enrollArray)
@@ -107,7 +109,6 @@ export default function ProfilePage() {
     // Fetch lesson counts and progress for each enrolled course
     const progressMap: Record<string, { completed: number; total: number; percent: number }> = {}
     for (const e of enrollArray) {
-      // Get total lessons for this course
       const { data: lessons } = await supabase
         .from('course_lessons')
         .select('id')
@@ -123,7 +124,7 @@ export default function ProfilePage() {
       const { data: completed } = await supabase
         .from('course_progress')
         .select('lesson_id')
-        .eq('user_id', session.user.id)
+        .eq('user_id', userId)
         .in('lesson_id', lessonIds)
 
       const completedCount = completed?.length || 0
@@ -139,7 +140,7 @@ export default function ProfilePage() {
     const { data: regData } = await supabase
       .from('competition_registrations')
       .select('*, competitions(title, slug)')
-      .eq('user_id', session.user.id)
+      .eq('user_id', userId)
       .order('registered_at', { ascending: false })
     setRegistrations((regData as any) || [])
 
@@ -155,34 +156,41 @@ export default function ProfilePage() {
 
     const { error } = await supabase
       .from('profiles')
-      .update({
+      .upsert({
+        id: user.id,
+        email: user.primaryEmailAddress?.emailAddress || null,
+        name: user.fullName || null,
         first_name: form.first_name || null,
         second_name: form.second_name || null,
         age: form.age ? parseInt(form.age) : null,
         phone_number: form.phone_number || null,
         bank_name: form.bank_name || null,
         bank_account_number: form.bank_account_number || null,
+        role: profile?.role || 'student',
       })
-      .eq('id', user.id)
 
     setSaving(false)
     if (error) {
       setMessage('Error saving: ' + error.message)
     } else {
       setMessage('✓ Profile updated successfully')
-      // Refresh profile
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(data)
     }
   }
 
-  if (loading) {
+  if (!isLoaded || loading) {
     return (
       <Layout>
         <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>
       </Layout>
     )
   }
+
+  const displayName = profile?.first_name && profile?.second_name
+    ? `${profile.first_name} ${profile.second_name}`
+    : profile?.name || user?.fullName || user?.primaryEmailAddress?.emailAddress?.split('@')[0] || 'User'
+  const displayEmail = user?.primaryEmailAddress?.emailAddress || ''
 
   return (
     <Layout>
@@ -229,15 +237,13 @@ export default function ProfilePage() {
                 color: '#0a2540',
               }}
             >
-              {(profile?.name || user?.email?.split('@')[0] || 'U').charAt(0).toUpperCase()}
+              {displayName.charAt(0).toUpperCase()}
             </div>
             <div>
               <h2 style={{ fontFamily: '"DM Serif Display", serif', color: '#0a2540', marginBottom: '0.25rem' }}>
-                {profile?.first_name && profile?.second_name
-                  ? `${profile.first_name} ${profile.second_name}`
-                  : profile?.name || user?.email?.split('@')[0] || 'User'}
+                {displayName}
               </h2>
-              <p style={{ color: '#666', fontSize: '0.9rem' }}>{user?.email}</p>
+              <p style={{ color: '#666', fontSize: '0.9rem' }}>{displayEmail}</p>
               <span
                 style={{
                   display: 'inline-block',

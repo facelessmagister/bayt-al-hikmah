@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { auth } from '@clerk/nextjs/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -28,19 +29,19 @@ export default async function CourseDetailPage({
   const lessons = course.course_lessons || []
   const sortedLessons = lessons.sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
 
-  // Check enrollment status
-  const { data: { session } } = await supabase.auth.getSession()
+  // Check enrollment status (Clerk auth)
+  const { userId } = await auth()
   let isEnrolled = false
   let enrollmentStatus = null
   let completedLessonIds = new Set<string>()
   let completedCount = 0
   let progressPercent = 0
 
-  if (session) {
+  if (userId) {
     const { data: enrollment } = await supabase
       .from('course_enrollments')
       .select('*')
-      .eq('user_id', session.user.id)
+      .eq('user_id', userId)
       .eq('course_id', course.id)
       .single()
 
@@ -54,7 +55,7 @@ export default async function CourseDetailPage({
         const { data: progress } = await supabase
           .from('course_progress')
           .select('lesson_id')
-          .eq('user_id', session.user.id)
+          .eq('user_id', userId)
           .in('lesson_id', lessonIds)
 
         completedLessonIds = new Set((progress || []).map((p: any) => p.lesson_id))

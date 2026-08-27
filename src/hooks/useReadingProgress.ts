@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { useUser } from '@clerk/nextjs'
 import { createClient } from '@/utils/supabase/client'
 
 export interface ReadingProgress {
@@ -15,13 +16,13 @@ export interface ReadingProgress {
 }
 
 export function useReadingProgress() {
+  const { user, isLoaded, isSignedIn } = useUser()
   const supabase = createClient()
   const [progress, setProgress] = useState<ReadingProgress[]>([])
   const [loading, setLoading] = useState(true)
 
-  async function fetchProgress() {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
+  const fetchProgress = useCallback(async () => {
+    if (!isLoaded || !isSignedIn || !user) {
       setLoading(false)
       return
     }
@@ -29,7 +30,7 @@ export function useReadingProgress() {
     const { data, error } = await supabase
       .from('reading_progress')
       .select('*')
-      .eq('user_id', session.user.id)
+      .eq('user_id', user.id)
       .order('last_read_at', { ascending: false })
 
     if (error) {
@@ -40,11 +41,11 @@ export function useReadingProgress() {
 
     setProgress(data || [])
     setLoading(false)
-  }
+  }, [isLoaded, isSignedIn, user, supabase])
 
   useEffect(() => {
     fetchProgress()
-  }, [])
+  }, [fetchProgress])
 
   const saveProgress = useCallback(
     async (params: {
@@ -54,14 +55,13 @@ export function useReadingProgress() {
       completion_percent: number
       language: string
     }) => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
+      if (!isLoaded || !isSignedIn || !user) return
 
       const { error } = await supabase
         .from('reading_progress')
         .upsert(
           {
-            user_id: session.user.id,
+            user_id: user.id,
             ...params,
             last_read_at: new Date().toISOString(),
           },
@@ -75,7 +75,7 @@ export function useReadingProgress() {
 
       await fetchProgress()
     },
-    []
+    [isLoaded, isSignedIn, user, supabase, fetchProgress]
   )
 
   return { progress, loading, saveProgress, refreshProgress: fetchProgress }

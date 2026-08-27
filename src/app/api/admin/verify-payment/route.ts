@@ -1,20 +1,21 @@
 import { createClient } from '@/utils/supabase/server'
+import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 // POST: Verify a competition registration payment (admin only)
 export async function POST(request: Request) {
-  const supabase = createClient()
-
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
+  const { userId } = await auth()
+  if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  const supabase = createClient()
 
   // Check admin role
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', session.user.id)
+    .eq('id', userId)
     .single()
 
   if (!profile || profile.role !== 'admin') {
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
     .from('competition_registrations')
     .update({
       payment_status: 'verified',
-      payment_verified_by: session.user.id,
+      payment_verified_by: userId,
       payment_verified_at: new Date().toISOString(),
     })
     .eq('id', registrationId)

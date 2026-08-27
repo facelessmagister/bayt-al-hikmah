@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { auth } from '@clerk/nextjs/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -8,17 +9,17 @@ export const metadata = {
 }
 
 export default async function AdminTranslationsPage() {
-  const supabase = createClient()
-
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
-    redirect('/auth/?next=/admin/translations/')
+  const { userId } = await auth()
+  if (!userId) {
+    redirect('/sign-in?redirect_url=/admin/translations/')
   }
+
+  const supabase = createClient()
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', session.user.id)
+    .eq('id', userId)
     .single()
 
   if (!profile || profile.role !== 'admin') {

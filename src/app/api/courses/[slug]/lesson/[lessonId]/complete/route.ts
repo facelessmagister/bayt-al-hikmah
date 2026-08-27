@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 // POST: Mark a single lesson as complete
@@ -6,13 +7,13 @@ export async function POST(
   request: Request,
   { params }: { params: { slug: string; lessonId: string } }
 ) {
-  const supabase = createClient()
-  const { slug, lessonId } = params
-
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
+  const { userId } = await auth()
+  if (!userId) {
     return NextResponse.json({ error: 'Please log in to track your progress.' }, { status: 401 })
   }
+
+  const supabase = createClient()
+  const { slug, lessonId } = params
 
   // Find course
   const { data: course } = await supabase
@@ -41,7 +42,7 @@ export async function POST(
   const { data: existing } = await supabase
     .from('course_progress')
     .select('*')
-    .eq('user_id', session.user.id)
+    .eq('user_id', userId)
     .eq('lesson_id', lessonId)
     .single()
 
@@ -53,13 +54,12 @@ export async function POST(
   const { error } = await supabase
     .from('course_progress')
     .insert({
-      user_id: session.user.id,
+      user_id: userId,
       lesson_id: lessonId,
       completed_at: new Date().toISOString(),
     })
 
   if (error) {
-    // Check if it's a unique constraint violation (already exists)
     if (error.code === '23505') {
       return NextResponse.json({ alreadyCompleted: true })
     }
@@ -75,7 +75,7 @@ export async function POST(
   const { data: completedLessons } = await supabase
     .from('course_progress')
     .select('lesson_id')
-    .eq('user_id', session.user.id)
+    .eq('user_id', userId)
     .in('lesson_id', (allLessons || []).map(l => l.id))
 
   const total = allLessons?.length || 0
@@ -87,14 +87,13 @@ export async function POST(
     await supabase
       .from('course_enrollments')
       .update({ status: 'completed' })
-      .eq('user_id', session.user.id)
+      .eq('user_id', userId)
       .eq('course_id', course.id)
   } else {
-    // Ensure enrollment is active (not completed if they're still going)
     await supabase
       .from('course_enrollments')
       .update({ status: 'active' })
-      .eq('user_id', session.user.id)
+      .eq('user_id', userId)
       .eq('course_id', course.id)
   }
 

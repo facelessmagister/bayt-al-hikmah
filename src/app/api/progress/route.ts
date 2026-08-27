@@ -1,22 +1,23 @@
 import { createClient } from '@/utils/supabase/server'
+import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 // GET: Fetch user's reading progress
 export async function GET(request: Request) {
+  const { userId } = await auth()
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const supabase = createClient()
   const { searchParams } = new URL(request.url)
   const contentType = searchParams.get('content_type')
   const contentSlug = searchParams.get('content_slug')
 
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   let query = supabase
     .from('reading_progress')
     .select('*')
-    .eq('user_id', session.user.id)
+    .eq('user_id', userId)
     .order('last_read_at', { ascending: false })
 
   if (contentType) {
@@ -37,6 +38,11 @@ export async function GET(request: Request) {
 
 // POST: Save or update reading progress
 export async function POST(request: Request) {
+  const { userId } = await auth()
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const supabase = createClient()
   const body = await request.json()
   const { content_type, content_slug, chapter_num, completion_percent, language } = body
@@ -48,16 +54,11 @@ export async function POST(request: Request) {
     )
   }
 
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   const { data, error } = await supabase
     .from('reading_progress')
     .upsert(
       {
-        user_id: session.user.id,
+        user_id: userId,
         content_type,
         content_slug,
         chapter_num,
@@ -80,6 +81,11 @@ export async function POST(request: Request) {
 
 // DELETE: Remove reading progress entry
 export async function DELETE(request: Request) {
+  const { userId } = await auth()
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const supabase = createClient()
   const { searchParams } = new URL(request.url)
   const contentSlug = searchParams.get('content_slug')
@@ -92,15 +98,10 @@ export async function DELETE(request: Request) {
     )
   }
 
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   const { error } = await supabase
     .from('reading_progress')
     .delete()
-    .eq('user_id', session.user.id)
+    .eq('user_id', userId)
     .eq('content_slug', contentSlug)
     .eq('language', language)
 

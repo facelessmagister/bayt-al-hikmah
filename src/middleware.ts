@@ -1,32 +1,49 @@
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse, type NextRequest } from 'next/server'
-import { updateSession } from '@/utils/supabase/middleware'
 
-export async function middleware(request: NextRequest) {
-  const { response, user } = await updateSession(request)
+const isProtectedRoute = createRouteMatcher([
+  '/admin/(.*)',
+  '/profile/(.*)',
+  '/dashboard/(.*)',
+])
 
-  // Protect admin routes — require authentication + admin role
-  if (request.nextUrl.pathname.startsWith('/admin/')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/auth/', request.url))
+const isApiProtectedRoute = createRouteMatcher([
+  '/api/progress(.*)',
+  '/api/courses/(.*)/enroll(.*)',
+  '/api/courses/(.*)/complete(.*)',
+  '/api/courses/(.*)/lesson/(.*)/complete(.*)',
+  '/api/competitions/(.*)/register(.*)',
+  '/api/competitions/(.*)/submit(.*)',
+  '/api/admin/(.*)',
+])
+
+export default clerkMiddleware(async (auth, request: NextRequest) => {
+  // Protect admin pages
+  if (isProtectedRoute(request)) {
+    const { userId } = await auth()
+    if (!userId) {
+      const signInUrl = new URL('/sign-in', request.url)
+      signInUrl.searchParams.set('redirect_url', request.url)
+      return NextResponse.redirect(signInUrl)
     }
-    // Role check: fetch profile role from Supabase
-    // For now, allow all authenticated users (role check in page component)
   }
 
-  // Protect profile/dashboard routes — require authentication
-  if (request.nextUrl.pathname.startsWith('/profile/') || 
-      request.nextUrl.pathname.startsWith('/dashboard/')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/auth/', request.url))
+  // Protect API routes
+  if (isApiProtectedRoute(request)) {
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
   }
 
-  return response
-}
+  return NextResponse.next()
+})
 
 export const config = {
   matcher: [
-    // Skip auth callback (handled separately), static files, and images
-    '/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Skip static files and images, but run on all other routes
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Clerk auto-proxy route
+    '/__clerk/:path*',
   ],
 }

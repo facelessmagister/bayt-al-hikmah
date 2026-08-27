@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
+import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 const PROD_ORIGIN = 'https://bayt-al-hikmah-nine.vercel.app'
@@ -8,16 +9,15 @@ export async function POST(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const supabase = createClient()
+  const { userId } = await auth()
   const slug = params.slug
 
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
-    // Redirect to login with next param so user returns to the course page
-    return NextResponse.redirect(`${PROD_ORIGIN}/auth/?next=/course/${slug}/`)
+  if (!userId) {
+    return NextResponse.redirect(`${PROD_ORIGIN}/sign-in?redirect_url=${PROD_ORIGIN}/course/${slug}/`)
   }
 
-  // Find course
+  const supabase = createClient()
+
   const { data: course } = await supabase
     .from('courses')
     .select('id')
@@ -28,11 +28,10 @@ export async function POST(
     return NextResponse.redirect(`${PROD_ORIGIN}/courses/?error=not-found`)
   }
 
-  // Check if already enrolled
   const { data: existing } = await supabase
     .from('course_enrollments')
     .select('*')
-    .eq('user_id', session.user.id)
+    .eq('user_id', userId)
     .eq('course_id', course.id)
     .single()
 
@@ -40,11 +39,10 @@ export async function POST(
     return NextResponse.redirect(`${PROD_ORIGIN}/course/${slug}/?enrolled=1`)
   }
 
-  // Create enrollment
   const { error } = await supabase
     .from('course_enrollments')
     .insert({
-      user_id: session.user.id,
+      user_id: userId,
       course_id: course.id,
       status: 'active',
     })
@@ -53,6 +51,5 @@ export async function POST(
     return NextResponse.redirect(`${PROD_ORIGIN}/course/${slug}/?error=enrollment-failed`)
   }
 
-  // Redirect back to course page with success
   return NextResponse.redirect(`${PROD_ORIGIN}/course/${slug}/?enrolled=1`)
 }
