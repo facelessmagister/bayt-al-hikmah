@@ -2,6 +2,12 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
+  // Skip middleware for auth callback — it needs to handle session exchange
+  // without updateSession interfering
+  if (request.nextUrl.pathname.startsWith('/auth/callback')) {
+    return NextResponse.next()
+  }
+
   const { response, user } = await updateSession(request)
 
   // Protect admin routes — require authentication + admin role
@@ -9,8 +15,6 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/', request.url))
     }
-    // Role check: fetch profile role from Supabase
-    // For now, allow all authenticated users (role check in page component)
   }
 
   // Protect profile/dashboard routes — require authentication
@@ -26,7 +30,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Skip auth callback (handled separately), static files, and images
-    '/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
