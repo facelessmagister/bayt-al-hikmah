@@ -6,8 +6,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // trailingSlash disabled: Clerk proxy route /__clerk/* needs exact path matching
-  trailingSlash: false,
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;

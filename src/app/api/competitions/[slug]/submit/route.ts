@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 // POST: Submit quiz answers
@@ -7,13 +6,13 @@ export async function POST(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.json({ error: 'Please log in to submit your quiz.' }, { status: 401 })
-  }
-
   const supabase = createClient()
   const slug = params.slug
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
+    return NextResponse.json({ error: 'Please log in to submit your quiz.' }, { status: 401 })
+  }
 
   // Find competition
   const { data: competition } = await supabase
@@ -26,11 +25,11 @@ export async function POST(
     return NextResponse.json({ error: 'Competition not found.' }, { status: 404 })
   }
 
-  // Verify registration
+  // Verify registration (any status — payment NOT required to submit)
   const { data: registration } = await supabase
     .from('competition_registrations')
     .select('*')
-    .eq('user_id', userId)
+    .eq('user_id', session.user.id)
     .eq('competition_id', competition.id)
     .single()
 
@@ -73,7 +72,7 @@ export async function POST(
   const { data: existingSubmission } = await supabase
     .from('competition_submissions')
     .select('*')
-    .eq('user_id', userId)
+    .eq('user_id', session.user.id)
     .eq('competition_id', competition.id)
     .single()
 
@@ -85,7 +84,7 @@ export async function POST(
   const { data, error } = await supabase
     .from('competition_submissions')
     .insert({
-      user_id: userId,
+      user_id: session.user.id,
       competition_id: competition.id,
       submission_data: {
         answers,

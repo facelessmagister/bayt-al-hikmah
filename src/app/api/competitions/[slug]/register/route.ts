@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 const PROD_ORIGIN = 'https://bayt-al-hikmah-nine.vercel.app'
@@ -9,13 +8,13 @@ export async function POST(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.redirect(`${PROD_ORIGIN}/sign-in?redirect_url=${PROD_ORIGIN}/competitions/${params.slug}/`)
-  }
-
   const supabase = createClient()
   const slug = params.slug
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
+    return NextResponse.redirect(`${PROD_ORIGIN}/auth/?next=/competitions/${slug}/`)
+  }
 
   // Find competition
   const { data: competition } = await supabase
@@ -32,7 +31,7 @@ export async function POST(
   const { data: existing } = await supabase
     .from('competition_registrations')
     .select('*')
-    .eq('user_id', userId)
+    .eq('user_id', session.user.id)
     .eq('competition_id', competition.id)
     .single()
 
@@ -44,7 +43,7 @@ export async function POST(
   const { error } = await supabase
     .from('competition_registrations')
     .insert({
-      user_id: userId,
+      user_id: session.user.id,
       competition_id: competition.id,
       payment_status: 'pending',
     })
@@ -53,5 +52,6 @@ export async function POST(
     return NextResponse.redirect(`${PROD_ORIGIN}/competitions/${slug}/?error=registration-failed`)
   }
 
+  // Redirect back to competition page with success
   return NextResponse.redirect(`${PROD_ORIGIN}/competitions/${slug}/?registered=1`)
 }

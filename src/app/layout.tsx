@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import './globals.css';
 
 export const metadata = {
@@ -6,9 +5,6 @@ export const metadata = {
   description: 'A digital library of Islamic literature — books, tafsir, and hadith in multiple languages.',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
 };
-
-// Force dynamic rendering — Clerk auth requires server-side rendering
-export const dynamic = 'force-dynamic';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,9 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <ClerkProvider>
-          {children}
-        </ClerkProvider>
+        {children}
       </body>
     </html>
   );

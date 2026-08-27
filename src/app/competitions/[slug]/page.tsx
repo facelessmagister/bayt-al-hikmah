@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { auth } from '@clerk/nextjs/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 
@@ -31,16 +30,16 @@ export default async function CompetitionPage({
     )
   }
 
-  // Check if user is registered (Clerk auth)
-  const { userId } = await auth()
+  // Check if user is registered
+  const { data: { session } } = await supabase.auth.getSession()
   let isRegistered = false
   let registrationStatus = null
 
-  if (userId) {
+  if (session) {
     const { data: reg } = await supabase
       .from('competition_registrations')
       .select('*')
-      .eq('user_id', userId)
+      .eq('user_id', session.user.id)
       .eq('competition_id', competition.id)
       .single()
 
@@ -118,9 +117,9 @@ export default async function CompetitionPage({
             {competition.description}
           </p>
 
-          {!userId && (
+          {!session && (
             <Link
-              href={`/sign-in?redirect_url=/competitions/${slug}/`}
+              href={`/auth/?next=/competitions/${slug}/`}
               style={{
                 display: 'inline-block',
                 padding: '0.85rem 1.75rem',
@@ -136,7 +135,7 @@ export default async function CompetitionPage({
             </Link>
           )}
 
-          {userId && !isRegistered && (
+          {session && !isRegistered && (
             <form action={`/api/competitions/${slug}/register/`} method="POST">
               <button
                 type="submit"
@@ -156,7 +155,7 @@ export default async function CompetitionPage({
             </form>
           )}
 
-          {userId && isRegistered && registrationStatus === 'pending' && (
+          {session && isRegistered && registrationStatus === 'pending' && (
             <div
               style={{
                 background: 'rgba(196, 163, 90, 0.15)',
@@ -189,7 +188,7 @@ export default async function CompetitionPage({
             </div>
           )}
 
-          {userId && isRegistered && (registrationStatus === 'verified' || registrationStatus === 'waived') && (
+          {session && isRegistered && (registrationStatus === 'verified' || registrationStatus === 'waived') && (
             <div
               style={{
                 background: 'rgba(74, 222, 128, 0.15)',
@@ -346,7 +345,7 @@ export default async function CompetitionPage({
         )}
 
         {/* Payment Instructions (shown when pending) */}
-        {userId && isRegistered && registrationStatus === 'pending' && (
+        {session && isRegistered && registrationStatus === 'pending' && (
           <div
             style={{
               background: '#fff8e7',

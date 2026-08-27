@@ -1,21 +1,20 @@
 import { createClient } from '@/utils/supabase/server'
-import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 // POST: Create or update a translation project (admin only)
 export async function POST(request: Request) {
-  const { userId } = await auth()
-  if (!userId) {
+  const supabase = createClient()
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-
-  const supabase = createClient()
 
   // Check admin role
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', userId)
+    .eq('id', session.user.id)
     .single()
 
   if (!profile || profile.role !== 'admin') {
@@ -72,17 +71,17 @@ export async function POST(request: Request) {
 
 // PATCH: Update project progress (admin only)
 export async function PATCH(request: Request) {
-  const { userId } = await auth()
-  if (!userId) {
+  const supabase = createClient()
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-
-  const supabase = createClient()
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', userId)
+    .eq('id', session.user.id)
     .single()
 
   if (!profile || profile.role !== 'admin') {

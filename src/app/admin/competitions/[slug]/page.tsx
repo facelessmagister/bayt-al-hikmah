@@ -1,22 +1,21 @@
 import { createClient } from '@/utils/supabase/server'
-import { auth } from '@clerk/nextjs/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 export default async function AdminCompetitionDetailPage({ params }: { params: { slug: string } }) {
-  const { userId } = await auth()
-  if (!userId) {
-    redirect(`/sign-in?redirect_url=/admin/competitions/${params.slug}/`)
-  }
-
   const supabase = createClient()
   const slug = params.slug
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
+    redirect(`/auth/?next=/admin/competitions/${slug}/`)
+  }
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', userId)
+    .eq('id', session.user.id)
     .single()
 
   if (!profile || profile.role !== 'admin') {

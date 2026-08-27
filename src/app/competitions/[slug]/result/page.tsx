@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { auth } from '@clerk/nextjs/server'
 import Layout from '@/components/Layout'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -8,9 +7,9 @@ export default async function CompetitionResultPage({ params }: { params: { slug
   const supabase = createClient()
   const slug = params.slug
 
-  const { userId } = await auth()
-  if (!userId) {
-    redirect(`/sign-in?redirect_url=/competitions/${slug}/result/`)
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) {
+    redirect(`/auth/?next=/competitions/${slug}/result/`)
   }
 
   // Fetch competition
@@ -28,7 +27,7 @@ export default async function CompetitionResultPage({ params }: { params: { slug
   const { data: submission } = await supabase
     .from('competition_submissions')
     .select('*')
-    .eq('user_id', userId)
+    .eq('user_id', session.user.id)
     .eq('competition_id', competition.id)
     .single()
 

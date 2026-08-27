@@ -1,9 +1,8 @@
 'use client'
 
-import { useUser, useClerk } from '@clerk/nextjs'
+import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
 interface UserProfile {
   id: string
@@ -14,55 +13,62 @@ interface UserProfile {
 }
 
 export default function UserNav() {
-  const { user, isLoaded, isSignedIn } = useUser()
-  const { signOut } = useClerk()
   const supabase = createClient()
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [profileLoaded, setProfileLoaded] = useState(false)
+  const [user, setUser] = useState<UserProfile | null>(null)
+  const [loading, setLoading] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
 
   useEffect(() => {
-    async function fetchProfile() {
-      if (!isLoaded || !isSignedIn || !user) {
-        setProfileLoaded(true)
-        return
+    async function getUser() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+        
+        if (profile) {
+          setUser({
+            id: session.user.id,
+            name: profile.name || session.user.email?.split('@')[0] || 'User',
+            email: session.user.email || '',
+            avatar_url: profile.avatar_url,
+            role: profile.role,
+          })
+        } else {
+          // Profile not yet created — use basic info
+          setUser({
+            id: session.user.id,
+            name: session.user.email?.split('@')[0] || 'User',
+            email: session.user.email || '',
+            avatar_url: null,
+            role: 'student',
+          })
+        }
       }
-
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-
-      if (profileData) {
-        setProfile({
-          id: user.id,
-          name: profileData.name || user.fullName || user.primaryEmailAddress?.emailAddress?.split('@')[0] || 'User',
-          email: user.primaryEmailAddress?.emailAddress || '',
-          avatar_url: profileData.avatar_url,
-          role: profileData.role,
-        })
-      } else {
-        setProfile({
-          id: user.id,
-          name: user.fullName || user.primaryEmailAddress?.emailAddress?.split('@')[0] || 'User',
-          email: user.primaryEmailAddress?.emailAddress || '',
-          avatar_url: user.imageUrl,
-          role: 'student',
-        })
-      }
-      setProfileLoaded(true)
+      setLoading(false)
     }
 
-    fetchProfile()
-  }, [isLoaded, isSignedIn, user, supabase])
+    getUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        getUser()
+      } else {
+        setUser(null)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   async function handleSignOut() {
-    await signOut()
+    await supabase.auth.signOut()
     window.location.href = '/'
   }
 
-  if (!isLoaded || !profileLoaded) {
+  if (loading) {
     return (
       <div style={{ color: '#b0c4de', fontSize: '0.9rem' }}>
         Loading...
@@ -70,11 +76,11 @@ export default function UserNav() {
     )
   }
 
-  if (!isSignedIn || !user) {
+  if (!user) {
     return (
       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
         <Link
-          href="/sign-in"
+          href="/auth/"
           style={{
             color: '#0a2540',
             background: '#c4a35a',
@@ -91,9 +97,6 @@ export default function UserNav() {
       </div>
     )
   }
-
-  const displayName = profile?.name || user.fullName || 'User'
-  const displayEmail = profile?.email || user.primaryEmailAddress?.emailAddress || ''
 
   return (
     <div style={{ position: 'relative' }}>
@@ -123,18 +126,12 @@ export default function UserNav() {
             fontWeight: 600,
             fontSize: '0.85rem',
             color: '#0a2540',
-            overflow: 'hidden',
           }}
         >
-          {profile?.avatar_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={profile.avatar_url} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          ) : (
-            displayName?.charAt(0).toUpperCase() || 'U'
-          )}
+          {user.name?.charAt(0).toUpperCase() || 'U'}
         </div>
         <span style={{ maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {displayName}
+          {user.name}
         </span>
         <svg
           width="12"
@@ -177,8 +174,8 @@ export default function UserNav() {
             }}
           >
             <div style={{ padding: '0.5rem 0.75rem', borderBottom: '1px solid #eee', marginBottom: '0.25rem' }}>
-              <div style={{ fontWeight: 600, color: '#0a2540', fontSize: '0.85rem' }}>{displayName}</div>
-              <div style={{ fontSize: '0.75rem', color: '#888' }}>{displayEmail}</div>
+              <div style={{ fontWeight: 600, color: '#0a2540', fontSize: '0.85rem' }}>{user.name}</div>
+              <div style={{ fontSize: '0.75rem', color: '#888' }}>{user.email}</div>
             </div>
             <Link
               href="/profile/"

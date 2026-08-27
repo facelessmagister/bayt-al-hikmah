@@ -1,35 +1,32 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
 import { NextResponse, type NextRequest } from 'next/server'
+import { updateSession } from '@/utils/supabase/middleware'
 
-export default clerkMiddleware(async (auth, request: NextRequest) => {
-  const { userId } = await auth()
-  const path = request.nextUrl.pathname
+export async function middleware(request: NextRequest) {
+  const { response, user } = await updateSession(request)
 
-  // Protect admin pages — require authentication
-  if (path.startsWith('/admin/') || path.startsWith('/profile/') || path.startsWith('/dashboard/')) {
-    if (!userId) {
-      const signInUrl = new URL('/sign-in', request.url)
-      signInUrl.searchParams.set('redirect_url', request.url)
-      return NextResponse.redirect(signInUrl)
+  // Protect admin routes — require authentication + admin role
+  if (request.nextUrl.pathname.startsWith('/admin/')) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/auth/', request.url))
+    }
+    // Role check: fetch profile role from Supabase
+    // For now, allow all authenticated users (role check in page component)
+  }
+
+  // Protect profile/dashboard routes — require authentication
+  if (request.nextUrl.pathname.startsWith('/profile/') || 
+      request.nextUrl.pathname.startsWith('/dashboard/')) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/auth/', request.url))
     }
   }
 
-  // Protect API routes — require authentication
-  if (path.startsWith('/api/progress') ||
-      path.startsWith('/api/courses/') && (path.includes('/enroll') || path.includes('/complete')) ||
-      path.startsWith('/api/competitions/') && (path.includes('/register') || path.includes('/submit')) ||
-      path.startsWith('/api/admin/')) {
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-  }
-
-  return NextResponse.next()
-})
+  return response
+}
 
 export const config = {
   matcher: [
-    // Skip static files and images, run on all other routes
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Skip auth callback (handled separately), static files, and images
+    '/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
