@@ -41,9 +41,9 @@ export default clerkMiddleware(async (auth, request: NextRequest) => {
 
 export const config = {
   matcher: [
-    // Skip static files and images, but run on all other routes
+    // Skip static files and images, run on all other routes
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-    // Clerk auto-proxy route
-    '/__clerk/:path*',
+    // Always run for Clerk frontend API proxy routes
+    '/__clerk/(.*)',
   ],
 }
