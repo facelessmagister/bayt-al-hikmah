@@ -1,38 +1,61 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/utils/supabase/server'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/'
+  const url = new URL(request.url)
+  const code = url.searchParams.get('code')
+  const next = url.searchParams.get('next') ?? '/'
 
-  // Hardcode production origin — don't trust request.url (may be localhost)
   const PROD_ORIGIN = 'https://bayt-al-hikmah-nine.vercel.app'
 
-  const supabase = createClient()
+  const cookieStore = cookies()
 
-  // If no code, check if user already has a session (e.g., returning user)
+  // Create the Supabase server client with full cookie access
+  // This is critical for PKCE: the code_verifier is stored in a cookie
+  // by the browser client, and we need to read it here
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          // Get ALL cookies — the PKCE code_verifier is one of them
+          return cookieStore.getAll().map(c => ({ name: c.name, value: c.value }))
+        },
+        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set({ name, value, ...options })
+            })
+          } catch {
+            // Can be ignored if called from a Server Component
+          }
+        },
+      },
+    }
+  )
+
+  // If no code, check if already logged in
   if (!code) {
     const { data: { session } } = await supabase.auth.getSession()
     if (session) {
-      // Already logged in, just redirect
       return NextResponse.redirect(`${PROD_ORIGIN}${next}`)
     }
-    // No session and no code — error
     return NextResponse.redirect(`${PROD_ORIGIN}/auth/auth-code-error/`)
   }
 
   // Exchange the code for a session
-  const { error } = await supabase.auth.exchangeCodeForSession(code)
+  // This requires the PKCE code_verifier cookie to be present
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
   if (error) {
-    // Check if the error is because user already has a session
+    console.error('OAuth exchange error:', error.message)
+    // Check if we already have a valid session despite the error
     const { data: { session } } = await supabase.auth.getSession()
     if (session) {
-      // Already logged in — redirect to the app
       return NextResponse.redirect(`${PROD_ORIGIN}${next}`)
     }
-    // Real error
     return NextResponse.redirect(`${PROD_ORIGIN}/auth/auth-code-error/`)
   }
 

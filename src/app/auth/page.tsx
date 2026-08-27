@@ -100,9 +100,6 @@ function AuthForm() {
       provider: 'google',
       options: {
         redirectTo: `https://bayt-al-hikmah-nine.vercel.app/auth/callback/?next=${encodeURIComponent(nextUrl)}`,
-        queryParams: {
-          prompt: 'select_account',
-        },
       },
     })
 
