@@ -84,7 +84,10 @@ function AuthForm() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `https://bayt-al-hikmah-nine.vercel.app/auth/callback/?next=${encodeURIComponent(nextUrl)}`,
+        // NOTE: must exactly match an entry in Supabase Dashboard → Auth → URL Configuration
+        // The allow-list currently only has the bare domain, so we redirect to it.
+        // The browser client auto-detects ?code= on landing and exchanges it (PKCE).
+        redirectTo: 'https://bayt-al-hikmah-nine.vercel.app',
       },
     })
 
