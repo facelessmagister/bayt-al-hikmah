@@ -16,8 +16,22 @@ Unified Islamic digital library. Next.js 14 static export, Vercel-deployed.
 ## Current Status
 
 - **Phase 0 (CONTENT):** COMPLETE — 13 books, 104 chapters, bilingual AR+EN reader, Solaris design.
-- **Phase 1 (AUTH + DATABASE):** PENDING — See `DEVELOPMENT_PLAN.md` for full migration plan.
-- **Framework change:** Next.js static export → SSR + API routes (pending Phase 1).
+- **Phase 1 (AUTH):** COMPLETE — Supabase Auth (Google OAuth + email/password), unified /auth/ page. See `supabase-oauth-nextjs` skill for the proven pattern and pitfalls.
+- **Education Center reframe:** COMPLETE — 5 pillars (Library, Academy, Young Learners, Competitions, Translation).
+- **Framework:** Next.js 14 SSR (not static export) — required for auth + API routes.
+
+## Authentication (WORKING — do not break)
+
+The auth system is fragile. Follow these rules EXACTLY or it breaks:
+
+1. **Google OAuth `redirectTo` MUST be the bare domain:** `https://bayt-al-hikmah-nine.vercel.app` — NOT `/auth/callback/`. The Supabase Redirect URL allow-list only contains the bare domain; any other URL is silently dropped (browser stalls on Google, never returns). The browser client auto-exchanges `?code=` on landing (PKCE, `detectSessionInUrl`).
+2. **The anon key in `.env.local` and Vercel must be the FULL JWT** (~208 chars, no literal `...`). Agent file-write tools mask JWTs — write `.env.local` via terminal heredoc and verify programmatically. A truncated key still works for email auth but breaks OAuth silently.
+3. **Never edit the middleware matcher regex** — the escaping breaks on Vercel and 500s the entire site (`MIDDLEWARE_INVOCATION_FAILED`). Exclude paths with early `return NextResponse.next()` inside the function body.
+4. **Never call `signOut()` before `signInWithOAuth`** — wipes the PKCE code_verifier cookie.
+5. **Never gate the auth page on a `getSession()` check** — can hang on "Loading..." forever.
+6. After changing `NEXT_PUBLIC_` vars in Vercel, always redeploy (they're baked into the JS bundle at build time). Use `--force` if caching is suspected.
+
+Full pitfall table and debug playbook: load the `supabase-oauth-nextjs` skill.
 
 ## Development Plan
 
