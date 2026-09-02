@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { remark } from 'remark';
+import remarkGfm from 'remark-gfm';
 import remarkHtml from 'remark-html';
 import { createClient } from '@/utils/supabase/client';
 
@@ -19,7 +20,7 @@ interface ChapterReaderProps {
 }
 
 async function markdownToHtml(md: string): Promise<string> {
-  const processed = await remark().use(remarkHtml).process(md);
+  const processed = await remark().use(remarkGfm).use(remarkHtml).process(md);
   return processed.toString();
 }
 

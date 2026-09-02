@@ -322,13 +322,14 @@ books:
       archive_id: "faith-and-life"
       archive_url: "https://archive.org/details/faith-and-life"
     chapters:
-      - { num: 1, title: { en: "Chapter 1", ar: "الفصل الأول" }, slug: "ch-01" }
-      - { num: 2, title: { en: "Chapter 2", ar: "الفصل الثاني" }, slug: "ch-02" }
-      - { num: 3, title: { en: "Chapter 3", ar: "الفصل الثالث" }, slug: "ch-03" }
-      - { num: 4, title: { en: "Chapter 4", ar: "الفصل الرابع" }, slug: "ch-04" }
+      - { num: 1, title: { en: "Iman (Faith) and the Dignity of Man", ar: "الإيمان وكرامة الإنسان" }, slug: "ch-01" }
+      - { num: 2, title: { en: "Iman and Happiness", ar: "الإيمان والسعادة" }, slug: "ch-02" }
+      - { num: 3, title: { en: "Iman and Love", ar: "الإيمان والمحبة" }, slug: "ch-03" }
+      - { num: 4, title: { en: "Iman and Hope", ar: "الإيمان والرجاء" }, slug: "ch-04" }
     status:
       en: published
       ar: not-translated
+    notes: "English text from the Al-Falah Foundation edition (2004), abridged from 'The Impact of Iman in the Life of the Individual', edited by Prof. Ahlam Fathi. Digitally reformatted from Archive.org OCR in 2026 with verse citations standardized."
 
   auspices-victory:
     title:
