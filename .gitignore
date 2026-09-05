@@ -11,3 +11,4 @@ db/
 *.db-journal
 *.db-shm
 *.db-wal
+source-audit/raw/

@@ -1,0 +1,41 @@
+# Some Characteristics of the Call
+
+It is among Allah's shaping of the Muslim Brothers' call that it should arise in Ismailia, and that this should take place upon division and prolonged disagreement around some subsidiary points that have often caused division in parties and goals. Its emergence coincided with the intense, violent struggle between the fanatical foreigner and the struggling patriot. As a result of these circumstances, this call acquired characteristics that distinguished it from many of the calls contemporary with it.
+
+Among these characteristics are:
+
+1. Distance from disputed points.
+2. Distance from the dominance of notables and grandees.
+3. Distance from parties and organizations.
+4. Attention to formation and gradualism in steps.
+5. Preference for the practical, productive side over propaganda and announcements.
+6. Strong attraction of youth.
+7. Rapid spread in villages and towns.
+
+## 1 — Distance from Disputed Points
+
+As for distance from disputed *fiqh* points: the Muslim Brothers believe that disagreement in subsidiary matters is a necessary, unavoidable thing, since the sources of Islam — verses, *ḥadīth*, and rulings — differ in their outward expressions and in people's comprehension and understanding. This disagreement was real among the Companions themselves, and it remained and will remain until the Day of Resurrection. How wise was Imam Mālik, may Allah be pleased with him, when he said to Abū Jaʿfar al-Manṣūr, who wanted to impose *al-Muwaṭṭaʾ* upon the people: "The Companions of the Messenger of Allah, peace and blessings be upon him, dispersed into the lands; if you burden them with one opinion, there will be *fitnah*." The blame is not on disagreement itself, but on what they saw as blame: bigotry for one's opinion and confining people's minds. This view of disputed matters made hearts gather around one idea, and made people think that they had come together "on what makes a Muslim a Muslim," as Zayd, may Allah be pleased with him, said. This view was necessary for a group that wanted to spread its idea in a country whose people were divided by disagreement over matters that had no meaning for debate or dispute.
+
+## 2 — Distance from the Dominance of Grandees and Notables
+
+As for distance from the dominance of grandees and notables: it is because people turn away from these calls that spring from fancies and desires and toward the established calls that possess authority and yield benefits, even if only in people's opinion and not in truth. Because we, the bearers of the Muslim Brothers' call, deliberately adopted from the first day of the call's appearance a way that would not efface its original colour with the colour of other calls that arise before these grandees, none of them has attempted to exploit it or direct it to any goal other than that intended. That is because many of the great ones lack the Islamic conduct that ought to characterise the ordinary Muslim, let alone the great Muslim who bears the name of an Islamic call to guide people. Hence this class has remained distant from the Muslim Brothers, except for a few noble, virtuous men who sympathise with their idea, share their goals, participate in their works, and wish them success.
+
+## 3 — Distance from Parties and Organizations
+
+As for distance from connection with parties and organizations: there has been and still is among these organizations mutual aversion and hostility incompatible with the brotherhood of Islam. The call of Islam is general, comprehensive, does not divide, and is not served by anyone except one who is free from every colour [of partisanship] and becomes pure for Allah. This meaning was formerly difficult for souls accustomed to seeking status and wealth through their party or group. Therefore we preferred to avoid the [partisan] body and to be patient in depriving ourselves of many sound elements until the veil was lifted and people perceived some hidden realities, returning after trial to the straight path with hearts full of certainty and faith.
+
+Now, since the arm of the call has grown strong and its frame has solidified, and it has become able to direct without being directed and to influence without being influenced, we invite the grandees, notables, bodies, and parties to join us, to follow our path, to work with us, and to leave behind these empty appearances that have no benefit. Let them unite under the banner of the Great Qur'an and shelter under the flag of the Noble Prophet and the strong program of Islam. If they respond, that is the best for them and their happiness in this world and the Hereafter, and the call will be able to shorten time and effort. If they refuse, there is no harm on us if we wait a little, seeking help from Allah alone until He casts them down and brings them into our hands, forcing them to work for the call as servants, when previously they could have been leaders. But this is the prevailing way of most people — they do not know.
+
+## 4 — Gradualism in Steps
+
+As for gradualism, habituation to cultivation, and clarity of steps along the path of the Muslim Brothers: they believe that every call must pass through three stages: a stage of propagation, introduction, and spreading the idea and directing it to the masses of the people; then a stage of formation, selecting supporters, preparing soldiers, and arranging ranks from among those invited; then, after all this, a stage of execution, action, and production. Often these three stages proceed side by side, because of the unity of the call and the strength of the mutual connection in it together. Thus the caller calls, and at the same time selects and prepares, and at the same time acts and executes.
+
+But there is no doubt that the final goal or complete result cannot be achieved except after abundant propagation, many supporters, and firm formation.
+
+Within the bounds of these stages our call has proceeded and still proceeds. We began with propagation and directed it to the Ummah in successive lessons, in repeated travels, in numerous publications, in public and private gatherings, in the first newspaper of the Muslim Brothers, then in the weekly *Nadhīr*. We still call and shall continue until there is no single individual left whom the call of the Muslim Brothers has not reached in its brilliant reality and correct form. Allah refuses anything but to complete His light. I think we have reached in this stage a degree at which we can be content and upon which the regularity of progress can be relied. It has therefore become one of our most binding duties to take the second step: the step of testing, formation, and preparation.
+
+We have taken the second step in three forms: *al-katāʾib* (battalions), by which the ranks are strengthened through the mingling of souls and spirits, the resisting of habits and familiarities, training in excellent attachment to Allah the Exalted and seeking victory from Him — this is the institute of spiritual cultivation for the Muslim Brothers; then *al-firaq* (scout and rover units) for scouting, roving, and athletic activities, by which the ranks are strengthened through developing the bodies of the Muslim Brothers, accustoming them to obedience, discipline, and noble athletic morals, and preparing them for the sound soldiery that Islam imposes upon every Muslim — this is the institute of physical cultivation for the Muslim Brothers; then the *dars al-taʿālīm* (lesson of teachings), in the battalions or in the clubs of the Muslim Brothers, by which the ranks are strengthened through forming the ideas of the Muslim Brothers and their minds by a comprehensive study of the most important matters that a Muslim needs to know about his religion and his worldly life — this is the institute of general and intellectual cultivation for the Muslim Brothers.
+
+Besides this there are the other various sides of activity by which the Muslim Brothers are trained for the duty expected of them as a group preparing to lead an Ummah, nay, the entire world.
+
+After we are reassured of our position in this step, we shall take, Allah willing, the third step: the practical step after which the complete fruits of the Muslim Brothers' call appear.

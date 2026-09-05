@@ -139,6 +139,56 @@ books:
     translated_at: "2026-07-24"
     notes: "English translation covers chapters 1-3 only."
 
+  collected-rasail:
+    title:
+      en: "Collected Epistles of Hasan al-Banna"
+      ar: "مجموعة رسائل الإمام الشهيد حسن البنا"
+    author: hasan-al-banna
+    shelf: revivalist
+    original_language: ar
+    languages: [en]
+    domains: [dawah, haraki, tarbiyyah, aqeedah, islamic-movement, spirituality]
+    tags: [hasan-al-banna, muslim-brotherhood, rasaail, revivalist, epistles, manhaj]
+    source:
+      archive_url: "https://archive.org/details/majmooat-rasail-al-banna"
+      notes: "Arabic OCR from multiple sources including Foulabook and KetabOnline. English translation from OCR."
+    chapters:
+      - { num: 1, title: { en: "Publisher's Introduction", ar: "مقدمة الناشر" }, slug: "00-publishers-introduction" }
+      - { num: 2, title: { en: "The Letter of Teachings (Risalat al-Ta'alim)", ar: "رسالة التعليم" }, slug: "01-letter-of-teachings" }
+      - { num: 3, title: { en: "To What Do We Call People?", ar: "إلى أي شيء ندعو الناس" }, slug: "02-to-what-do-we-call" }
+      - { num: 4, title: { en: "Our Call in a New Phase", ar: "دعوتنا في طور جديد" }, slug: "03-our-call-new-phase" }
+      - { num: 5, title: { en: "Toward the Light", ar: "نحو النور" }, slug: "04-toward-the-light" }
+      - { num: 6, title: { en: "In Ten Years — The Fifth General Conference", ar: "في عشر سنوات" }, slug: "05-in-ten-years" }
+      - { num: 7, title: { en: "Between Yesterday and Today", ar: "بين الأمس واليوم" }, slug: "06-between-yesterday-today" }
+      - { num: 8, title: { en: "Some Characteristics of the Call", ar: "بعض خصائص الدعوة" }, slug: "07-characteristics-of-the-call" }
+      - { num: 9, title: { en: "Honest Counsel", ar: "نصيحة صادقة" }, slug: "08-honest-counsel" }
+      - { num: 10, title: { en: "When Will Our Executive Steps Be?", ar: "متى خطواتنا التنفيذية" }, slug: "09-when-executive-steps" }
+      - { num: 11, title: { en: "From the Messages of the Muslim Brothers", ar: "من رسائل الإخوان" }, slug: "10-from-messages" }
+      - { num: 12, title: { en: "The Muslim Brothers and Force and Revolution", ar: "الإخوان والقوة والثورة" }, slug: "11-force-and-revolution" }
+      - { num: 13, title: { en: "The Muslim Brothers and Government", ar: "الإخوان والحكومة" }, slug: "12-and-government" }
+      - { num: 14, title: { en: "The Muslim Brothers and the Egyptian Constitution", ar: "الإخوان والدستور" }, slug: "13-and-constitution" }
+      - { num: 15, title: { en: "The Muslim Brothers and the Law", ar: "الإخوان والقانون" }, slug: "14-and-the-law" }
+      - { num: 16, title: { en: "The Muslim Brothers and National, Arab, and Islamic Unity", ar: "الإخوان والوحدة" }, slug: "15-and-unity" }
+      - { num: 17, title: { en: "The Muslim Brothers and the Caliphate", ar: "الإخوان والخلافة" }, slug: "16-and-the-caliphate" }
+      - { num: 18, title: { en: "The Muslim Brotherhood on Parties, al-Fatah, and the European States", ar: "الإخوان والأحزاب" }, slug: "17-on-parties" }
+      - { num: 19, title: { en: "The Muslim Brotherhood Under the Banner of the Qur'an", ar: "الإخوان تحت راية القرآن" }, slug: "18-under-banner-quran" }
+      - { num: 20, title: { en: "Three Visions and Objections", ar: "ثلاث رؤى واعتراضات" }, slug: "19-three-visions" }
+      - { num: 21, title: { en: "Our National Cause and the Islamic Orientation", ar: "قضيتنا القومية" }, slug: "20-national-cause" }
+      - { num: 22, title: { en: "Our Unity in the Light of the Islamic Orientation", ar: "وحدتنا" }, slug: "21-our-unity" }
+      - { num: 23, title: { en: "The System of Government in the Islamic System", ar: "نظام الحكم" }, slug: "22-system-of-government" }
+      - { num: 24, title: { en: "Our Internal Problems in the Islamic System", ar: "مشكلاتنا الداخلية" }, slug: "23-internal-problems" }
+      - { num: 25, title: { en: "The Economic System", ar: "النظام الاقتصادي" }, slug: "24-economic-system" }
+      - { num: 26, title: { en: "O Youth", ar: "يا شباب" }, slug: "25-o-youth" }
+      - { num: 27, title: { en: "Establishing the Islamic Creedal Pillars", ar: "إقامة المعاقل الإسلامية" }, slug: "26-creedal-pillars" }
+      - { num: 28, title: { en: "The Excellence of Night Prayer and Seeking Forgiveness", ar: "فضل قيام الليل" }, slug: "27-excellence-night-prayer" }
+      - { num: 29, title: { en: "Al-Ma'thurawt: Daily Litany and Qur'anic Litany", ar: "المأثورات" }, slug: "28-al-mathurat" }
+    status:
+      en: published
+      ar: not-translated
+    translated_by: "Tarbiyyah Translation Team"
+    translated_at: "2026-09-05"
+    notes: "English translation from Arabic OCR of Majmu'at Rasa'il al-Imam al-Shahid. 29 chapters, ~90,000 words. Source compiled from Foulabook and KetabOnline digital editions."
+
   # ============================================================
   # SHELF: Qaradawi Collection
   # ============================================================

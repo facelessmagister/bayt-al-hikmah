@@ -1,0 +1,36 @@
+Author,Book Title,Language,URL/Source,HTTP Status,Repository,Format Available,Downloadable,Quality Tier,Notes,Assessment
+said-hawwa,Allah (الله جل جلاله),English,archive.org/details/Allah_201301,200,Archive.org,Text PDF + DjVu,YES,A,Downloadable (Allah_text.pdf + Allah_djvu.txt),English text exists — fastest to process
+said-hawwa,Jund Allah: Planning (جند الله تخطيطا),Arabic,archive.org/details/AAskZad-1142814,200,Archive.org,Image PDF only (19.6MB),YES,C,Image-only PDF — needs OCR,Part of Jund Allah series
+said-hawwa,Jund Allah: Organization (جند الله تنظيما),Arabic,archive.org/details/AAskZad-1142891,200,Archive.org,Image PDF only,YES,C,Image-only PDF — needs OCR,Part of Jund Allah series
+said-hawwa,Jund Allah: Culture & Ethics (جند الله ثقافة وأخلاقا),Arabic,archive.org/details/AAskZad-1143006,200,Archive.org,Image PDF only,YES,C,Image-only PDF — needs OCR,Part of Jund Allah series
+said-hawwa,Al-Rasul (الرسول),Arabic,archive.org/details/AAskZad-1142965,200,Archive.org,Image PDF only,YES,C,Image-only PDF — needs OCR,Said Hawwa on the Prophet ﷺ
+said-hawwa,Al-Islam (الإسلام),Arabic,archive.org/details/AAskZad-1143394,200,Archive.org,Image PDF only,YES,C,Image-only PDF — needs OCR,Multiple editions available
+said-hawwa,Tarbiyyatuna al-Ruhiyya (تربيتنا الروحية),Arabic,archive.org/details/AAskZad-1143701,200,Archive.org,Image PDF only,YES,C,ALREADY IN LIBRARY (our-spiritual-education),Already published — skip
+said-hawwa,Man Ajl Khutwa (من أجل خطوة),Arabic,archive.org/details/AAskZad-1142827,200,Archive.org,Image PDF only,YES,C,Image-only PDF — needs OCR,On the path of jihad
+said-hawwa,Jawlat fi al-Fiqh (جولات في الفقهين),Arabic,archive.org/details/AAskZad-1142869,200,Archive.org,Image PDF only,YES,C,Image-only PDF — needs OCR,Fiqh work
+said-hawwa,HawaSaid Collection (19 ZIPs),Arabic,archive.org/details/HawaSaid,200,Archive.org,19 ZIP files (image scans),YES,C,"ZIP scans — unknown contents, no text layer",Collection of 19 books in ZIP format
+said-hawwa,Beberapa Pelajaran Dalam Amal Islami,Indonesian,archive.org/download/BacaanAnda/,200,Archive.org,Text PDF (370KB),YES,A,Indonesian translation of Said Hawwa,Indonesian — useful as cross-reference
+said-hawwa,Tazkiyatun Nafs (Purifying the Soul),Indonesian,scribd.com/doc/15438180,200,Scribd,HTML page (login required),LOGIN,X,Scribd requires login/subscription,Indonesian translation only
+fathi-yakan,To Be a Muslim (English trans.),English,zulkiflihasan.files.wordpress.com/2008/06/tobeamuslim-fathi-yakan.pdf,403,WordPress,Direct PDF (blocked),NO,X,403 Forbidden — URL redirected and blocked,ALREADY IN LIBRARY as 'what-my-belonging-to-islam-means' — skip
+fathi-yakan,Ke Arah Kesatuan Gerakan Islam,Malay,archive.org/download/BacaanAnda/KeArahKesatuanGerakanIslam-FathiYakan.pdf,000→200,Archive.org,Text PDF (236KB),YES,A,Downloadable via archive.org/download/BacaanAnda/,Malay translation — new title for library
+fathi-yakan,Apa Ertinya Saya Menganut Islam,Malay,PDFCoffee (no direct URL),N/A,PDFCoffee,Unknown,UNKNOWN,X,Not tested — no direct URL in document,Malay translation of 'What My Belonging Means'
+fathi-yakan,al-Isti'ab,Malay/Indonesian,scribd.com/document/81715590,200,Scribd,HTML page (login required),LOGIN,X,Scribd requires login/subscription,Indonesian translation
+fathi-yakan,Various titles,English,islambasics.com/bookauthor/fathi-yakan,200,Islambasics,HTML page,UNKNOWN,B,Page accessible — need to scrape for PDF links,May have multiple English PDFs
+fathi-yakan,Various titles,English,emaanlibrary.com/item-author/fathi-yakan,200,Emaanlibrary,HTML page,UNKNOWN,B,Page accessible — need to scrape for PDF links,May have multiple English PDFs
+fathi-yakan,Various titles,English/Urdu/Hindi,rekhta.org/authors/al-ustaz-fathi-yakan/all,200,Rekhta,HTML page,UNKNOWN,B,Page accessible — Rekhta is Urdu literature hub,Urdu/Hindi translations
+fathi-yakan,Al-Islam Fikra wa Haraka wa Inqilab,Arabic,noor-book.com (percent-encoded URL),403,Noor Library,Blocked (403),NO,X,Noor Library blocks curl — may work in browser,Arabic original — need browser to verify
+mustafa-mashhur,The Path of Dawah Between Originality and Deviation,English,archive.org/details/learnislampdfenglishbookthepathofdawahbetweenoriginalityanddeviation,200,Archive.org,Text PDF + DjVu (8.4MB text PDF),YES,A,Downloadable — has _text.pdf and _djvu.txt,"BEST FIND for Mashhur — English, text layer ready"
+mustafa-mashhur,Jihad Is the Way,English,palwatch.org/STORAGE/special reports/Jihad_is_the_way_by_Mustafa_Mashhur.pdf,200,PalWatch,Direct PDF (200 OK),YES,A,Direct PDF download works,Policy document framing — user approved inclusion
+mustafa-mashhur,Amal Jamai (Gerakan Bersama),Indonesian,archive.org/download/BacaanAnda/,200,Archive.org,Text PDF (162KB),YES,A,Indonesian translation of Mashhur work,Short treatise in Indonesian
+hasan-al-banna,Majmu'at Rasa'il (Collected Epistles),Arabic,archive.org/details/Pdf3484,200,Archive.org,EPUB + Text PDF + DjVu (42MB text PDF),YES,A,Best source — has EPUB (5.7MB) + _text.pdf (42MB),PRIMARY al-Banna text — richest format options
+hasan-al-banna,Al-Mathurat al-Kubra (Daily Supplications),Arabic,archive.org/details/matsurat-kubra-hasan-al-banna-1,200,Archive.org,EPUB + Text PDF + DjVu,YES,A,EPUB (204KB) + _text.pdf (1.4MB),Concise devotional text — easy to process
+hasan-al-banna,Risalat al-Ta'alim (Letter of Teachings),French,archive.org/details/LepitreAuxEnseignements,200,Archive.org,Text PDF + DjVu,YES,A,French translation — useful as cross-ref,French — not direct for EN translation
+hasan-al-banna,Al-Munajah (The Intimate Discourse),English,archive.org/details/al-munajah-the-intimate-discourse,200,Archive.org,Unknown — need to check,LIKELY,A,English translation of al-Banna text,English — fast to process
+hasan-al-banna,Six Tracts of Hasan al-Banna,English,openmaktaba.com/six-tracts-of-hassan-albanna/,200,OpenMaktaba,HTML page,UNKNOWN,B,Page accessible — need to scrape for PDF link,English translation of selected tracts
+hasan-al-banna,Memoirs of the Call and the Preacher,English/Arabic,openmaktaba.com/hasan-al-banna/,200,OpenMaktaba,HTML page,UNKNOWN,B,Page accessible — need to scrape for PDF link,Key biographical text
+hasan-al-banna,UsrahDakwah (Family/Dawah),Indonesian,archive.org/download/BacaanAnda/,200,Archive.org,Text PDF (283KB),YES,A,Indonesian translation of al-Banna dawah text,Indonesian — useful as cross-ref
+majdi-al-hilali,Lessons (Audio),Arabic (audio),archive.org/details/Lessons-DR-Majdi-Al-Hilali,200,Archive.org,Audio files only (MP3/Ogg),YES,X,Audio only — no text,Audio lessons — not usable for text translation
+majdi-al-hilali,Various titles,Arabic,noor-book.com/en/ebooks-Majdi-Alhilali-pdf,403,Noor Library,Blocked (403),NO,X,Noor Library blocks curl,Need browser to verify
+majdi-al-hilali,Various titles,Arabic,ketabpedia.com/book_author/مجدي-الهلالي,000,Ketabpedia,Connection failed,NO,X,Server unreachable,Dead link or SSL issue
+majdi-al-hilali,al-'Awda ila al-Qur'an,Arabic,4readlib.com/author,404,4readlib,404 Not Found,NO,X,Page does not exist,Dead link
+majdi-al-hilali,Various titles,Arabic,shamela.ws (author page),N/A,Shamela,Not tested directly,UNKNOWN,B,Referenced in document but no direct URL,Need to search shamela.ws

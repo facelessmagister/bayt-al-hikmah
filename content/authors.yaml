@@ -40,6 +40,35 @@ authors:
       of the promised generation in Islamic thought.
     priority: 2
 
+  hasan-al-banna:
+    name: Hasan al-Banna
+    native_name: حسن البنا
+    birth_year: 1906
+    death_year: 1949
+    nationality: Egyptian
+    role: Founder and first General Guide of the Muslim Brotherhood
+    movement: Muslim Brotherhood (Egypt)
+    bio: >
+      Egyptian Islamic revivalist, educator, and founder of the Society of the Muslim
+      Brothers (1928). Authored numerous tracts (rasa'il) on Islamic activism, spiritual
+      education, and organizational methodology. His collected epistles (Majmu'at Rasa'il)
+      form the foundational texts of the modern Islamic revivalist movement.
+    priority: 1
+
+  mustafa-mashhur:
+    name: Mustafa Mashhur
+    native_name: مصطفى مشهور
+    birth_year: 1921
+    death_year: 2002
+    nationality: Egyptian
+    role: 5th General Guide of the Egyptian Muslim Brotherhood (1996-2002)
+    movement: Muslim Brotherhood (Egypt)
+    bio: >
+      Egyptian Islamic leader and fifth General Guide of the Muslim Brotherhood.
+      Authored works on da'wa methodology and organizational theory, including the
+      multi-volume "Laws of Da'wa" series.
+    priority: 2
+
   yusuf-al-qaradawi:
     name: Yusuf al-Qaradawi
     native_name: يوسف القرضاوي
