@@ -189,6 +189,131 @@ books:
     translated_at: "2026-09-05"
     notes: "English translation from Arabic OCR of Majmu'at Rasa'il al-Imam al-Shahid. 29 chapters, ~90,000 words. Source compiled from Foulabook and KetabOnline digital editions."
 
+  al-munajah:
+    title:
+      en: "Al-Munajah: The Intimate Discourse"
+      ar: "المناجاة"
+    author: hasan-al-banna
+    shelf: revivalist
+    original_language: ar
+    languages: [en]
+    domains: [spirituality, duaa, worship]
+    tags: [munajah, intimate-discourse, duaa, qiyam, supplication, hasan-al-banna]
+    source:
+      archive_id: "al-munajah-the-intimate-discourse"
+      archive_url: "https://archive.org/details/al-munajah-the-intimate-discourse"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "The Merits and Timing of Qiyam al-Layl", ar: "فضل قيام الليل" }, slug: "01-merits-of-qiyam" }
+      - { num: 3, title: { en: "The Merits of Du'a and Istighfar", ar: "فضل الدعاء والاستغفار" }, slug: "02-merits-of-dua-and-istighfar" }
+      - { num: 4, title: { en: "Etiquette and the Optimal Time for Making Du'a", ar: "آداب الدعاء" }, slug: "03-etiquette-of-dua" }
+      - { num: 5, title: { en: "On Celebrating Praise and Invoking Blessings", ar: "الذكر والصلاة على النبي" }, slug: "04-praise-and-blessings" }
+      - { num: 6, title: { en: "The Prophet's Du'a in Tahajjud Prayer", ar: "دعاء النبي في التهجد" }, slug: "05-prophets-dua-in-tahajjud" }
+      - { num: 7, title: { en: "Selected Supplications", ar: "أدعية مختارة" }, slug: "06-selected-supplications" }
+    status:
+      en: published
+      ar: not-translated
+    translated_by: "Shaykh Ahmad Muhammad Sa'ad (Angelwing Media)"
+    translated_at: "2026-09-05"
+    notes: "English translation from Angelwing Media edition. OCR from Archive.org text PDF."
+
+  path-of-dawah:
+    title:
+      en: "The Path of Dawah Between Originality and Deviation"
+      ar: "طريق الدعوة بين الأصالة والانحراف"
+    author: mustafa-mashhur
+    shelf: revivalist
+    original_language: ar
+    languages: [en]
+    domains: [dawah, haraki, methodology]
+    tags: [dawah, methodology, deviation, haraki, mustafa-mashhur, manhaj]
+    source:
+      archive_id: "learnislampdfenglishbookthepathofdawahbetweenoriginalityanddeviation"
+      archive_url: "https://archive.org/details/learnislampdfenglishbookthepathofdawahbetweenoriginalityanddeviation"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "Forms of Deviation", ar: "صور الانحراف" }, slug: "01-forms-of-deviation" }
+      - { num: 3, title: { en: "Commitment to the Jama'ah", ar: "الالتزام بالجماعة" }, slug: "02-commitment-to-jamaah" }
+      - { num: 4, title: { en: "The Question of Comprehension", ar: "مسألة الفهم" }, slug: "03-question-of-comprehension" }
+      - { num: 5, title: { en: "Means and Steps of Our Endeavor", ar: "وسائل وخطوات العمل" }, slug: "04-means-and-steps" }
+      - { num: 6, title: { en: "The Path of Dawah Between Confidence and Doubts", ar: "طريق الدعوة بين الثقة والشك" }, slug: "05-confidence-and-doubts" }
+      - { num: 7, title: { en: "Ordeals and Trials on the Path of Da'wah", ar: "الابتلاءات في طريق الدعوة" }, slug: "06-ordeals-and-trials" }
+      - { num: 8, title: { en: "Our Stance Towards the Enemy", ar: "موقفنا من العدو" }, slug: "07-stance-towards-enemy" }
+      - { num: 9, title: { en: "Conclusion", ar: "الخاتمة" }, slug: "08-conclusion" }
+    status:
+      en: published
+      ar: not-translated
+    translated_by: "Al-Falah Foundation for Translation, Publication & Distribution"
+    translated_at: "2026-09-05"
+    notes: "English translation from Al-Falah Foundation edition (1421/2000). ISBN: 977-5813-44-1. OCR from Archive.org text PDF."
+
+  jihad-is-the-way:
+    title:
+      en: "Jihad Is the Way"
+      ar: "الجهاد هو الطريق"
+    author: mustafa-mashhur
+    shelf: revivalist
+    original_language: ar
+    languages: [en]
+    domains: [dawah, haraki, jihad]
+    tags: [jihad, dawah, haraki, mustafa-mashhur, laws-of-dawah]
+    source:
+      archive_url: "https://palwatch.org/STORAGE/special%20reports/Jihad_is_the_way_by_Mustafa_Mashhur.pdf"
+      notes: "Fifth volume of 'The Laws of Da'wa' series. PMW English translation."
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "Jihad for the Cause of Allah", ar: "الجهاد في سبيل الله" }, slug: "01-jihad-for-cause-of-allah" }
+      - { num: 3, title: { en: "The Duty of Jihad", ar: "فرضية الجهاد" }, slug: "02-duty-of-jihad" }
+      - { num: 4, title: { en: "Preparation for Jihad", ar: "الاستعداد للجهاد" }, slug: "03-preparation-for-jihad" }
+      - { num: 5, title: { en: "The Stages of Jihad", ar: "مراحل الجهاد" }, slug: "04-stages-of-jihad" }
+      - { num: 6, title: { en: "Jihad and the Islamic State", ar: "الجهاد والدولة الإسلامية" }, slug: "05-jihad-and-islamic-state" }
+      - { num: 7, title: { en: "Conclusion", ar: "الخاتمة" }, slug: "06-conclusion" }
+    status:
+      en: published
+      ar: not-translated
+    translated_by: "Palestinian Media Watch translation"
+    translated_at: "2026-09-05"
+    notes: "English translation by Palestinian Media Watch. Fifth volume of 'The Laws of Da'wa' series."
+
+  allah-said-hawwa:
+    title:
+      en: "Allah"
+      ar: "الله جل جلاله"
+    author: said-hawwa
+    shelf: revivalist
+    original_language: ar
+    languages: [en]
+    domains: [aqeedah, tawhid, theology]
+    tags: [allah, tawhid, aqeedah, existence-of-allah, divine-attributes, said-hawwa]
+    source:
+      archive_id: "Allah_201301"
+      archive_url: "https://archive.org/details/Allah_201301"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "مقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "Introduction to Knowledge about Allah", ar: "مدخل إلى معرفة الله" }, slug: "01-knowledge-about-allah" }
+      - { num: 3, title: { en: "The Phenomenon of the Creation of the Cosmos", ar: "ظاهرة خلق الكون" }, slug: "02-phenomenon-creation-cosmos" }
+      - { num: 4, title: { en: "The Phenomenon of the Will", ar: "ظاهرة الإرادة" }, slug: "03-phenomenon-will" }
+      - { num: 5, title: { en: "The Phenomenon of Life", ar: "ظاهرة الحياة" }, slug: "04-phenomenon-life" }
+      - { num: 6, title: { en: "The Phenomenon of Answer", ar: "ظاهرة الإجابة" }, slug: "05-phenomenon-answer" }
+      - { num: 7, title: { en: "The Phenomenon of Guidance", ar: "ظاهرة الهداية" }, slug: "06-phenomenon-guidance" }
+      - { num: 8, title: { en: "The Phenomenon of Creation", ar: "ظاهرة الخلق" }, slug: "07-phenomenon-creation" }
+      - { num: 9, title: { en: "The Phenomenon of Wisdom", ar: "ظاهرة الحكمة" }, slug: "08-phenomenon-wisdom" }
+      - { num: 10, title: { en: "The Phenomenon of Care", ar: "ظاهرة الرعاية" }, slug: "09-phenomenon-care" }
+      - { num: 11, title: { en: "The Phenomenon of Unity", ar: "ظاهرة الوحدة" }, slug: "10-phenomenon-unity" }
+      - { num: 12, title: { en: "Causality", ar: "السببية" }, slug: "11-causality" }
+      - { num: 13, title: { en: "Nature", ar: "الطبيعة" }, slug: "12-nature" }
+      - { num: 14, title: { en: "Monotheism", ar: "التوحيد" }, slug: "13-monotheism" }
+      - { num: 15, title: { en: "Return to the Beginning", ar: "العودة إلى البداية" }, slug: "14-return-to-beginning" }
+      - { num: 16, title: { en: "Phenomena Indicate Allah's Existence", ar: "الظواهر تدل على وجود الله" }, slug: "15-phenomena-indicate-allahs-existence" }
+      - { num: 17, title: { en: "Comparisons", ar: "مقارنات" }, slug: "16-comparisons" }
+      - { num: 18, title: { en: "References", ar: "المراجع" }, slug: "17-references" }
+    status:
+      en: published
+      ar: not-translated
+    translated_by: "English translation (translator unnamed in source)"
+    translated_at: "2026-09-05"
+    notes: "Part 1 of 'The Series of the Three Principles' (Allah, Ar-Rasul, Al-Islam). ISBN: 977-342-136-8. OCR from Archive.org DjVu text."
+
   # ============================================================
   # SHELF: Qaradawi Collection
   # ============================================================

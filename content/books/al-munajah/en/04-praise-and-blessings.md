@@ -1,0 +1,63 @@
+# On Celebrating Praise of Allah and Invoking Blessings on the Prophet
+
+ON CELEBRATING PRAISE OF ALLAH AND INVOKING
+
+Bf- DIVINE BLESSINGS UPON THE PROPHET
+
+Celebrating praise of Allah
+
+According to Buraydah, the Prophet ﷺ heard a person saying:
+
+"O Allah! I pray to You while I bear witness that You are Allah.
+
+There is no God but You, the One, The Everlasting Refuge,92 Who begets not nor has been begotten and there is none like unto You."
+
+Upon hearing this, the Prophet ﷺ commented: "By the One in Whose Hands is my soul! This man has used the Greatest Name of Allah in his prayer. Surely, Allala answers any supplication and fulfils any need if such a Name is ever used by a supplicant."93 j| Anas ibn Malik said: "While a man was making Jw'a', he said:'O Allah! I pray to You (bearing in mind) that all praise and thanks are due to You. There is no God but You, the Most Kind, thejMost Bounteous, the Originator of the heavens and the earth, the One fall of Majesty and Honour. O Living, O Eternal!' Commenting on this, the Prophet ﷺ asked: 'Do you know with what this man has supplicated?'The Companions said:'Allah and His Messenger know best'.Thc Prophet ﷺ continued:'By die One in Whose Hands lies my soul, he has supplicated with the Greatest Name of Allah with which if He was called, He would answer and if He was asked, He would give.""4
+
+Invoking divine blessings upon the Prophet
+
+AbQ.Mas'nd al-'Adawl said: "While we were sitting in the assembly of Sa'd ibn 'Ubadah, the Prophet came to us. Upon 92. The Everlasting Refuge stands for the Arabic word al-Simad which is one of the fairest Names of Alhh.
+
+In fact, the Arabic word al-$amad means more than just an everlasting refuge. Ibn 'Abbls uid:'aZ-Swiad is the One to who people rush io tor their needs to be fulfilled and their complaints to be executed and then wishes 'Our Lord! Give us mercy from Your presence and shape for us right conduct in our plight"® "There is no God save You. Glorified be You! I have been a wrong doer.""
+
+"My Lord! Forgive and have mercy, for You are best of all Who show mercy." "
+
+"Our Lord! Vouchsafe us the comfort of our wives and of our offspring, and make us guides for (all) those who ward off (evil). " ' R DIVINE BLESSINGS UPON THE PROPHET "My Lord! Vouchsafe me wisdom and unite me to the righteous And give unto me a good report in later generations. And place me among the inheritors of the Garden of Delight."89 "Our Lord Forgive us and our brothers who were before us m the faith, and place not in our hearts any rancour toward those who believe. Our Lord! You are Full of Pity, Merciful."90 "My Lord! Forgive me and my parents and him who enters my house believing, and believing men and believing women, and increase not the wrong doers in aught save ruin."91 St r supplicated?'The Companions said:'Allah and His Messenger know al-Kahf 10 86. al-Anbiya'. 87 87 al-Mu'nnnniK |18 88 al-l'urqin; 74 kindness overwhelms everything, the AU-Knowing Whose knowledge is perfect and unsurpassed, and the One 89. al-Shu'art': 83-85 90. al HasJu. 10 93. Abu Dawnd and al-Tirmidhi. / - 91. Nob; 28 94. Reported by the authors of the books of Simon.
+
+42
+
+Chapter Five
+
+ON CELEBRATING PRAISE OF ALLAH AND INVOKING
+
+Celebrating praise of Allah
+
+According to Buraydah, the Prophet ﷺ heard a person saying:
+
+"O Allah! I pray to You while I bear witness that You are Allah.
+
+There is no God but You, the One,The Everlasting Refuge,92 Who begets not nor has been begotten and there is none like unto You."
+
+Upon hearing this, the Prophet ﷺ commented: "By the One in Whose Hands is my soul! This man has used the Greatest Name of Allah in his prayer. Surely, Allah answers any supplication and fulfils any need if such a Name is ever used by a supplicant."9394 a Anas ibn Malik said:"While a man was making du'a'', he said:'Os Allah! I pray to You (bearing in mind) that all praise and thanks are due to You. There is no God but You, the Most Kind, the Most Bounteous, the Originator of the heavens and the earth, the One full of Majesty and Honour. O Living, O Eternal!' Commenting on this, the Prophet ﷺ asked: 'Do you know with what diis man has best'.The Prophet ﷺ continued: 'By the One in Whose Hands lies my soul, he has supplicated with the Greatest Name of Allah with which if He was called, He would answer and if He was asked, He would ;give",!M ■ ::
+
+Invoking divine blessings upon the Prophet
+
+Abu Mas'od al-'Adawl said; "While we were sitting in the assembly of Sa'd ibn 'Ubodah, the Prophet ﷺ came to us. Upon 92. The Everlasting Refuge stands for the Arabic word al-^amad which is one of the fairest Names of Albh (n face the Arabic word al*$amad means more chan just an everlasting refuge. Ibn 'Abbas uid is the One to who people rush to for their needs to be fulfilled and their complaints to be executed and their wishes to be realised, The word also means the Master Who has possessed unsurpassed excellence, the Noble Who has become Himself a source of perfect honour, die Great Whose greatness cannot be rivaled, the Kind Whose Who has no rival or peer.** (Ta/s!i, Ibn Kathlr) - ;
+
+seeing him, Bashir ibn Sa d asked: 'O Messenger of Allah! Alhli has ordered us to invoke blessings upon you. How should wc bless you''
+
+The Messenger of Allah ﷺ ept quiet to the extent that we wished we had not asked him. Then he told us to say. 'O Allah, bless Muhammad and the family of Muhammad as You have blessed Ibrahim, and shower favours on Muhammad and the family of Muhammad as You showered favours on Ibrahim. You are indeed Worthy of Praise and Glorious, and then give salutations as you know.'"
+
+'Abdullah Ibn Mas'Od said: "When you send blessings to the iViC .3* a Messenger of Allah, do it as perfectly as you can, for you do not <1 know whether or not it may be reviewed by him." People said to 1 A* ■ him:"Teach us how to do that!" He replied:"Say:'O Allah! Shower Your blessings, mercy and favours upon the master of all messengers, 4s leader of all the pious and the seal of prophets, your slave and Messenger Muhammad who has led people to every good thing -w- and taught diem every good deed and given die best example of kindness. O Allah! Raise him up to the praised position'" for w hich all people before and after him long.95 O Allah! Bless Muhammad 9697 and his family as you blessed Ibrahim and his family. Surely, You are Worthy of Praise and the Owner of Glory. O Allah! Shower Your favours on Muhammad and his family as You have showered Your favours on Ibrahim and his family. Indeed, You are worthy of all Praise and Owner of Glory.""7 'All ibn AbflThlib began one of his sermons saying: "O Allah, rhe Spreader of the surfaces (of the earth) and Keeper (intact) of all skies, Creator and Fashioner of hearts the way You wanted them to be, good or evil! Send Your most excellent blessings and eternally 95 i.e cbc potiuon of interceding oil behalfof hn follower! on the Day ofJudgement % If one feeh a great dmre for something that belongs co someone else wlnlu nor begrudging th n jx r-» having this thing, it is called in Arabic ghibtah. which literally mean* happiness Such a feeling n IdJ-im <'l\ acceptable because a person who feels that he wants to be as successful as his neighbour, tor linum v jn.l a« the same tunc wisliei that bis neighbour continues being successful has not done anything wrong IW-wi if one desires to be as successhd as one's neighbour but ar die same time wishes that one s neighbour tads m everything is surely evil. Such behaviour n called (mmu/ (envy), which refers to a feeling of discontent and resentment aroused by and in conjunction with a desire lor the potaesaions or qualities of another 1 hn n IdJnitcJly unacceptable and u contrary to having firm belief io Allah Envy is not accepted under nn cmuinitanccs because it lontradiits the very feeling of accepting what Allah has given to each person aid 98 i.e guidance and revelation.Thu refers to the fact that the advent of die Prophet ﷺ cumntuted a new cuflSuuMS a person s heart with hatred and dissatisfaction All such maladies affect a person's behaviour and <pc and hb message of lsllm represented a fresh link between people and their Creator; a hnk which had been spread til-dunking and malice in society. Io I dim. a true believer should have a faithful and pure heart that is cut a long tune previously. The coming of Islam and the birth of the Prophet ﷺ was, thin. an opening of a swelled with mercy love and un< erity 97 of Ibn Majak elupu r on Ulessmg the Prophet ﷺ , 44 increase favours on Your servant and Prophet Muhammad who IS the last of those (Prophets) who preceded him and the opener of what has been closed* and the proclaimer of truth with truth."
+
+z' ^3 ® w* ** doted door and a renew al of this link. ■ W From Naty (Peaks of Eloquence), a collection of sermons and uyine bv Ah ibn Abu Dbb seeing him, Bashir ibn Sa'd asked:'O Messenger of Allah! Allah has ordered us to invoke blessings upon you. How should we bless you?'
+
+The Messenger of Allah ﷺ ept quiet to die extent that we wished we had not asked him. Then he told us to say: 'O Allah, bless Muljammad and the family of Muhammad as You have blessed Ibrahim, and shower favours on Muhammad and the family of Muhammad as You showered favours on Ibrahim. You are indeed Worthy of Praise and Glorious, and then give salutations as you know.'"
+
+'Abdullah Ibn Mas'Od said: "When you send blessings to the Messenger of Allah, do it as perfecdy as you can, for you do not know whether or not it may be reviewed by him." People said to him:"Teach us how to do that!" He replied: "Say: 'O Allah! Shower Your blessing, mercy and favours upon the master of all messengers, leader of all the pious and the seal of prophets, your slave and Messenger Muhammad who has led people to every good thing and taught them every good deed and given the best example of kindness. O Allah! Raise him up to the praised position9596*for which all people before and after him long.94 O Allah! Bless Muhammad and his family as you blessed Ibrahim and his family. Surely,You are Worthy of Praise and the Owner of Glory. O Allah! Shower Your favours on Muljammad and his family as You have showered Your favours bn Ibrahim and his family. Indeed, You are worthy of all Praise and Owner of Glory.""7 'All ibn AbtlTilib began one of his sermons saying:"O Allah, the Spreader of the surfaces (of die earth) and Keeper (intact) of all skies, Creator and Fashioner of hearts the way You wanted them to be, good or evil! Send Your most excellent blessings and eternally 95. Le. the position of interceding on behalf of his followers on the Day of Judgement 96, Jf one feds a great desire for something that belongs to someone else whilst not begrudging that pcrvjn having dm dung, it is called in Arabic jjfahtaJt, which literally means happiness Such a feeling is Ishim, .ills acceptable because a person who feels that he wants to be as successful as hit neighbour, for insumc. and at dir same time willies that bis neighbour continues being successful has not done anything wrong 1 lowcur if One desires to be 34 successful as one's neighbour but at the same time wishes that one's neighbour tails in everything is surely evil. Such behaviour is called liasad (envy), which refers to a feeling of discontent and resentment aroused by and in conjunction with a desire for die possessions or qualities of another This n Isllnucally unacceptable and is contrary to loving firm belief in Allah. Envy is not accepted under an> circumsunrci because it contradicts the very feeling of accepting what Allah has given to each person and 98. ix guidance and revelation. This refers to the fact that the advent of the Prophet ﷺ constituted a new consumes a person's heart With hatred and dissatisfaction All such maladies affect a person's behaviour and age and his message of Islam represented a fresh link between people and their Creator; a link which had been spread ill-ilnnkjng and malice in society. In Islam, a true believer should have a faithful and pure heart that u cut a long time previously. The coming of Islam and the birth of the Prophet ® was. thus, an opening of a swelled with mercy, love and sincerity [ 97 Swnaw of Ibn Majah. chapter on Blessing the Prophet ﷺ fc, 43 45 increase favours on Your servant and Prophet Muljammad who is the last of those (Prophets) who preceded him and die opener of what has been dosed98 and the proclaimer of truth with truth."'"
+
+clctod door and a renewal of this link. .
+
+99. from Koh/ Al'Batyhah (Peaks of Eloquence), a collection of sermons and sayings by 'Ah ibn Abd TMib.
+
+4
