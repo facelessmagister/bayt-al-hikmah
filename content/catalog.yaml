@@ -314,6 +314,67 @@ books:
     translated_at: "2026-09-05"
     notes: "Part 1 of 'The Series of the Three Principles' (Allah, Ar-Rasul, Al-Islam). ISBN: 977-342-136-8. OCR from Archive.org DjVu text."
 
+  al-mathurat:
+    title:
+      en: "Al-Mathurat al-Kubra: The Great Litany"
+      ar: "المأثورات الكبرى"
+    author: hasan-al-banna
+    shelf: revivalist
+    original_language: ar
+    languages: [en]
+    domains: [spirituality, duaa, dhikr, worship]
+    tags: [mathurat, litany, supplications, dhikr, morning-evening, hasan-al-banna, devotional]
+    source:
+      archive_id: "matsurat-kubra-hasan-al-banna-1"
+      archive_url: "https://archive.org/details/matsurat-kubra-hasan-al-banna-1"
+    chapters:
+      - { num: 1, title: { en: "Introduction", ar: "المقدمة" }, slug: "00-introduction" }
+      - { num: 2, title: { en: "The Excellence of Dhikr", ar: "فضل الذكر" }, slug: "01-excellence-of-dhikr" }
+      - { num: 3, title: { en: "Status of the Hadiths of al-Mathurat", ar: "status أحاديث المأثورات" }, slug: "02-status-of-hadiths" }
+      - { num: 4, title: { en: "Guidance for Practicing al-Mathurat", ar: "إرشادات للممارسة" }, slug: "03-guidance-for-practice" }
+      - { num: 5, title: { en: "The Small Litany (Wazhifah Sughra)", ar: "الوظيفة الصغرى" }, slug: "04-small-litany" }
+      - { num: 6, title: { en: "The Great Litany (Wazhifah Kubra)", ar: "الوظيفة الكبرى" }, slug: "05-great-litany" }
+      - { num: 7, title: { en: "Prophetic Supplications for Morning and Evening", ar: "أدعية الصباح والمساء" }, slug: "06-morning-evening-supplications" }
+      - { num: 8, title: { en: "The Brotherhood Litany (Wirid Rabitah)", ar: "ورد الرابطة" }, slug: "07-brotherhood-litany" }
+      - { num: 9, title: { en: "The Self-Reckoning Litany (Wirid Muhasabah)", ar: "ورد المحاسبة" }, slug: "08-self-reckoning-litany" }
+      - { num: 10, title: { en: "Ten Counsels", ar: "عشر وصايا" }, slug: "09-ten-counsels" }
+    status:
+      en: published
+      ar: not-translated
+    translated_by: "K.H. Hamim Thohari (Indonesian translation, Pustaka Azzam Publishing, 2023)"
+    translated_at: "2026-09-05"
+    notes: "Indonesian translation of Al-Mathurat al-Kubra. Contains Arabic prayers with Indonesian translation. OCR from Archive.org DjVu text."
+
+  kesatuan-gerakan-islam:
+    title:
+      en: "Toward the Unity of the Islamic Movement"
+      ar: "نحو وحدة الحركة الإسلامية"
+    author: fathi-yakan
+    shelf: revivalist
+    original_language: ar
+    languages: [en]
+    domains: [dawah, haraki, islamic-movement, unity]
+    tags: [unity, islamic-movement, haraki, fathi-yakan, malay-translation]
+    source:
+      archive_url: "https://archive.org/download/BacaanAnda/"
+      notes: "Malay translation from Akademi Islam, Universiti Malaya. Part of BacaanAnda collection on Archive.org."
+    chapters:
+      - { num: 1, title: { en: "Translator's Introduction", ar: "مقدمة المترجم" }, slug: "00-translators-introduction" }
+      - { num: 2, title: { en: "The Obligation to Form a Unified Global Islamic Movement", ar: "وجوب تكوين حركة إسلامية عالمية موحدة" }, slug: "01-obligation-unified-movement" }
+      - { num: 3, title: { en: "The Experience of the Muslim Brotherhood", ar: "تجربة الإخوان المسلمين" }, slug: "02-experience-muslim-brotherhood" }
+      - { num: 4, title: { en: "The Movement and Regional Conflicts", ar: "الحركة والصراعات الإقليمية" }, slug: "03-regional-conflicts" }
+      - { num: 5, title: { en: "Diagnosis and Treatment", ar: "التشخيص والعلاج" }, slug: "04-diagnosis-and-treatment" }
+      - { num: 6, title: { en: "Education and Nurturing", ar: "التربية والتكوين" }, slug: "05-education-and-nurturing" }
+      - { num: 7, title: { en: "In Movement Action", ar: "في عمل الحركة" }, slug: "06-movement-action" }
+      - { num: 8, title: { en: "The Main Tasks of the Movement", ar: "مهام الحركة الأساسية" }, slug: "07-main-tasks" }
+      - { num: 9, title: { en: "Essential Characteristics of the Proposed Movement", ar: "خصائص الحركة المقترحة" }, slug: "08-essential-characteristics" }
+    status:
+      en: published
+      ar: not-translated
+    translated_by: "Mohd. Kamil Abdul Majid (Akademi Islam, Universiti Malaya, Ramadhan 1404)"
+    translated_at: "2026-09-05"
+    notes: "Malay translation of 'Ke Arah Kesatuan Gerakan Islam'. Part of BacaanAnda collection on Archive.org. OCR from text PDF."
+
   # ============================================================
   # SHELF: Qaradawi Collection
   # ============================================================
