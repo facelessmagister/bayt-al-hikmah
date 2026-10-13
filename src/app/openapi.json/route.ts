@@ -12,37 +12,37 @@ export async function GET() {
     openapi: "3.0.0",
     info: {
       title: "Bayt al-Hikmah Library API",
-      version: "1.0.0",
+      version: "1.1.0",
       description:
-        "Public read-only API for the Bayt al-Hikmah Islamic digital library: classical texts, scholars, and bilingual (Arabic/English) chapters.",
+        "Public read-only API for the Bayt al-Hikmah Islamic digital library: classical texts, scholars, and bilingual (Arabic/English) chapters. All endpoints are GET-only.",
     },
     servers: [{ url: "/" }],
     paths: {
       "/api/public/books/": {
         get: {
           operationId: "list_library_books",
-          summary: "List all books in the library with authors, shelves, and languages",
+          summary: "List all books in the library (with authors, shelves, languages). Without params.",
           responses: { "200": { description: "Book catalog" } },
         },
       },
-      "/api/public/books/{slug}/": {
+      "/api/public/book/": {
         get: {
           operationId: "get_book",
           summary: "Get one book's metadata and its chapter list",
           parameters: [
-            { name: "slug", in: "path", required: true, schema: { type: "string" }, description: "Book slug, e.g. what-my-belonging-to-islam-means" },
+            { name: "slug", in: "query", required: true, schema: { type: "string" }, description: "Book slug, e.g. how-to-call-to-islam" },
             { name: "lang", in: "query", schema: { type: "string", enum: ["en", "ar"] }, description: "Chapter language (default en)" },
           ],
           responses: { "200": { description: "Book with chapters" } },
         },
       },
-      "/api/public/books/{slug}/{chapter}/": {
+      "/api/public/chapter/": {
         get: {
           operationId: "get_book_chapter",
-          summary: "Read one chapter of a book",
+          summary: "Read one chapter of a book (bilingual)",
           parameters: [
-            { name: "slug", in: "path", required: true, schema: { type: "string" }, description: "Book slug" },
-            { name: "chapter", in: "path", required: true, schema: { type: "number" }, description: "Chapter number" },
+            { name: "slug", in: "query", required: true, schema: { type: "string" }, description: "Book slug" },
+            { name: "chapter", in: "query", required: true, schema: { type: "number" }, description: "Chapter number" },
             { name: "lang", in: "query", schema: { type: "string", enum: ["en", "ar"] }, description: "Chapter language (default en)" },
           ],
           responses: { "200": { description: "Chapter content" } },

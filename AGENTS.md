@@ -198,3 +198,7 @@ Note: Book #3 and #14 are the same entry — `how-to-call-to-islam` was updated 
 - **Source authenticity** — follow Tarbiyyah CLAUDE.md source tiers for all content.
 - **Git** — `master` branch deploys to production. Push is allowed (GitHub repo is the canonical source).
 - **No local-only restriction** — unlike Quran Wiki and Tarbiyyah, this project IS pushed to GitHub.
+## Notes from agent memory (2026-09-27)
+
+- User is sole content creator. Workflow: translate → content/books/[slug]/ → update catalog.yaml → build → deploy.
+- Telegram: https://t.me/bayt_al_hikmah_xyz (competition payment verification channel).
